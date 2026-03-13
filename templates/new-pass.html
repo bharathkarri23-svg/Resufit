@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Password - Resufit</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth_split.css') }}">
+    <style>
+        .email-badge { display: inline-block; padding: 0.25rem 0.5rem; background: #e2e8f0; border-radius: 4px; font-weight: 600; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <main class="split-layout">
+        
+        <!-- LEFT SIDE: Branding & Animation -->
+        <div class="split-left">
+            <a href="/" class="split-logo">
+                <i class="fa-solid fa-file-signature"></i> Resufit
+            </a>
+            
+            <!-- background animation elements trapped in left panel -->
+            <div class="bg-shape shape-1"></div>
+            <div class="bg-shape shape-2" style="bottom: 10%; right: 10%;"></div>
+            
+            <div class="split-left-content animate-on-scroll">
+                <h1>Secure Your Account</h1>
+                <p>Set a strong password to protect your data.</p>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Frameless Form Area -->
+        <div class="split-right">
+            
+            <!-- Optional Top Right Nav Links removed per request -->
+
+            <div class="split-form-container">
+                <div class="split-header">
+                    <h2>Set New Password</h2>
+                    <p>Creating a new password for <span class="email-badge">{{ email }}</span></p>
+                </div>
+                
+                <form action="/new-pass" method="post" class="auth-form">
+                    <input type="hidden" name="email" value="{{ email }}">
+                    
+                    <div class="input-group password-group">
+                        <label for="password"><i class="fa-solid fa-lock"></i> New Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="••••••••" minlength="8" required>
+                            <i class="fa-solid fa-eye" id="togglePassword1"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group password-group">
+                        <label for="confirm_password"><i class="fa-solid fa-lock-open"></i> Confirm New Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" minlength="8" required>
+                            <i class="fa-solid fa-eye" id="togglePassword2"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="margin-top: 1rem;">Save Password</button>
+                </form>
+                
+                {% if error %}
+                    <div class="error-message">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+            // Password Toggle 1
+            const toggle1 = document.getElementById('togglePassword1');
+            const pass1 = document.getElementById('password');
+            if (toggle1 && pass1) {
+                toggle1.addEventListener('click', function () {
+                    const type = pass1.getAttribute('type') === 'password' ? 'text' : 'password';
+                    pass1.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            // Password Toggle 2
+            const toggle2 = document.getElementById('togglePassword2');
+            const pass2 = document.getElementById('confirm_password');
+            if (toggle2 && pass2) {
+                toggle2.addEventListener('click', function () {
+                    const type = pass2.getAttribute('type') === 'password' ? 'text' : 'password';
+                    pass2.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

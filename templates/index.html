@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resufit - Resume Analyzer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="index-page">
+
+    <!-- background animation elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-nav">
+        <div class="logo">
+            <i class="fa-solid fa-file-signature"></i> Resufit
+        </div>
+        <div class="nav-links">
+            <a href="#home" class="nav-item">Home</a>
+            <a href="#about" class="nav-item">About</a>
+            <a href="#services" class="nav-item">Services</a>
+            
+            {% if session.get('user') %}
+                <a href="/logout" class="btn btn-outline">Sign Out</a>
+            {% else %}
+                <button class="btn btn-primary" id="openSignInModal">Sign In</button>
+                <a href="/signup" class="btn btn-primary-light">Sign Up</a>
+            {% endif %}
+        </div>
+        <div class="nav-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- MAIN SECTIONS -->
+    <main>
+        <!-- HOME SECTION -->
+        <section id="home" class="hero-section glass-container animate-on-scroll">
+            <div class="hero-content">
+                <span class="badge">AI-Powered Analysis</span>
+                <h1>Supercharge Your <span class="highlight">Resume</span></h1>
+                <p>Unlock your career potential. Our smart analyzer parses your resume to give you actionable feedback, ATS compatibility scores, and personalized tips.</p>
+                <div class="hero-buttons">
+                    {% if session.get('user') %}
+                        <a href="/home" class="btn btn-primary btn-lg">Go to Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+                    {% else %}
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('openSignInModal').click()">Get Started Now <i class="fa-solid fa-arrow-right"></i></button>
+                    {% endif %}
+                    <a href="#about" class="btn btn-outline btn-lg">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="glass-card mockup-card">
+                    <div class="mockup-header">
+                        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-box"></div>
+                        <div class="score-circle">
+                            <h2>95%</h2>
+                            <p>ATS Match</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="about-section glass-container animate-on-scroll">
+            <div class="section-header">
+                <h2>About <span class="highlight">Resufit</span></h2>
+                <p>Designed to bridge the gap between talented candidates and automated tracking systems.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Why choose us?</h3>
+                    <p>In today's competitive job market, an excellent resume is your golden ticket. Over 75% of resumes are rejected by Applicant Tracking Systems (ATS) before a human ever sees them.</p>
+                    <p>Resufit leverages advanced NLP to analyze your resume against industry standards, ensuring your skills shine through the noise.</p>
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check-circle"></i> Instant ATS scoring</li>
+                        <li><i class="fa-solid fa-check-circle"></i> Keyword optimization</li>
+                        <li><i class="fa-solid fa-check-circle"></i> Formatting checks</li>
+                    </ul>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card glass-card">
+                        <i class="fa-solid fa-users"></i>
+                        <h3>10k+</h3>
+                        <p>Users Helped</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <h3>5k+</h3>
+                        <p>Jobs Secured</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section id="services" class="services-section glass-container animate-on-scroll">
+            <div class="section-header">
+                <h2>Our <span class="highlight">Services</span></h2>
+                <p>Everything you need to build the perfect resume in one place.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card glass-card">
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    </div>
+                    <h3>Deep Analysis</h3>
+                    <p>Comprehensive breakdown of your resume's structure, impact, and clarity metrics.</p>
+                </div>
+                <div class="service-card glass-card">
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3>AI Suggestions</h3>
+                    <p>Smart, context-aware suggestions to improve your bullet points and action verbs.</p>
+                </div>
+                <div class="service-card glass-card">
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3>Format Export</h3>
+                    <p>Download your optimized resume in universally accepted, ATS-friendly PDF formats.</p>
+                </div>
+            </div>
+        </section>
+
+    <!-- FOOTER -->
+    <footer class="glass-footer">
+        <p>&copy; 2026 Resufit. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#"><i class="fa-brands fa-github"></i></a>
+        </div>
+    </footer>
+
+
+    <!-- SIGN IN MODAL -->
+    <div class="modal-overlay" id="signInModal">
+        <div class="modal-dialog glass-card">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <button class="close-modal" id="closeSignInModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">Sign in to Resufit to continue your journey.</p>
+                
+                <form action="/signin" method="post" class="auth-form">
+                    <div class="input-group">
+                        <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="name@example.com" required>
+                    </div>
+                    
+                    <div class="input-group password-group">
+                        <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="••••••••" required>
+                            <i class="fa-solid fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="remember">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 btn-glow">Sign In</button>
+                </form>
+                
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+                
+                <div class="social-login">
+                    <a href="/google-login" class="btn btn-outline btn-google w-100">
+                        <i class="fa-brands fa-google"></i> Sign in with Google
+                    </a>
+                </div>
+                
+                <p class="auth-redirect">Don't have an account? <a href="/signup">Create Account</a></p>
+                
+                {% if error %}
+                    <div class="error-message">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal Logic
+            const modal = document.getElementById('signInModal');
+            const openBtns = document.querySelectorAll('#openSignInModal');
+            const closeBtn = document.getElementById('closeSignInModal');
+            
+            if (modal && closeBtn) {
+                openBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling
+                    });
+                });
+                
+                closeBtn.addEventListener('click', () => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // Mobile Nav Toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Password Toggle
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile nav if open
+                        if (navLinks.classList.contains('active')) {
+                            navLinks.classList.remove('active');
+                        }
+                    }
+                });
+            });
+
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Check for errors to automatically open modal (e.g. if redirected back with error)
+            const hasError = {{ 'true' if error else 'false' }};
+            if (hasError && modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        const form = document.getElementById("contactForm");
+
+        form.addEventListener("submit", function(e){
+
+            e.preventDefault();   // prevents page reload
+
+            const formData = new FormData(form);
+
+            fetch("/message", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if(data.success){
+                    alert("Message sent successfully!");
+                    form.reset();
+                }else{
+                    alert("Failed to send message");
+                }
+
+            });
+
+        });
+
+    </script>
+</body>
+</html>

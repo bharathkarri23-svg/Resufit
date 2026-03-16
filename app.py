@@ -25,7 +25,17 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-GOOGLE_CLIENT_SECRETS_FILE = os.getenv("client_secret")
+GOOGLE_CLIENT_SECRETS_FILE = {
+    "web": {
+        "client_id": os.getenv("client_id"),
+        "project_id": os.getenv("project_id"),
+        "auth_uri": os.getenv("auth_uri"),
+        "token_uri": os.getenv("token_uri"),
+        "auth_provider_x509_cert_url": os.getenv("auth_provider_x509_cert_url"),
+        "client_secret": os.getenv("client_secret"),
+        "redirect_uris": [os.getenv("redirect_uri")]
+    }
+}
 
 SCOPES = [
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -325,7 +335,7 @@ def new_pass():
 @app.route("/google-login")
 def google_login():
 
-    flow = Flow.from_client_secrets_file(
+    flow = Flow.from_client_config(
         GOOGLE_CLIENT_SECRETS_FILE,
         scopes=SCOPES,
         redirect_uri=REDIRECT_URI
@@ -348,7 +358,6 @@ def google_login():
 @app.route("/callback")
 def callback():
 
-
     if "error" in request.args:
         return render_template("signin.html", error="Google authentication failed")
 
@@ -357,7 +366,7 @@ def callback():
     if not state:
         return redirect(url_for("signin"))
 
-    flow = Flow.from_client_secrets_file(
+    flow = Flow.from_client_config(
         GOOGLE_CLIENT_SECRETS_FILE,
         scopes=SCOPES,
         state=session["state"],
@@ -461,6 +470,13 @@ def home():
             os.remove(path)
             return render_template("home.html",email=session.get("user"),error="Unsupported file type") 
 
+        MAX_LENGTH = 4000
+
+        if len(text) > MAX_LENGTH:
+            os.remove(path)
+            return render_template("home.html",email=session["user"],username=username,error="Resume text exceeds maximum length of 4000 characters. Please upload a shorter resume.")
+        else:
+            text = text
 
         if not is_resume_text(text):
             os.remove(path)
@@ -472,7 +488,7 @@ def home():
             analysis = analyze_resume(text)
             print("DEBUG ANALYSIS:", analysis)
 
-        os.remove(path)
+        os.remove(path)    
 
     return render_template("home.html",email=session["user"],text = text, analysis=analysis,username=username)
 

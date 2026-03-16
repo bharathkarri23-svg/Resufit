@@ -23,7 +23,7 @@
     <!-- NAVBAR -->
     <nav class="navbar glass-nav">
         <div class="logo">
-            <i class="fa-solid fa-file-signature"></i> Resufit
+            <img style="width: 40px; height: 40px; border-radius: 10px;" src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo"> Resufit
         </div>
         <div class="nav-links">
             <a href="#home" class="nav-item">Home</a>
@@ -97,13 +97,13 @@
                 <div class="about-stats">
                     <div class="stat-card glass-card">
                         <i class="fa-solid fa-users"></i>
-                        <h3>10k+</h3>
-                        <p>Users Helped</p>
+                        <h3>{{ total_users }}</h3>
+                        <p>Total Users</p>
                     </div>
                     <div class="stat-card glass-card">
                         <i class="fa-solid fa-briefcase"></i>
-                        <h3>5k+</h3>
-                        <p>Jobs Secured</p>
+                        <h3>{{ resumes_analyzed }}</h3>
+                        <p>Resumes Analyzed</p>
                     </div>
                 </div>
             </div>

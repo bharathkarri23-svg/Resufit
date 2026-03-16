@@ -8,13 +8,21 @@ import requests
 import os
 import random
 import time
+import uuid
 import smtplib
 from email.mime.text import MIMEText
+from ocr import extract_text, ocr_image
+from groq_ai import analyze_resume
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = "uploads"
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 GOOGLE_CLIENT_SECRETS_FILE = os.getenv("client_secret")
@@ -48,6 +56,13 @@ def init_db():
             provider TEXT NOT NULL
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS uploads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_path TEXT,
+            uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
 
     conn.commit()
     conn.close()
@@ -59,8 +74,16 @@ init_db()
 # -------------------------------
 
 @app.route("/")
+@app.route("/index.html")
 def index():
-    return render_template("index.html")
+    conn = sqlite3.connect(DATABASE)
+    curr = conn.cursor()
+    curr.execute("SELECT COUNT(*) FROM users;")
+    total_users = curr.fetchone()[0]
+    curr.execute("SELECT COUNT(*) FROM uploads;")
+    resumes_analyzed = curr.fetchone()[0]
+    conn.close()
+    return render_template("index.html", total_users=total_users, resumes_analyzed=resumes_analyzed)
 
 
 # -------------------------------
@@ -389,19 +412,98 @@ def callback():
 
     return redirect(url_for("home"))
 
-
 # -------------------------------
 # Protected Home
 # -------------------------------
 
-@app.route("/home")
+@app.route("/home" , methods=["GET", "POST"])
 def home():
 
     if "user" not in session:
         return redirect(url_for("signin"))
+    username = re.sub(r'\d+', '', session["user"].split("@")[0]).capitalize()
+    text = ""
+    analysis = ""
 
-    return render_template("home.html", email=session["user"])
+    if request.method == "POST":
 
+        if "resume" not in request.files:
+            return render_template(
+                "home.html",
+                email=session["user"],
+                username=username,
+                error="No file uploaded"
+            )
+
+        file = request.files["resume"]
+
+        if file.filename == "":
+            return render_template(
+            "home.html",
+            email=session["user"],
+            username=username,
+            error="No file selected"
+        )
+
+        unique_name = str(uuid.uuid4()) + "_" + file.filename
+
+        path = os.path.join(app.config["UPLOAD_FOLDER"], unique_name)
+
+        file.save(path)
+        if file.filename.endswith(".pdf"):
+            text = extract_text(path)
+            print("DEBUG CLEAN PDF TEXT:", text)
+
+        elif file.filename.endswith((".png", ".jpg", ".jpeg")):
+            text = ocr_image(path)
+            print("DEBUG CLEAN OCR TEXT:", text)
+        else:
+            os.remove(path)
+            return render_template("home.html",email=session.get("user"),error="Unsupported file type") 
+
+
+        if not is_resume_text(text):
+            os.remove(path)
+            return render_template("home.html",email=session["user"],username=username,error="Uploaded file does not appear to be a resume. Please upload a valid resume.")
+        else:
+            curr = sqlite3.connect(DATABASE).cursor()
+            curr.execute("INSERT INTO uploads (file_path) VALUES (?)", (unique_name,))
+            curr.connection.commit()
+            analysis = analyze_resume(text)
+            print("DEBUG ANALYSIS:", analysis)
+
+        os.remove(path)
+
+    return render_template("home.html",email=session["user"],text = text, analysis=analysis,username=username)
+
+
+def is_resume_text(text):
+
+    resume_keywords = [
+        "experience",
+        "education",
+        "skills",
+        "projects",
+        "certifications",
+        "linkedin",
+        "github",
+        "objective",
+        "summary",
+        "intern",
+        "university",
+        "bachelor",
+        "master"
+    ]
+
+    text_lower = text.lower()
+
+    score = 0
+
+    for word in resume_keywords:
+        if word in text_lower:
+            score += 1
+
+    return score >= 3
 
 # -------------------------------
 # Logout
@@ -412,7 +514,6 @@ def logout():
 
     session.clear()
     return redirect(url_for("index"))
-
 
 # -------------------------------
 # Run App

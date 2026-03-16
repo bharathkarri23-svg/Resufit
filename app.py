@@ -462,10 +462,9 @@ def home():
         if file.filename.endswith(".pdf"):
             text = extract_text(path)
             print("DEBUG CLEAN PDF TEXT:", text)
-
-        elif file.filename.endswith((".png", ".jpg", ".jpeg")):
-            text = ocr_image(path)
-            print("DEBUG CLEAN OCR TEXT:", text)
+        # elif file.filename.endswith((".png", ".jpg", ".jpeg")):
+        #     text = ocr_image(path)
+        #     print("DEBUG CLEAN OCR TEXT:", text)
         else:
             os.remove(path)
             return render_template("home.html",email=session.get("user"),error="Unsupported file type") 

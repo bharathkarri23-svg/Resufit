@@ -671,9 +671,14 @@ def template6():
 @app.route('/download')
 def download_pdf():
 
-    config = pdfkit.configuration(
-        wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-    )
+    if os.name == "nt":  # Windows
+        config = pdfkit.configuration(
+            wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+        )
+    else:  # Linux / Render
+        config = pdfkit.configuration(
+            wkhtmltopdf="/usr/bin/wkhtmltopdf"
+        )
 
     options = {
         'page-size': 'A4',

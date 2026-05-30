@@ -300,6 +300,7 @@
             position: relative;
             margin-left: auto;
         }
+        /* Upload Button */
         .header-upload-btn {
             background: linear-gradient(135deg, var(--primary), #00e0ff);
             color: white;
@@ -308,14 +309,48 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            white-space: nowrap;
+            border: none;
+            user-select: none;
         }
+
+        /* Hover Effect */
         .header-upload-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
         }
+
+        /* Click Effect */
+        .header-upload-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Mobile Friendly */
+        @media (max-width: 768px) {
+            .header-upload-btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 15px;
+                border-radius: 12px;
+                margin-right: 5px;
+            }
+        }
+
+        /* Small Mobile Devices */
+        @media (max-width: 480px) {
+            .header-upload-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
         .transparent-start {
             background: rgba(255, 255, 255, 0.05) !important;
             backdrop-filter: blur(5px) !important;
@@ -330,7 +365,7 @@
             display: none;
             width: 100%;
             animation: fadeIn 0.4s ease;
-            flex-grow: 1; /* allow empty tabs to take up remaining height without scrolling */
+            flex-grow: 1;
             box-sizing: border-box;
         }
         .tab-content.active {
@@ -366,6 +401,154 @@
                 z-index: 5;
             }
             .sidebar-overlay.active { display: block; }
+        }
+
+        .container{
+        width:100%;
+        max-width:1300px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        }
+
+        /* LEFT SIDE */
+
+        .left-section{
+        flex:1;
+        padding: 20px;
+        }
+
+        .left-section h1{
+        font-size:40px;
+        line-height:1.1;
+        font-weight:800;
+        color:#000;
+        }
+
+        .left-section p{
+        font-size:15px;
+        line-height:1.8;
+        color:#333;
+        max-width:650px;
+        }
+
+        /* BUTTONS */
+
+        .buttons{
+        display:flex;
+        margin-bottom:20px;
+        flex-wrap:wrap;
+        margin-left:70px;
+        }
+
+        .btn-primary{
+        padding:10px 25px;
+        background:#2f54eb;
+        color:white;
+        border:none;
+        border-radius:50px;
+        font-size:20px;
+        font-weight:500;
+        cursor:pointer;
+        transition:0.3s;
+        box-shadow:0 10px 25px rgba(47,84,235,0.3);
+        }
+
+        .btn-primary:hover{
+        transform:translateY(-3px);
+        background:#1d39c4;
+        }
+
+        /* RIGHT SIDE */
+
+        .right-section{
+        flex:1;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:relative;
+        }
+
+        .resume-card{
+        background:white;
+        padding:20px;
+        border-radius:20px;
+        box-shadow:0 15px 40px rgba(0,0,0,0.15);
+        position:relative;
+        width:360px;
+        }
+
+        .resume-card img{
+        width:360px;
+        border-radius:12px;
+        display:block;
+        }
+
+        .tag{
+        position:absolute;
+        top:-18px;
+        right:-20px;
+        background:#f5c367;
+        padding:12px 24px;
+        border-radius:40px;
+        font-weight:700;
+        font-size:18px;
+        box-shadow:0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media(max-width:1100px){
+        .container{
+            flex-direction:column;
+            text-align:center;
+        }
+        .left-section h1{
+            font-size:45px;
+        }
+        .left-section p{
+            margin:auto;
+            margin-bottom:35px;
+        }
+        .buttons{
+            justify-content:center;
+        }
+        .review-box{
+            margin:auto;
+        }
+        }
+
+        @media(max-width:768px){
+        body{
+            padding:20px;
+        }
+        .left-section h1{
+            font-size:38px;
+        }
+        .left-section p{
+            font-size:15px;
+            margin-bottom:5px;
+        }
+        .btn-primary,
+        .btn-secondary{
+            width:300px;
+            font-size:13px;
+            padding:12px;
+            margin-bottom:5px;
+        }
+        .resume-card{
+            width:100%;
+        }
+        .review-box{
+            padding:15px;
+        }
+        .review-box h3{
+            font-size:20px;
+        }
+        .review-box p{
+            font-size:16px;
+        }
         }
     </style>
 </head>
@@ -408,6 +591,8 @@
         </button>
     </div>
 
+<!-- .......................................................Resume Analysis ................................................................ -->
+
     <!-- Dashboard Tab -->
     <div id="dashboard" class="tab-content active">
 
@@ -418,6 +603,7 @@
             
             {% if analysis or error %}
             <form method="POST" enctype="multipart/form-data" class="header-upload-form">
+                <input type="hidden" name="form_type" value="resume_analysis">
                 <label for="header-file" class="header-upload-btn">
                     Upload New Resume
                 </label>
@@ -431,6 +617,7 @@
         <div class="glass-card upload-section transparent-start">
             <h2>Upload Your Resume</h2>
             <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="form_type" value="resume_analysis">
                 <label for="file" class="labelFile">
                     <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="50" height="50" fill="currentColor">
                         <g><path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z"/></g>
@@ -452,7 +639,7 @@
         </div>
         {% endif %}
 
-        {% if analysis and analysis is mapping %}
+        {% if analysis is mapping and active_tab == "dashboard" %}
     <!-- Analysis Results -->
     <div class="dashboard-grid">
         
@@ -607,16 +794,193 @@
 
     </div> <!-- End Dashboard Tab -->
 
+    <!-- ...........................................................Job Fit................................................................. -->
+
     <!-- Empty Transparent Tabs -->
-    <div id="job-fit" class="tab-content transparent-start" style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
-        <h1 style="font-size: 28px; margin-bottom: 20px;">Job Fit Analysis</h1>
-        <p style="font-size: 18px; opacity: 0.8;">Select a job to see how well you fit.</p>
+    <div id="job-fit" class="tab-content " style="padding: 40px; border-radius: 20px; margin-top: 15px;">
+        <div class="dashboard-header">
+            <h1>Job Fit Analysis</h1>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" >
+            <input type="hidden" name="form_type" value="job_fit">
+            <!-- Upload Resume -->
+            <div class="glass-card upload-section transparent-start">
+                <h2>Upload Your Resume</h2>
+                <label for="jobfit-file" class="labelFile">
+                    <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="50" height="50" fill="currentColor">
+                        <g>
+                            <path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 
+                            C102.609,16.43,88.713,7.576,73.087,7.576
+                            c-22.117,0-40.112,17.994-40.112,40.115 
+                            c0,0.913,0.036,1.854,0.118,2.834
+                            C14.004,54.875,0,72.11,0,91.959
+                            c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538
+                            c-19.583,0-35.509-15.929-35.509-35.509
+                            c0-17.526,13.084-32.621,30.442-35.105
+                            c0.931-0.132,1.768-0.633,2.326-1.392
+                            c0.555-0.755,0.795-1.704,0.644-2.63
+                            c-0.297-1.904-0.447-3.582-0.447-5.139
+                            c0-18.249,14.852-33.094,33.094-33.094
+                            c13.703,0,25.789,8.26,30.803,21.04
+                            c0.63,1.621,2.351,2.534,4.058,2.14
+                            c15.425-3.568,29.919,3.883,36.604,17.168
+                            c0.508,1.027,1.503,1.736,2.641,1.897
+                            c17.368,2.473,30.481,17.569,30.481,35.112
+                            c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761
+                            c23.459,0,42.538-19.079,42.538-42.535
+                            C184.69,71.545,169.884,53.901,149.968,50.186z"/></g></svg>
+
+                    <p style="margin-top: 15px; font-weight: 500;">Drag & Drop or Click to Browse Resume</p>
+                    <p style="font-size: 12px; color: #a3aed1;">(PDF)</p>
+                </label>
+
+                <input class="input" name="resume" id="jobfit-file" type="file" required>
+            </div>
+
+            <!-- Job Description -->
+            <div class="glass-card">
+                <h3 class="section-title">Paste Job Description</h3>
+                <textarea id="jobdesc" name="jobdesc" placeholder="Paste the job description here..." required style=" width: 100%; height: 200px; padding: 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; resize: vertical; box-sizing: border-box;"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button  type="submit" style=" margin-top: 20px; width: 100%; max-width: 300px;display: block;">Analyze Profile</button>
+        </form>
+
+        {% if error %}
+        <div class="glass-card upload-section transparent-start">
+            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Error Processing File</h2>
+            <p style="color: #ffb3b3; font-size: 16px;">{{ error }}</p>
+            <p style="color: white; margin-top: 15px;">Please use the <strong>Upload New Resume</strong> button above to try again.</p>
+        </div>
+        {% endif %}
+        <br><br>
+
+        <!-- .................................. Job Analysis ......................................-->
+
+        {% if jobanalysis is mapping and active_tab == "job-fit" %}
+    <!-- Analysis Results -->
+    <div class="dashboard-grid">
+        
+        <!-- Scores Chart -->
+        <div class="glass-card full-width">
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border-left: 4px solid var(--primary);">
+                <h3 class="section-title">Job Fit Score</h3>
+                <p style="margin: 0; font-size: 16px; line-height: 1.6;">
+                    <p>{{ jobanalysis.score }}</p>
+                </p>
+            </div>
+        </div>
+
+        <!-- Matching Skillls -->
+        <div class="glass-card">
+            <h3 class="section-title">Matching Skills</h3>
+            <ul>
+                {% for skill in jobanalysis.skill %}
+                    <li>
+                        <strong>{{ skill }}</strong>
+                    </li>
+                {% else %}
+                    <li style="color: #666;">No matching skills found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Missing Skillls -->
+        <div class="glass-card" style="background: rgba(255, 235, 235, 0.7); border-color: rgba(220, 53, 69, 0.3);">
+            <h3 class="section-title" style="color: #dc3545; border-bottom-color: rgba(220, 53, 69, 0.2);">Missing Skills</h3>
+            <p><strong>Required Elements Missing:</strong></p>
+            <div>
+                {% for missing in jobanalysis.missing_skills %}
+                    {% if missing %}
+                        <span class="badge missing">{{ missing }}</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge strength">Everything looks complete!</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Extra  Certifications -->
+        <div class="glass-card full-width">
+            <h3 class="section-title">Extra Certifications Suggestions</h3>
+            <ul>
+                {% for cert in jobanalysis.Certifications_Suggestions %}
+                    <li>
+                        <strong>{{ cert.name }}</strong>
+                        <p>{{ cert.reason }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Suggestions -->
+        <div class="glass-card full-width">
+            <h3 class="section-title">
+                Suggestions
+            </h3>
+
+            {% if jobanalysis.Suggestions and jobanalysis.Suggestions|length > 0 %}
+            <p style="margin-top: 20px;"><strong>Actionable Suggestions:</strong></p>
+            <ul style="color: #444;">
+                {% for sug in jobanalysis.Suggestions %}
+                    <li>{{ sug }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No suggestions needed. Your resume matches well.</p>
+            {% endif %}
+        </div>
     </div>
 
-    <div id="resume-builder" class="tab-content transparent-start" style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
-        <h1 style="font-size: 28px; margin-bottom: 20px;">Resume Builder</h1>
-        <p style="font-size: 18px; opacity: 0.8;">Create a new resume from scratch.</p>
+    {% elif jobanalysis %}
+    <!-- Fallback if it's not a mapping/dict (error in JSON parsing) -->
+    <div class="glass-card">
+        <h3>Analysis Results</h3>
+        <p style="color: #dc3545;">The AI returned plain text instead of structured data.</p>
+        <pre style="white-space: pre-wrap; word-wrap: break-word; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 10px;">{{ jobanalysis }}</pre>
     </div>
+    {% else %}
+    <div class="glass-card" style="text-align: center; color: #666; padding: 40px;">
+        <svg style="margin-bottom: 20px; color: var(--primary); opacity: 0.5;" xml:space="preserve" viewBox="0 0 184.69 184.69" width="80" height="80" fill="currentColor">
+            <g><path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z"/></g>
+        </svg>
+        <p style="font-size: 18px; font-weight: 500;">No analysis to show yet.</p>
+        <p>Please upload a resume document above to get started.</p>
+    </div>
+    {% endif %}
+        
+    </div>
+
+    <!-- ...........................................................Resume Builder................................................................. -->
+
+    <div id="resume-builder" class="tab-content transparent-start" style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
+        
+        <div class="container">
+    <!-- LEFT CONTENT -->
+            <div class="left-section">
+            <h1>Top <br>Resume Templates</h1>
+            <p>Welcome to our Resume Builder website, designed to help students and professionals create modern, professional, and ATS-friendly resumes easily. Choose from top resume templates, customize your details, and generate impressive resumes within minutes.</p>
+            <div class="buttons">
+                <button class="btn-primary" onclick="window.location.href='{{ url_for('builder') }}'">Create new resume</button>
+            </div>
+            </div>
+
+            <!-- RIGHT IMAGE -->
+            <div class="right-section">
+            <div class="resume-card">
+                <div class="tag">
+                ✨ Enhance with AI
+                </div>
+                <img src="https://template.canva.com/EAGDIYMJ4NU/2/0/1131w-wixRuvEARu8.jpg" alt="Resume Template">
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ...........................................................Blog................................................................. -->
 
     <div id="blog" class="tab-content transparent-start" style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
         <h1 style="font-size: 28px; margin-bottom: 20px;">Blog</h1>
@@ -627,38 +991,125 @@
 
 <!-- Scripts -->
 <script>
-    // Sidebar Toggle Logic for Mobile
+
+    // ===============================
+    // Sidebar Toggle Logic
+    // ===============================
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('open');
         document.querySelector('.sidebar-overlay').classList.toggle('active');
     }
 
+    // ===============================
     // Tab Switching Logic
+    // ===============================
     function switchTab(tabId, element) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
-        
+
+        // Remove active classes
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Add active class
         document.getElementById(tabId).classList.add('active');
         element.classList.add('active');
-        
-        // Auto-close sidebar on mobile after selecting a tab
-        if(window.innerWidth <= 992) {
+
+        // Save active tab
+        localStorage.setItem("activeTab", tabId);
+
+        // Auto close sidebar on mobile
+        if (window.innerWidth <= 992) {
             document.getElementById('sidebar').classList.remove('open');
             document.querySelector('.sidebar-overlay').classList.remove('active');
         }
     }
 
-    // Update filename text on file select
+    // ===============================
+    // Restore Active Tab After Refresh
+    // ===============================
+    window.addEventListener("DOMContentLoaded", () => {
+
+        const activeTab = localStorage.getItem("activeTab");
+
+        if (activeTab) {
+
+            // Remove all active classes
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Activate saved tab
+            const selectedTab = document.getElementById(activeTab);
+
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+
+            // Activate matching sidebar button
+            document.querySelectorAll('.slide').forEach(slide => {
+
+                const onclickValue = slide.getAttribute("onclick");
+
+                if (onclickValue && onclickValue.includes(activeTab)) {
+                    slide.classList.add("active");
+                }
+
+            });
+        }
+    });
+
+    // ===============================
+    // Dashboard File Upload Name
+    // ===============================
     const fileInput = document.getElementById("file");
+
     if (fileInput) {
-        fileInput.addEventListener("change", function() {
-            const fileName = this.files[0] ? this.files[0].name : "Browse File";
+
+        fileInput.addEventListener("change", function () {
+
+            const fileName = this.files[0]
+                ? this.files[0].name
+                : "Browse File";
+
             const labelText = document.querySelector(".labelFile p");
-            if(labelText) {
+
+            if (labelText) {
                 labelText.textContent = fileName;
             }
+
         });
     }
+
+    // ===============================
+    // Job Fit File Upload Name
+    // ===============================
+    const jobFitFile = document.getElementById("jobfit-file");
+
+    if (jobFitFile) {
+
+        jobFitFile.addEventListener("change", function () {
+
+            const fileName = this.files[0]
+                ? this.files[0].name
+                : "Browse Resume";
+
+            const labelText = this.previousElementSibling.querySelector("p");
+
+            if (labelText) {
+                labelText.textContent = fileName;
+            }
+
+        });
+    }
+
 </script>
 
 </body>

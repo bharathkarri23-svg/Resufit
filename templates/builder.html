@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Builder</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        
+        /* MAIN SECTION */
+
+        .main{
+            margin-top: 110px;
+            width:100%;
+        }
+
+        .main h1{
+            text-align:center;
+            font-size:40px;
+            font-weight:600;
+            margin-bottom:50px;
+            color:#000;
+        }
+
+        /* CARDS */
+
+        .cards{
+            display:flex;
+            justify-content:center;
+            gap:35px;
+            flex-wrap:wrap;
+        }
+
+        .card{
+            width:300px;
+            background:white;
+            border-radius:18px;
+            padding:35px;
+            border:1px solid #ddd;
+            box-shadow:0 4px 15px rgba(0,0,0,0.05);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-6px);
+        }
+
+        .top-line{
+            width:100%;
+            height:5px;
+            background:#83e28c;
+            border-radius:20px;
+            margin-bottom:20px;
+        }
+
+        .card img{
+            width:65px;
+            margin-bottom:15px;
+        }
+
+        .card h2{
+            font-size:20px;
+            font-weight:600;
+            margin-bottom:20px;
+            color:#000;
+        }
+
+        .card ul{
+            list-style:none;
+        }
+
+        .card ul li{
+            font-size:15px;
+            margin-bottom:7px;
+            color:#111;
+        }
+
+        .card ul li::before{
+            content:"✓";
+            margin-right:14px;
+            font-weight:bold;
+        }
+
+        /* CONTINUE BUTTON */
+
+        .btn-section{
+            width:100%;
+            display:flex;
+            justify-content:center;
+            margin-top:30px;
+        }
+
+        .continue-btn{
+            padding:15px 140px;
+            background:#3559e8;
+            color:white;
+            border:none;
+            border-radius:50px;
+            font-size:20px;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.3s;
+            box-shadow:0 10px 25px rgba(53,89,232,0.25);
+        }
+
+        .continue-btn:hover{
+            background:#2347cf;
+            transform:translateY(-3px);
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media(max-width:1200px){
+
+            .main h1{
+                font-size:55px;
+            }
+
+            .card{
+                width:100%;
+            }
+
+        }
+
+        @media(max-width:768px){
+
+            .main{
+                padding:20px;
+            }
+
+            .main h1{
+                font-size:28px;
+                line-height:1.3;
+            }
+
+            .card{
+                padding:20px;
+            }
+
+            .card h2{
+                font-size:20px;
+            }
+
+            .card ul li{
+                font-size:15px;
+            }
+
+            .continue-btn{
+                width:70%;
+                padding:15px;
+                font-size:20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+
+    <nav class="navbar glass-nav">
+        <div class="logo">
+            <img style="width: 40px; height: 40px; border-radius: 10px;" src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo"> Resufit
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/home" class="nav-item">Dashboard</a>
+            <a href="/logout" class="btn btn-outline">Sign Out</a>
+        </div>
+        <div class="nav-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+
+    <section class="main">
+
+        <h1>Here’s how you build your resume</h1>
+
+        <div class="cards">
+
+            <!-- CARD 1 -->
+
+            <div class="card">
+
+                <div class="top-line"></div>
+
+                <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png">
+
+                <h2>Pick a template</h2>
+
+                <ul>
+                    <li>ATS friendly</li>
+                    <li>Flexible layouts</li>
+                    <li>Easy Editing</li>
+                </ul>
+
+            </div>
+
+            <!-- CARD 2 -->
+
+            <div class="card">
+
+                <div class="top-line"></div>
+
+                <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
+
+                <h2>Edit content with AI</h2>
+
+                <ul>
+                    <li>Smart Suggestions</li>
+                    <li>Edit & enhance with AI</li>
+                    <li>Professional Writing</li>
+                </ul>
+
+            </div>
+
+            <!-- CARD 3 -->
+
+            <div class="card">
+
+                <div class="top-line"></div>
+
+                <img src="https://cdn-icons-png.flaticon.com/512/5610/5610944.png">
+
+                <h2>Download</h2>
+
+                <ul>
+                    <li>One-Click Download</li>
+                    <li>Instant Save</li>
+                    <li>Quick Access</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- CONTINUE BUTTON -->
+
+        <div class="btn-section">
+
+            <button class="continue-btn"
+                    onclick="window.location.href='{{ url_for('res_template') }}'">
+                Continue
+            </button>
+
+        </div>
+
+    </section>
+
+    <script>
+            // Mobile Nav Toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+
+</body>
+</html>

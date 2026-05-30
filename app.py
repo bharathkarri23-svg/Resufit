@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request, redirect, url_for,jsonify
+from flask import Flask, session, render_template, request, redirect, url_for,jsonify,send_file
 import sqlite3
 import secrets
 import re
@@ -12,8 +12,9 @@ import uuid
 import smtplib
 from email.mime.text import MIMEText
 from ocr import extract_text, ocr_image
-from groq_ai import analyze_resume
+from groq_ai import analyze_resume,analyze_job_fit
 from dotenv import load_dotenv
+import pdfkit
 
 load_dotenv()
 
@@ -425,72 +426,186 @@ def callback():
 # Protected Home
 # -------------------------------
 
-@app.route("/home" , methods=["GET", "POST"])
+@app.route("/home", methods=["GET", "POST"])
 def home():
 
+    # ==========================
+    # Authentication Check
+    # ==========================
     if "user" not in session:
         return redirect(url_for("signin"))
-    username = re.sub(r'\d+', '', session["user"].split("@")[0]).capitalize()
-    text = ""
-    analysis = ""
 
+    username = re.sub(r'\d+', '', session["user"].split("@")[0]).capitalize()
+
+    # ==========================
+    # Default Variables
+    # ==========================
+    text = None
+    analysis = None
+    jobanalysis = None
+    error = None
+
+    active_tab = "dashboard"
+
+    # ==========================
+    # Handle POST Request
+    # ==========================
     if request.method == "POST":
 
+        form_type = request.form.get("form_type")
+
+        # ==========================
+        # File Validation
+        # ==========================
         if "resume" not in request.files:
+
             return render_template(
                 "home.html",
                 email=session["user"],
                 username=username,
-                error="No file uploaded"
+                error="No file uploaded",
+                active_tab=active_tab
             )
 
         file = request.files["resume"]
 
         if file.filename == "":
-            return render_template(
-            "home.html",
-            email=session["user"],
-            username=username,
-            error="No file selected"
-        )
 
+            return render_template(
+                "home.html",
+                email=session["user"],
+                username=username,
+                error="No file selected",
+                active_tab=active_tab
+            )
+
+        # ==========================
+        # Save File
+        # ==========================
         unique_name = str(uuid.uuid4()) + "_" + file.filename
 
-        path = os.path.join(app.config["UPLOAD_FOLDER"], unique_name)
+        path = os.path.join(
+            app.config["UPLOAD_FOLDER"],
+            unique_name
+        )
 
         file.save(path)
-        if file.filename.endswith(".pdf"):
-            text = extract_text(path)
-            print("DEBUG CLEAN PDF TEXT:", text)
-        # elif file.filename.endswith((".png", ".jpg", ".jpeg")):
-        #     text = ocr_image(path)
-        #     print("DEBUG CLEAN OCR TEXT:", text)
-        else:
-            os.remove(path)
-            return render_template("home.html",email=session.get("user"),error="Unsupported file type") 
 
-        MAX_LENGTH = 4000
+        # ==========================
+        # Extract Text
+        # ==========================
+        if file.filename.endswith(".pdf"):
+
+            text = extract_text(path)
+
+        elif file.filename.endswith((".png", ".jpg", ".jpeg")):
+
+            text = ocr_image(path)
+
+        else:
+
+            os.remove(path)
+
+            return render_template(
+                "home.html",
+                email=session["user"],
+                username=username,
+                error="Unsupported file type",
+                active_tab=active_tab
+            )
+
+        # ==========================
+        # Text Validation
+        # ==========================
+        MAX_LENGTH = 6000
 
         if len(text) > MAX_LENGTH:
+
             os.remove(path)
-            return render_template("home.html",email=session["user"],username=username,error="Resume text exceeds maximum length of 4000 characters. Please upload a shorter resume.")
-        else:
-            text = text
+
+            return render_template(
+                "home.html",
+                email=session["user"],
+                username=username,
+                error="Resume text exceeds maximum length.",
+                active_tab=active_tab
+            )
 
         if not is_resume_text(text):
+
             os.remove(path)
-            return render_template("home.html",email=session["user"],username=username,error="Uploaded file does not appear to be a resume. Please upload a valid resume.")
-        else:
-            curr = sqlite3.connect(DATABASE).cursor()
-            curr.execute("INSERT INTO uploads (file_path) VALUES (?)", (unique_name,))
-            curr.connection.commit()
+
+            return render_template(
+                "home.html",
+                email=session["user"],
+                username=username,
+                error="Uploaded file is not a valid resume.",
+                active_tab=active_tab
+            )
+
+        # ==========================
+        # Save Upload Record
+        # ==========================
+        conn = sqlite3.connect(DATABASE)
+
+        curr = conn.cursor()
+
+        curr.execute(
+            "INSERT INTO uploads (file_path) VALUES (?)",
+            (unique_name,)
+        )
+
+        conn.commit()
+
+        conn.close()
+
+        # ==========================
+        # Resume Analysis
+        # ==========================
+        if form_type == "resume_analysis":
+
+            active_tab = "dashboard"
+
             analysis = analyze_resume(text)
+
             print("DEBUG ANALYSIS:", analysis)
 
-        os.remove(path)    
+        # ==========================
+        # Job Fit Analysis
+        # ==========================
+        elif form_type == "job_fit":
 
-    return render_template("home.html",email=session["user"],text = text, analysis=analysis,username=username)
+            active_tab = "job-fit"
 
+            jobdesc = request.form.get("jobdesc")
+
+            if not jobdesc or jobdesc.strip() == "":
+
+                error = "Please enter a job description."
+
+            else:
+
+                jobanalysis = analyze_job_fit(text,jobdesc)
+                print("DEBUG JOB FIT:", jobanalysis)
+
+        # ==========================
+        # Delete Uploaded File
+        # ==========================
+        os.remove(path)
+
+    # ==========================
+    # Final Render
+    # ==========================
+    return render_template(
+        "home.html",
+        email=session["user"],
+        username=username,
+        text=text,
+        analysis=analysis,
+        jobanalysis=jobanalysis,
+        error=error,
+        active_tab=active_tab
+    )
 
 def is_resume_text(text):
 
@@ -519,6 +634,66 @@ def is_resume_text(text):
             score += 1
 
     return score >= 3
+
+@app.route("/builder")
+def builder():
+    return render_template("builder.html")
+
+@app.route("/res_template")
+def res_template():
+    return render_template("res_template.html")
+
+@app.route("/template1")
+def template1():
+    return render_template("template1.html")
+
+@app.route("/template2")
+def template2():
+    return render_template("template2.html")
+
+@app.route("/template3")
+def template3():
+    return render_template("template3.html")
+
+@app.route("/template4")
+def template4():
+    return render_template("template4.html")
+
+@app.route("/template5")
+def template5():
+    return render_template("template5.html")
+
+@app.route("/template6")
+def template6():
+    return render_template("template6.html")
+
+@app.route('/download')
+def download_pdf():
+
+    config = pdfkit.configuration(
+        wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    )
+
+    options = {
+        'page-size': 'A4',
+        'margin-top': '0mm',
+        'margin-right': '0mm',
+        'margin-bottom': '0mm',
+        'margin-left': '0mm',
+        'encoding': 'UTF-8'
+    }
+
+    pdfkit.from_url(
+        'https://dominique-dominative-incoordinately.ngrok-free.dev/template1',
+        'resume.pdf',
+        configuration=config,
+        options=options
+    )
+
+    return send_file(
+        'resume.pdf',
+        as_attachment=True
+    )
 
 # -------------------------------
 # Logout

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Templates</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+
+    /* TITLE */
+
+    .heading{
+        text-align:center;
+        margin-top:120px;
+    }
+
+    .heading h1{
+        font-size:52px;
+        font-weight:800;
+        color:#000;
+        margin-bottom:10px;
+    }
+
+    .heading p{
+        color:#555;
+        font-size:18px;
+    }
+
+    /* TEMPLATE SECTION */
+
+    .template-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+        gap:30px;
+        padding:80px;
+    }
+
+    /* CARD */
+
+    .template-card{
+        background:white;
+        border-radius:16px;
+        overflow:hidden;
+        box-shadow:0 5px 18px rgba(0,0,0,0.1);
+        transition:0.3s;
+        border:3px solid transparent;
+        position:relative;
+    }
+
+    .template-card:hover{
+        transform:translateY(-5px);
+        border-color:#2f54eb;
+    }
+
+    .template-card img{
+        width:100%;
+        height:400px;
+        object-fit:contain;
+        display:block;
+        padding:5px;
+    }
+
+    .recommended{
+        position:absolute;
+        top:14px;
+        right:14px;
+        background:#d9ecff;
+        color:#2958a7;
+        padding:6px 12px;
+        border-radius:20px;
+        font-size:12px;
+        font-weight:600;
+    }
+
+    /* BUTTON */
+
+    .choose-btn{
+        width:80%;
+        margin:18px auto 22px;
+        display:block;
+        padding:14px;
+        border:none;
+        background:#2f54eb;
+        color:white;
+        font-size:16px;
+        font-weight:600;
+        border-radius:40px;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    .choose-btn:hover{
+        background:#1d39c4;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:768px){
+
+    .heading h1{
+        font-size:34px;
+    }
+
+    .heading p{
+        font-size:15px;
+    }
+
+    .template-card img{
+        height:350px;
+    }
+
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+
+    <nav class="navbar glass-nav">
+        <div class="logo">
+            <img style="width: 40px; height: 40px; border-radius: 10px;" src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo"> Resufit
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/home" class="nav-item">Dashboard</a>
+            <a href="/logout" class="btn btn-outline">Sign Out</a>
+        </div>
+        <div class="nav-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+
+<!-- TITLE -->
+
+    <div class="heading">
+        <h1>Discover Resume Templates Perfect for You</h1>
+        <p>Choose from professionally designed templates tailored to make your resume stand out. You can update or switch your design anytime.</p>
+    </div>
+
+<!-- TEMPLATE GRID -->
+
+<div class="template-grid">
+
+    <!-- CARD 1 -->
+    <div class="template-card">
+        <img src="{{ url_for('static', filename='images/template1.jpeg') }}" alt="Template 1">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template1') }}'">Choose template</button>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="template-card">
+        <span class="recommended">Recommended</span>
+        <img src="images/template2.jpg" alt="Template 2">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template2') }}'">Choose template</button>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="template-card">
+        <span class="recommended">Recommended</span>
+        <img src="images/template3.jpg" alt="Template 3">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template3') }}'">Choose template</button>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="template-card">
+        <img src="images/template4.jpg" alt="Template 4">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template4') }}'">Choose template</button>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="template-card">
+        <span class="recommended">Recommended</span>
+        <img src="images/template5.jpg" alt="Template 5">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template5') }}'">Choose template</button>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="template-card">
+        <span class="recommended">Recommended</span>
+        <img src="images/template6.jpg" alt="Template 6">
+        <button class="choose-btn" onclick="window.location.href='{{ url_for('template6') }}'">Choose template</button>
+    </div>
+
+</div>
+
+</body>
+</html>

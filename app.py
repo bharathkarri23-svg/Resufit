@@ -702,6 +702,34 @@ def download_pdf():
     )
 
 # -------------------------------
+# AI Text Optimization Route
+# -------------------------------
+
+@app.route("/optimize-text", methods=["POST"])
+def optimize_text_route():
+    if "user" not in session:
+        return jsonify({"error": "Please sign in to use AI optimizations."}), 401
+        
+    try:
+        data = request.get_json()
+        if not data or "text" not in data:
+            return jsonify({"error": "Missing input text."}), 400
+            
+        text = data.get("text", "").strip()
+        context_type = data.get("type", "experience")
+        
+        if not text:
+            return jsonify({"optimized": ""})
+            
+        from groq_ai import optimize_text
+        optimized = optimize_text(text, context_type)
+        return jsonify({"optimized": optimized})
+        
+    except Exception as e:
+        print("ROUTE AI ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+# -------------------------------
 # Logout
 # -------------------------------
 

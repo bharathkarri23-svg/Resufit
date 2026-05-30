@@ -231,3 +231,35 @@ Return JSON in this exact format:
             "Suggestions": [],
             "error": str(e)
         }
+
+
+def optimize_text(text, context_type="experience"):
+    prompt = f"""
+You are an expert professional resume writer and ATS optimization specialist.
+Enhance and rewrite the following {context_type} text to make it sound highly professional, results-oriented, and ATS-friendly.
+
+Guidelines:
+1. Start with strong action verbs (e.g., Developed, Orchestrated, Optimized, Spearheaded).
+2. Incorporate standard industry terms and keywords.
+3. Quantify achievements where possible (e.g., emphasize numbers, metrics, or percent improvements).
+4. Keep it concise, readable, and perfectly formatted as bullet points if it's experience/projects.
+5. Do NOT invent fake companies, names, or dates. Only polish the phrasing and impact.
+
+Original Text:
+{text}
+
+Output ONLY the enhanced text. Do not add intro, explanations, or quotes.
+"""
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "You are a professional resume optimizer."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print("OPTIMIZE ERROR:", str(e))
+        return text

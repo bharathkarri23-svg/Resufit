@@ -568,7 +568,6 @@
         <li class="slide active" onclick="switchTab('dashboard', this)">Dashboard</li>
         <li class="slide" onclick="switchTab('job-fit', this)">Job Fit Analysis</li>
         <li class="slide" onclick="switchTab('resume-builder', this)">Resume Builder</li>
-        <li class="slide" onclick="switchTab('blog', this)">Blog</li>
     </ul>
     <div class="bottom">
         <ul>
@@ -797,160 +796,298 @@
     <!-- ...........................................................Job Fit................................................................. -->
 
     <!-- Empty Transparent Tabs -->
-    <div id="job-fit" class="tab-content " style="padding: 40px; border-radius: 20px; margin-top: 15px;">
-        <div class="dashboard-header">
-            <h1>Job Fit Analysis</h1>
-        </div>
+    <!-- ...........................................................Job Fit................................................................. -->
 
-        <form method="POST" enctype="multipart/form-data" >
-            <input type="hidden" name="form_type" value="job_fit">
-            <!-- Upload Resume -->
-            <div class="glass-card upload-section transparent-start">
-                <h2>Upload Your Resume</h2>
-                <label for="jobfit-file" class="labelFile">
-                    <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="50" height="50" fill="currentColor">
-                        <g>
-                            <path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 
-                            C102.609,16.43,88.713,7.576,73.087,7.576
-                            c-22.117,0-40.112,17.994-40.112,40.115 
-                            c0,0.913,0.036,1.854,0.118,2.834
-                            C14.004,54.875,0,72.11,0,91.959
-                            c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538
-                            c-19.583,0-35.509-15.929-35.509-35.509
-                            c0-17.526,13.084-32.621,30.442-35.105
-                            c0.931-0.132,1.768-0.633,2.326-1.392
-                            c0.555-0.755,0.795-1.704,0.644-2.63
-                            c-0.297-1.904-0.447-3.582-0.447-5.139
-                            c0-18.249,14.852-33.094,33.094-33.094
-                            c13.703,0,25.789,8.26,30.803,21.04
-                            c0.63,1.621,2.351,2.534,4.058,2.14
-                            c15.425-3.568,29.919,3.883,36.604,17.168
-                            c0.508,1.027,1.503,1.736,2.641,1.897
-                            c17.368,2.473,30.481,17.569,30.481,35.112
-                            c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761
-                            c23.459,0,42.538-19.079,42.538-42.535
-                            C184.69,71.545,169.884,53.901,149.968,50.186z"/></g></svg>
+    <!-- Empty Transparent Tabs -->
+    <div id="job-fit" class="tab-content " style="padding: 20px; border-radius: 20px; margin-top: 15px;">
+        <style>
+            .jobfit-container {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+                width: 100%;
+                box-sizing: border-box;
+            }
 
-                    <p style="margin-top: 15px; font-weight: 500;">Drag & Drop or Click to Browse Resume</p>
-                    <p style="font-size: 12px; color: #a3aed1;">(PDF)</p>
-                </label>
+            .jobfit-grid-setup {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+                text-align: left;
+            }
 
-                <input class="input" name="resume" id="jobfit-file" type="file" required>
+            .jobfit-card {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                color: #1e293b;
+            }
+
+            .jobfit-full-width {
+                grid-column: 1 / -1;
+            }
+
+            .ats-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+                margin: 4px;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+            }
+
+            .ats-badge.match {
+                background: rgba(25, 135, 84, 0.12);
+                color: #198754;
+                border-color: rgba(25, 135, 84, 0.25);
+            }
+
+            .ats-badge.missing {
+                background: rgba(220, 53, 69, 0.12);
+                color: #dc3545;
+                border-color: rgba(220, 53, 69, 0.25);
+            }
+
+            .suggestion-card-item {
+                background: rgba(255, 255, 255, 0.6);
+                border: 1px solid rgba(226, 232, 240, 0.8);
+                padding: 15px 20px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: flex-start;
+                gap: 15px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .suggestion-card-item:hover {
+                transform: translateX(5px);
+                background: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+                border-color: var(--primary);
+            }
+
+            .suggestion-card-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: rgba(13, 110, 253, 0.08);
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                flex-shrink: 0;
+            }
+
+            .suggestion-card-content {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                text-align: left;
+            }
+
+            .suggestion-card-title {
+                font-weight: 700;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+            .suggestion-card-text {
+                font-size: 13px;
+                color: #475569;
+                line-height: 1.5;
+            }
+
+            .labelFile-premium {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 180px;
+                border: 2px dashed rgba(13, 110, 253, 0.3);
+                border-radius: 15px;
+                background: rgba(13, 110, 253, 0.02);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                color: var(--primary);
+            }
+
+            .labelFile-premium:hover {
+                background: rgba(13, 110, 253, 0.06);
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+            .btn-jobfit-submit {
+                padding: 12px 30px;
+                border: none;
+                background: linear-gradient(135deg, var(--primary), #00e0ff);
+                color: white;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+                width: 100%;
+            }
+
+            .btn-jobfit-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
+            }
+
+            @media (max-width: 992px) {
+                .jobfit-grid-setup {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+
+        <div class="jobfit-container">
+            <div class="blog-header">
+                <h1 style="color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.2); font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800;">Job Fit Analysis</h1>
+                <p style="color: #cbd5e1; margin-top: 5px; font-size: 16px;">Compare your resume against any target role's criteria using Groq AI checks.</p>
             </div>
 
-            <!-- Job Description -->
-            <div class="glass-card">
-                <h3 class="section-title">Paste Job Description</h3>
-                <textarea id="jobdesc" name="jobdesc" placeholder="Paste the job description here..." required style=" width: 100%; height: 200px; padding: 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; resize: vertical; box-sizing: border-box;"></textarea>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="form_type" value="job_fit">
+                
+                <div class="jobfit-grid-setup">
+                    <!-- Column 1: Paste Job description -->
+                    <div class="jobfit-card">
+                        <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-paste"></i> Paste Job Description</h3>
+                        <textarea id="jobdesc" name="jobdesc" placeholder="Paste the full job description here (responsibilities, required tools, frameworks...)" required style="width: 100%; height: 210px; padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); outline: none; font-size: 14px; resize: vertical; box-sizing: border-box; background: #f8fafc; color: var(--text-main);"></textarea>
+                    </div>
+
+                    <!-- Column 2: Upload Resume -->
+                    <div class="jobfit-card" style="justify-content: space-between;">
+                        <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-file-arrow-up"></i> Upload Target Resume</h3>
+                        
+                        <label for="jobfit-file" class="labelFile-premium">
+                            <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="44" height="44" fill="currentColor">
+                                <g><path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z"/></g>
+                            </svg>
+                            <p style="margin-top: 12px; font-weight: 600; font-size: 14px;">Browse or Drag Resume File</p>
+                            <p style="font-size: 11px; opacity: 0.7; margin-top: 2px; color: var(--text-muted);">(PDF format only)</p>
+                        </label>
+                        <input class="input" name="resume" id="jobfit-file" type="file" required>
+                        
+                        <button type="submit" class="btn-jobfit-submit"><i class="fa-solid fa-magnifying-glass-chart"></i> Start Job Match Analysis</button>
+                    </div>
+                </div>
+            </form>
+
+            {% if error %}
+            <div class="jobfit-card" style="background: rgba(220,53,69,0.15); border-color: rgba(220,53,69,0.3); color: white;">
+                <h3 style="color: #fca5a5; font-weight: 700; margin: 0;"><i class="fa-solid fa-circle-exclamation"></i> Error Parsing Documents</h3>
+                <p style="font-size: 14px; opacity: 0.95; margin: 0;">{{ error }}</p>
+                <p style="font-size: 12px; opacity: 0.7; margin: 0;">Please ensure you are uploading a standard, searchable text-based PDF resume.</p>
             </div>
+            {% endif %}
 
-            <!-- Submit Button -->
-            <button  type="submit" style=" margin-top: 20px; width: 100%; max-width: 300px;display: block;">Analyze Profile</button>
-        </form>
+            <!-- .................................. Job Analysis Results ......................................-->
 
-        {% if error %}
-        <div class="glass-card upload-section transparent-start">
-            <h2 style="color: #ff4d4d; margin-bottom: 10px;">Error Processing File</h2>
-            <p style="color: #ffb3b3; font-size: 16px;">{{ error }}</p>
-            <p style="color: white; margin-top: 15px;">Please use the <strong>Upload New Resume</strong> button above to try again.</p>
-        </div>
-        {% endif %}
-        <br><br>
+            {% if jobanalysis is mapping and active_tab == "job-fit" %}
+            <div class="jobfit-grid-setup" style="margin-top: 10px;">
+                
+                <!-- Scores Card -->
+                <div class="jobfit-card jobfit-full-width">
+                    <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-circle-info"></i> Candidate Match Profile</h3>
+                    
+                    <div style="margin-top: 10px; padding: 20px; background: rgba(13, 110, 253, 0.03); border-radius: 15px; border-left: 5px solid var(--primary); display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; font-size: 15px; color: #0f172a;">Overall Job Fit Score</span>
+                            <span style="font-weight: 800; font-size: 26px; color: var(--primary);">{{ jobanalysis.score }}</span>
+                        </div>
+                        <div style="width: 100%; height: 16px; background: rgba(0,0,0,0.06); border-radius: 30px; overflow: hidden; border: 1px solid rgba(255,255,255,0.4);">
+                            <div style="width: {{ jobanalysis.score }}; height: 100%; border-radius: 30px; background: linear-gradient(90deg, var(--primary), #00e0ff); box-shadow: 0 0 15px rgba(13, 110, 253, 0.3);"></div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- .................................. Job Analysis ......................................-->
+                <!-- Matching Skills Card -->
+                <div class="jobfit-card">
+                    <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-circle-check" style="color: #198754;"></i> Matching Skills</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                        {% for skill in jobanalysis.skill %}
+                            <span class="ats-badge match"><i class="fa-solid fa-check"></i> {{ skill }}</span>
+                        {% else %}
+                            <div style="color: #64748b; font-size: 13px; padding: 10px 0;"><i class="fa-solid fa-face-frown"></i> No matching skill tags detected.</div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-        {% if jobanalysis is mapping and active_tab == "job-fit" %}
-    <!-- Analysis Results -->
-    <div class="dashboard-grid">
-        
-        <!-- Scores Chart -->
-        <div class="glass-card full-width">
-            <div style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border-left: 4px solid var(--primary);">
-                <h3 class="section-title">Job Fit Score</h3>
-                <p style="margin: 0; font-size: 16px; line-height: 1.6;">
-                    <p>{{ jobanalysis.score }}</p>
-                </p>
+                <!-- Missing Skills Card -->
+                <div class="jobfit-card">
+                    <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-triangle-exclamation" style="color: #dc3545;"></i> Missing ATS Keywords</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                        {% for missing in jobanalysis.missing_skills %}
+                            {% if missing %}
+                                <span class="ats-badge missing"><i class="fa-solid fa-exclamation"></i> {{ missing }}</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="ats-badge match" style="margin: 0;"><i class="fa-solid fa-circle-check"></i> No missing skills! Profile matches excellently.</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Extra Certifications Suggestions -->
+                <div class="jobfit-card jobfit-full-width">
+                    <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-certificate"></i> Certification Recommendations</h3>
+                    <div style="margin-top: 8px;">
+                        {% for cert in jobanalysis.Certifications_Suggestions %}
+                            <div class="suggestion-card-item">
+                                <div class="suggestion-card-icon"><i class="fa-solid fa-certificate"></i></div>
+                                <div class="suggestion-card-content">
+                                    <span class="suggestion-card-title">{{ cert.name }}</span>
+                                    <span class="suggestion-card-text">{{ cert.reason }}</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div style="color: #64748b; font-size: 13px; padding: 10px 0;"><i class="fa-solid fa-check"></i> No additional certifications needed for this level.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Actionable Suggestions -->
+                <div class="jobfit-card jobfit-full-width">
+                    <h3 class="section-title" style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-lightbulb"></i> Actionable Profile Adjustments</h3>
+                    <div style="margin-top: 8px;">
+                        {% if jobanalysis.Suggestions and jobanalysis.Suggestions|length > 0 %}
+                            {% for sug in jobanalysis.Suggestions %}
+                                <div class="suggestion-card-item">
+                                    <div class="suggestion-card-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                    <div class="suggestion-card-content">
+                                        <span class="suggestion-card-text" style="color: #0f172a; font-weight: 500;">{{ sug }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="suggestion-card-item" style="background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.2);">
+                                <div class="suggestion-card-icon" style="background: rgba(16,185,129,0.1); color: #10b981;"><i class="fa-solid fa-circle-check"></i></div>
+                                <div class="suggestion-card-content">
+                                    <span class="suggestion-card-text" style="color: #065f46; font-weight: 600;">Your profile is perfectly optimized for this role! No corrections needed.</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Matching Skillls -->
-        <div class="glass-card">
-            <h3 class="section-title">Matching Skills</h3>
-            <ul>
-                {% for skill in jobanalysis.skill %}
-                    <li>
-                        <strong>{{ skill }}</strong>
-                    </li>
-                {% else %}
-                    <li style="color: #666;">No matching skills found.</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Missing Skillls -->
-        <div class="glass-card" style="background: rgba(255, 235, 235, 0.7); border-color: rgba(220, 53, 69, 0.3);">
-            <h3 class="section-title" style="color: #dc3545; border-bottom-color: rgba(220, 53, 69, 0.2);">Missing Skills</h3>
-            <p><strong>Required Elements Missing:</strong></p>
-            <div>
-                {% for missing in jobanalysis.missing_skills %}
-                    {% if missing %}
-                        <span class="badge missing">{{ missing }}</span>
-                    {% endif %}
-                {% else %}
-                    <span class="badge strength">Everything looks complete!</span>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <!-- Extra  Certifications -->
-        <div class="glass-card full-width">
-            <h3 class="section-title">Extra Certifications Suggestions</h3>
-            <ul>
-                {% for cert in jobanalysis.Certifications_Suggestions %}
-                    <li>
-                        <strong>{{ cert.name }}</strong>
-                        <p>{{ cert.reason }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Suggestions -->
-        <div class="glass-card full-width">
-            <h3 class="section-title">
-                Suggestions
-            </h3>
-
-            {% if jobanalysis.Suggestions and jobanalysis.Suggestions|length > 0 %}
-            <p style="margin-top: 20px;"><strong>Actionable Suggestions:</strong></p>
-            <ul style="color: #444;">
-                {% for sug in jobanalysis.Suggestions %}
-                    <li>{{ sug }}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No suggestions needed. Your resume matches well.</p>
             {% endif %}
         </div>
-    </div>
-
-    {% elif jobanalysis %}
-    <!-- Fallback if it's not a mapping/dict (error in JSON parsing) -->
-    <div class="glass-card">
-        <h3>Analysis Results</h3>
-        <p style="color: #dc3545;">The AI returned plain text instead of structured data.</p>
-        <pre style="white-space: pre-wrap; word-wrap: break-word; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 10px;">{{ jobanalysis }}</pre>
-    </div>
-    {% else %}
-    <div class="glass-card" style="text-align: center; color: #666; padding: 40px;">
-        <svg style="margin-bottom: 20px; color: var(--primary); opacity: 0.5;" xml:space="preserve" viewBox="0 0 184.69 184.69" width="80" height="80" fill="currentColor">
-            <g><path d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z"/></g>
-        </svg>
-        <p style="font-size: 18px; font-weight: 500;">No analysis to show yet.</p>
-        <p>Please upload a resume document above to get started.</p>
-    </div>
-    {% endif %}
-        
     </div>
 
     <!-- ...........................................................Resume Builder................................................................. -->
@@ -980,14 +1117,7 @@
         </div>
     </div>
 
-    <!-- ...........................................................Blog................................................................. -->
-
-    <div id="blog" class="tab-content transparent-start" style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
-        <h1 style="font-size: 28px; margin-bottom: 20px;">Blog</h1>
-        <p style="font-size: 18px; opacity: 0.8;">Read the latest career tips and tricks.</p>
     </div>
-
-</div>
 
 <!-- Scripts -->
 <script>

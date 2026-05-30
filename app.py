@@ -640,67 +640,6 @@ def is_resume_text(text):
 def builder():
     return render_template("builder.html")
 
-@app.route("/res_template")
-def res_template():
-    return render_template("res_template.html")
-
-@app.route("/template1")
-def template1():
-    return render_template("template1.html")
-
-@app.route("/template2")
-def template2():
-    return render_template("template2.html")
-
-@app.route("/template3")
-def template3():
-    return render_template("template3.html")
-
-@app.route("/template4")
-def template4():
-    return render_template("template4.html")
-
-@app.route("/template5")
-def template5():
-    return render_template("template5.html")
-
-@app.route("/template6")
-def template6():
-    return render_template("template6.html")
-
-@app.route('/download')
-def download_pdf():
-
-    if os.name == "nt":  # Windows
-        config = pdfkit.configuration(
-            wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-        )
-    else:  # Linux / Render
-        config = pdfkit.configuration(
-            wkhtmltopdf="/usr/bin/wkhtmltopdf"
-        )
-
-    options = {
-        'page-size': 'A4',
-        'margin-top': '0mm',
-        'margin-right': '0mm',
-        'margin-bottom': '0mm',
-        'margin-left': '0mm',
-        'encoding': 'UTF-8'
-    }
-
-    pdfkit.from_url(
-        'https://dominique-dominative-incoordinately.ngrok-free.dev/template1',
-        'resume.pdf',
-        configuration=config,
-        options=options
-    )
-
-    return send_file(
-        'resume.pdf',
-        as_attachment=True
-    )
-
 # -------------------------------
 # AI Text Optimization Route
 # -------------------------------
@@ -744,4 +683,5 @@ def logout():
 # -------------------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

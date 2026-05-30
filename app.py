@@ -23,6 +23,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 

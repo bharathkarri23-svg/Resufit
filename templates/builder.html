@@ -739,6 +739,28 @@
             justify-content: var(--header-grid-justify) !important;
         }
 
+        /* KEYWORD CHECKLIST STYLES */
+        .keyword-badge {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 2px;
+        }
+        .keyword-badge.matched {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .keyword-badge.missing {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
         /* DYNAMIC TEMPLATE STYLES */
         
         /* ------------------ TEMPLATE 1: MODERN CORPORATE ------------------ */
@@ -2223,15 +2245,39 @@
                         </p>
                         <div class="form-group">
                             <label><i class="fa-solid fa-file-invoice"></i> Target Job Description</label>
-                            <textarea id="tailor_jd_input" style="min-height: 120px;" placeholder="Paste the job description here... (e.g. 'Seeking a Software Engineer experienced in Flask, Docker, and SQL...')"></textarea>
+                            <textarea id="tailor_jd_input" oninput="clearKeywordsChecklist()" style="min-height: 120px;" placeholder="Paste the job description here... (e.g. 'Seeking a Software Engineer experienced in Flask, Docker, and SQL...')"></textarea>
                         </div>
                         <div style="display: flex; gap: 10px;">
                             <button class="btn btn-primary" id="btn-tailor-jd" onclick="tailorResumeToJD()" style="flex: 1; border-radius: 10px;">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i> Tailor Resume to JD
                             </button>
+                            <button class="btn btn-outline" id="btn-scan-keywords" onclick="scanKeywords()" style="flex: 1; border-radius: 10px;">
+                                <i class="fa-solid fa-tags"></i> Scan Keywords
+                            </button>
                             <button class="btn btn-outline" id="btn-revert-tailor" onclick="revertTailoredResume()" style="display: none; border-radius: 10px; border-color: var(--danger); color: var(--danger);">
                                 <i class="fa-solid fa-undo"></i> Revert Tailoring
                             </button>
+                        </div>
+
+                        <!-- Keywords Checklist Box -->
+                        <div id="keywords-checklist-box" style="display: none; border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;">
+                            <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Keyword Scan Results
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label style="color: var(--success); font-weight: 600; font-size: 12px;"><i class="fa-solid fa-circle-check"></i> Matched Keywords</label>
+                                    <div id="matched-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
+                                        <!-- Matched badges will be injected here -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: #d97706; font-weight: 600; font-size: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Missing Keywords</label>
+                                    <div id="missing-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
+                                        <!-- Missing badges will be injected here -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3735,6 +3781,83 @@
             } else {
                 alert("No backup found to restore.");
             }
+        }
+
+        async function scanKeywords() {
+            const jdText = document.getElementById('tailor_jd_input').value;
+            if (!jdText.trim()) {
+                alert("Please paste a target job description first!");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-scan-keywords');
+            const originalHtml = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Scanning...';
+            
+            try {
+                const response = await fetch('/analyze-keywords', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ resumeData: resumeData, jobdesc: jdText })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    const matchedContainer = document.getElementById('matched-keywords-container');
+                    const missingContainer = document.getElementById('missing-keywords-container');
+                    
+                    matchedContainer.innerHTML = '';
+                    missingContainer.innerHTML = '';
+                    
+                    const matched = data.matched || [];
+                    const missing = data.missing || [];
+                    
+                    if (matched.length === 0) {
+                        matchedContainer.innerHTML = '<span style="font-size: 11px; color: var(--text-muted); font-style: italic;">No matched keywords found.</span>';
+                    } else {
+                        matched.forEach(keyword => {
+                            const badge = document.createElement('span');
+                            badge.className = 'keyword-badge matched';
+                            badge.innerHTML = `<i class="fa-solid fa-check"></i> ${keyword}`;
+                            matchedContainer.appendChild(badge);
+                        });
+                    }
+                    
+                    if (missing.length === 0) {
+                        missingContainer.innerHTML = '<span style="font-size: 11px; color: var(--text-muted); font-style: italic;">No missing keywords detected.</span>';
+                    } else {
+                        missing.forEach(keyword => {
+                            const badge = document.createElement('span');
+                            badge.className = 'keyword-badge missing';
+                            badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${keyword}`;
+                            missingContainer.appendChild(badge);
+                        });
+                    }
+                    
+                    document.getElementById('keywords-checklist-box').style.display = 'block';
+                } else {
+                    alert("Keyword scanning failed: " + (data.error || "Unknown error"));
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Network error: Could not reach the keyword scanner server.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+
+        function clearKeywordsChecklist() {
+            const box = document.getElementById('keywords-checklist-box');
+            if (box) box.style.display = 'none';
+            const matchedContainer = document.getElementById('matched-keywords-container');
+            const missingContainer = document.getElementById('missing-keywords-container');
+            if (matchedContainer) matchedContainer.innerHTML = '';
+            if (missingContainer) missingContainer.innerHTML = '';
         }
     </script>
 </body>

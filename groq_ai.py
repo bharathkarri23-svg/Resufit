@@ -315,3 +315,56 @@ JSON output structure:
     except Exception as e:
         print("TAILOR ERROR:", str(e))
         return resume_data
+
+
+def analyze_keywords(resume_data, job_description):
+    prompt = f"""
+You are an advanced ATS Keyword Analyzer.
+Compare the candidate's resume data JSON with the target job description.
+Extract the core technical skills, programming languages, databases, tools, frameworks, and methodologies required in the job description.
+Classify each keyword into:
+1. "matched": Present in the candidate's resume data.
+2. "missing": Required in the job description but not found in the candidate's resume.
+
+Resume Data:
+{json.dumps(resume_data, indent=2)}
+
+Job Description:
+{job_description}
+
+Rules:
+1. Be strict but reasonable (e.g. if "React.js" is in JD and "React" is in resume, classify as matched).
+2. Extract only real tools, technologies, and technical skills (no generic soft skills like "communication").
+3. Limit the lists to a maximum of 10 matched and 10 missing key terms.
+4. Return ONLY valid JSON. Do NOT return markdown or explanation.
+
+JSON format:
+{{
+  "matched": ["Python", "Flask", "PostgreSQL"],
+  "missing": ["Docker", "Kubernetes", "AWS"]
+}}
+"""
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "You are a strict ATS keyword analyzer that only outputs valid JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.1,
+        )
+        
+        result = response.choices[0].message.content.strip()
+        print("RAW KEYWORD ANALYSIS RESPONSE:", result)
+
+        # Extract JSON safely
+        match = re.search(r"\{.*\}", result, re.DOTALL)
+        if match:
+            json_text = match.group()
+            return json.loads(json_text)
+        else:
+            return json.loads(result)
+            
+    except Exception as e:
+        print("KEYWORD ANALYSIS ERROR:", str(e))
+        return {"matched": [], "missing": [], "error": str(e)}

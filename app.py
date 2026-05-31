@@ -698,6 +698,35 @@ def tailor_resume_route():
 
 
 # -------------------------------
+# AI Keyword Analysis Route
+# -------------------------------
+
+@app.route("/analyze-keywords", methods=["POST"])
+def analyze_keywords_route():
+    if "user" not in session:
+        return jsonify({"error": "Please sign in to use keyword scanning."}), 401
+        
+    try:
+        data = request.get_json()
+        if not data or "resumeData" not in data or "jobdesc" not in data:
+            return jsonify({"error": "Missing input data."}), 400
+            
+        resume_data = data.get("resumeData")
+        jobdesc = data.get("jobdesc").strip()
+        
+        if not jobdesc:
+            return jsonify({"matched": [], "missing": []})
+            
+        from groq_ai import analyze_keywords
+        result = analyze_keywords(resume_data, jobdesc)
+        return jsonify(result)
+        
+    except Exception as e:
+        print("ROUTE AI KEYWORDS ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
+# -------------------------------
 # Logout
 # -------------------------------
 

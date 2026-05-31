@@ -985,113 +985,127 @@
         /* ------------------ TEMPLATE 4: CREATIVE PROFESSIONAL ------------------ */
         .preview-sheet.template-4 {
             font-family: 'Inter', sans-serif;
-            padding: 0;
-            display: flex;
-            height: 100%;
-        }
-
-        .template-4 .sidebar-left {
-            width: 32%;
-            background: #7c2d12;
-            color: #ffedd5;
-            padding: 12mm 6mm;
+            padding: 15mm 15mm;
             display: flex;
             flex-direction: column;
-            gap: 6mm;
-            height: 100%;
+            gap: 4.5mm;
+            color: #2c3e50;
         }
 
-        .template-4 .main-right {
-            width: 68%;
-            background: white;
-            padding: 12mm 8mm;
-            display: flex;
-            flex-direction: column;
-            gap: 5.5mm;
-            height: 100%;
+        .template-4 .header-section {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         .template-4 .header-name {
             font-family: 'Playfair Display', serif;
-            font-size: 20pt;
+            font-size: 26pt;
             font-weight: 700;
-            color: #ffedd5;
+            color: #1a252f;
             line-height: 1.2;
         }
 
         .template-4 .header-title {
-            font-size: 10pt;
-            color: #fdba74;
-            margin-top: 1mm;
+            font-size: 11pt;
+            color: var(--primary);
+            margin-top: 2mm;
             text-transform: uppercase;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 2px;
         }
 
         .template-4 .contact-grid {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 8pt;
-            color: #fed7aa;
-            margin-top: 4mm;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 3.5mm;
+            font-size: 8.5pt;
+            color: #7f8c8d;
         }
 
         .template-4 .contact-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .template-4 .sidebar-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 10pt;
-            font-weight: 700;
-            color: #fdba74;
-            border-bottom: 1px solid #ea580c;
-            padding-bottom: 1.5mm;
-            margin-bottom: 2mm;
-            text-transform: uppercase;
+            gap: 5px;
         }
 
         .template-4 .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 12pt;
+            font-size: 13pt;
             font-weight: 700;
-            color: #7c2d12;
-            border-bottom: 2px solid #fdba74;
+            color: #1a252f;
+            border-bottom: 1px solid #bdc3c7;
             padding-bottom: 1.5mm;
             margin-bottom: 3.5mm;
+            margin-top: 2mm;
+            position: relative;
+        }
+
+        .template-4 .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
         }
 
         .template-4 .entry-header {
             display: flex;
             justify-content: space-between;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 9.5pt;
+            color: #2c3e50;
         }
 
         .template-4 .entry-subheader {
             display: flex;
             justify-content: space-between;
-            font-size: 8pt;
-            color: #ea580c;
-            font-weight: 500;
+            font-size: 8.5pt;
+            color: var(--primary);
+            font-weight: 600;
             margin-top: 0.5mm;
         }
 
         .template-4 .entry-desc {
-            font-size: 8pt;
-            color: #475569;
-            margin-top: 1mm;
+            font-size: 8.5pt;
+            color: #34495e;
+            margin-top: 1.5mm;
             line-height: 1.4;
         }
 
-        .template-4 .skills-list-vert {
+        .template-4 .skills-grid {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            font-size: 8pt;
+            gap: 2mm;
+            font-size: 8.5pt;
+        }
+
+        .template-4 .skills-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .template-4 .skills-cat {
+            font-weight: 700;
+            width: 150px;
+            color: #1a252f;
+        }
+
+        .template-4 .skills-list {
+            color: #34495e;
+            flex: 1;
+        }
+
+        .template-4 .certs-langs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 8.5pt;
         }
 
         /* ------------------ TEMPLATE 5: HIGH-DENSITY ACADEMIC ------------------ */
@@ -1181,51 +1195,59 @@
             display: flex;
             flex-direction: column;
             gap: 4.5mm;
+            color: #1f2937;
         }
 
         .template-6 .header-section {
-            background: #065f46;
-            color: white;
-            padding: 7mm 8mm;
-            margin: -15mm -15mm 2mm -15mm;
-            border-bottom: 4px solid #10b981;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         .template-6 .header-name {
             font-family: 'Outfit', sans-serif;
-            font-size: 24pt;
+            font-size: 26pt;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #ffffff;
+            letter-spacing: -0.5px;
+            color: #111827;
+            text-transform: uppercase;
         }
 
         .template-6 .header-title {
             font-size: 11pt;
-            color: #a7f3d0;
-            font-weight: 500;
+            color: var(--primary);
+            font-weight: 700;
             margin-top: 1mm;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .template-6 .contact-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            margin-top: 3.5mm;
+            margin-top: 3mm;
             font-size: 8.5pt;
-            color: #d1fae5;
+            color: #4b5563;
+        }
+
+        .template-6 .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .template-6 .section-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 11pt;
+            font-size: 12pt;
             font-weight: 800;
-            color: #065f46;
-            border-bottom: 2px solid #065f46;
+            color: #111827;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 1mm;
             margin-bottom: 3.5mm;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2mm;
         }
 
         .template-6 .entry-header {
@@ -1233,14 +1255,14 @@
             justify-content: space-between;
             font-weight: 700;
             font-size: 9.5pt;
-            color: #1f2937;
+            color: #111827;
         }
 
         .template-6 .entry-subheader {
             display: flex;
             justify-content: space-between;
             font-size: 8.5pt;
-            color: #047857;
+            color: var(--primary);
             font-weight: 600;
             margin-top: 0.5mm;
         }
@@ -1261,7 +1283,7 @@
         .template-6 .skills-cat {
             font-weight: 700;
             width: 140px;
-            color: #065f46;
+            color: #111827;
         }
 
         .template-6 .skills-list {
@@ -1983,10 +2005,10 @@
                             </div>
                         </div>
                         <div class="template-gallery-card" onclick="switchTemplate(4)" id="tgc-4">
-                            <div class="template-thumb-overlay" style="background: #7c2d12; color: #ffedd5;">T4</div>
+                            <div class="template-thumb-overlay" style="background: #722ed1; color: white;">T4</div>
                             <div class="template-gallery-info">
                                 <div class="template-gallery-title">Creative Professional</div>
-                                <div class="template-gallery-desc">Terracotta sidebar. Clean editorial aesthetic.</div>
+                                <div class="template-gallery-desc">Playfair Display titles, clean single-column design with accent underlines.</div>
                             </div>
                         </div>
                         <div class="template-gallery-card" onclick="switchTemplate(5)" id="tgc-5">
@@ -1997,10 +2019,10 @@
                             </div>
                         </div>
                         <div class="template-gallery-card" onclick="switchTemplate(6)" id="tgc-6">
-                            <div class="template-thumb-overlay" style="background: #065f46; color: white;">T6</div>
+                            <div class="template-thumb-overlay" style="background: #0f766e; color: white;">T6</div>
                             <div class="template-gallery-info">
                                 <div class="template-gallery-title">Bold Modernist</div>
-                                <div class="template-gallery-desc">Emerald title banner, striking highlights.</div>
+                                <div class="template-gallery-desc">Modern sans-serif typography, solid primary underlines, high contrast layout.</div>
                             </div>
                         </div>
                         <div class="template-gallery-card" onclick="switchTemplate(7)" id="tgc-7">
@@ -2243,9 +2265,9 @@
                 case 1: return '#2f54eb';
                 case 2: return '#111827';
                 case 3: return '#06b6d4';
-                case 4: return '#7c2d12';
+                case 4: return '#722ed1';
                 case 5: return '#000000';
-                case 6: return '#065f46';
+                case 6: return '#0f766e';
                 case 7: return '#1e293b';
                 case 8: return '#6366f1';
                 default: return '#2f54eb';
@@ -2261,21 +2283,6 @@
             sheet.style.setProperty('--primary', color);
             
             // Set dynamic background/borders for template specifics
-            if (currentTemplate === 4) {
-                const sidebar = sheet.querySelector('.sidebar-left');
-                if (sidebar) sidebar.style.backgroundColor = color;
-                const secTitles = sheet.querySelectorAll('.section-title');
-                secTitles.forEach(t => t.style.color = color);
-            }
-            if (currentTemplate === 6) {
-                const headerSec = sheet.querySelector('.header-section');
-                if (headerSec) headerSec.style.backgroundColor = color;
-                const secTitles = sheet.querySelectorAll('.section-title');
-                secTitles.forEach(t => {
-                    t.style.color = color;
-                    t.style.borderColor = color;
-                });
-            }
             if (currentTemplate === 3) {
                 const headerName = sheet.querySelector('.header-name');
                 if (headerName) headerName.style.color = color;
@@ -2312,24 +2319,7 @@
             if (themeSettings.margins === 'compact') paddingVal = '10mm';
             if (themeSettings.margins === 'spacious') paddingVal = '20mm';
             
-            if (currentTemplate !== 4) {
-                sheet.style.padding = paddingVal;
-            } else {
-                const sidebar = sheet.querySelector('.sidebar-left');
-                const mainRight = sheet.querySelector('.main-right');
-                if (sidebar && mainRight) {
-                    if (themeSettings.margins === 'compact') {
-                        sidebar.style.padding = '8mm 4mm';
-                        mainRight.style.padding = '8mm 6mm';
-                    } else if (themeSettings.margins === 'spacious') {
-                        sidebar.style.padding = '15mm 8mm';
-                        mainRight.style.padding = '15mm 10mm';
-                    } else {
-                        sidebar.style.padding = '12mm 6mm';
-                        mainRight.style.padding = '12mm 8mm';
-                    }
-                }
-            }
+            sheet.style.padding = paddingVal;
 
             // Apply font size density
             let baseSize = '10pt';
@@ -3030,121 +3020,7 @@
             const nameExtra = themeSettings.sectionNames.extra || 'Certifications & Languages';
 
             // Render template-specific structures
-            if (currentTemplate === 4) {
-                // Creative Accent uses a sidebar layout
-                let leftContent = `
-                    <div class="header-name">${(data.first_name || '')}<br>${(data.last_name || '')}</div>
-                    <div class="header-title">${data.job_title || ''}</div>
-                    <div class="contact-grid">
-                        ${emailHtml}
-                        ${phoneHtml}
-                        ${locationHtml}
-                        ${linkedinHtml}
-                        ${githubHtml}
-                        ${portfolioHtml}
-                    </div>
-                `;
 
-                if (data.skills && data.skills.length > 0) {
-                    leftContent += `<div class="sidebar-title" style="margin-top: 6mm;">${nameSkills}</div>`;
-                    leftContent += `<div class="skills-list-vert">`;
-                    data.skills.forEach(s => {
-                        leftContent += `<div style="font-weight: 600; margin-top: 1mm; font-size: 8pt; color: #fdba74;">${s.category}</div>`;
-                        leftContent += `<div style="font-size: 8pt; opacity: 0.9;">${s.list}</div>`;
-                    });
-                    leftContent += `</div>`;
-                }
-
-                if (data.languages && data.languages.length > 0) {
-                    leftContent += `<div class="sidebar-title" style="margin-top: 6mm;">Languages</div>`;
-                    leftContent += `<div class="skills-list-vert">`;
-                    data.languages.forEach(l => {
-                        leftContent += `<div style="display: flex; justify-content: space-between; font-size: 8pt;"><span>${l.language}</span><span style="opacity: 0.7;">${l.level}</span></div>`;
-                    });
-                    leftContent += `</div>`;
-                }
-
-                let rightContent = '';
-                
-                if (data.summary) {
-                    rightContent += `
-                        <div class="section-title">${nameSummary}</div>
-                        <div class="entry-desc" style="margin-top: 0; margin-bottom: 4mm;">${data.summary}</div>
-                    `;
-                }
-
-                if (data.experience && data.experience.length > 0) {
-                    rightContent += `<div class="section-title">${nameExperience}</div>`;
-                    data.experience.forEach(exp => {
-                        const dateRange = formatDateString(exp.start_date) + ' - ' + (exp.current ? 'Present' : formatDateString(exp.end_date));
-                        rightContent += `
-                            <div class="experience-entry" style="margin-bottom: 4mm;">
-                                <div class="entry-header">
-                                    <span>${exp.role || 'New Job'}</span>
-                                    <span style="font-weight: normal; font-size: 8pt; color: #64748b;">${dateRange}</span>
-                                </div>
-                                <div class="entry-subheader">
-                                    <span>${exp.company || 'Company'} | ${exp.location || 'Location'}</span>
-                                </div>
-                                <div class="entry-desc">${exp.description ? exp.description.replace(/\n/g, '<br>') : ''}</div>
-                            </div>
-                        `;
-                    });
-                }
-
-                if (data.projects && data.projects.length > 0) {
-                    rightContent += `<div class="section-title">${nameProjects}</div>`;
-                    data.projects.forEach(proj => {
-                        const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
-                        rightContent += `
-                            <div class="project-entry" style="margin-bottom: 4mm;">
-                                <div class="entry-header">
-                                    <span>${proj.name || 'Project'}</span>
-                                    <span style="font-weight: normal; font-size: 8pt; color: #64748b;">${dateRange}</span>
-                                </div>
-                                <div class="entry-subheader">
-                                    <span>${proj.role || 'Role'} | <a href="https://${proj.link}" target="_blank" style="color: inherit; text-decoration: none;">${proj.link || ''}</a></span>
-                                </div>
-                                <div class="entry-desc">${proj.description ? proj.description.replace(/\n/g, '<br>') : ''}</div>
-                            </div>
-                        `;
-                    });
-                }
-
-                if (data.education && data.education.length > 0) {
-                    rightContent += `<div class="section-title">${nameEducation}</div>`;
-                    data.education.forEach(edu => {
-                        rightContent += `
-                            <div class="education-entry" style="margin-bottom: 3mm;">
-                                <div class="entry-header">
-                                    <span>${edu.school || 'School'}</span>
-                                    <span style="font-weight: normal; font-size: 8pt; color: #64748b;">${formatDateString(edu.end_date)}</span>
-                                </div>
-                                <div class="entry-subheader">
-                                    <span>${edu.degree || 'Degree'} in ${edu.field || 'Field'} ${edu.gpa ? '(GPA: ' + edu.gpa + ')' : ''}</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                if (data.certifications && data.certifications.length > 0) {
-                    rightContent += `<div class="section-title">Certifications</div>`;
-                    data.certifications.forEach(cert => {
-                        rightContent += `
-                            <div style="font-size: 8.5pt; margin-bottom: 1.5mm; display: flex; justify-content: space-between;">
-                                <strong>${cert.name}</strong>
-                                <span style="color: #64748b;">${formatDateString(cert.date)}</span>
-                            </div>
-                        `;
-                    });
-                }
-
-                sheet.innerHTML = `
-                    <div class="sidebar-left">${leftContent}</div>
-                    <div class="main-right">${rightContent}</div>
-                `;
-            } else {
                 // Single column or standard banner templates (1, 2, 3, 5, 6, 7, 8)
                 let headerContent = `
                     <div class="header-name">${(data.first_name || '')} ${(data.last_name || '')}</div>
@@ -3276,7 +3152,6 @@
                     <div class="header-section">${headerContent}</div>
                     <div class="body-section">${bodyContent}</div>
                 `;
-            }
             
             // Apply customized styling variables, fonts, sizes, and spacing
             applyThemeSettings();

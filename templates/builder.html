@@ -680,6 +680,14 @@
             color: #1e40af !important;
         }
 
+        .project-tech {
+            font-size: 8.5pt;
+            color: var(--text-muted);
+            margin-top: 1mm;
+            margin-bottom: 1.5mm;
+            line-height: 1.45;
+        }
+
         /* DYNAMIC TEMPLATE STYLES */
         
         /* ------------------ TEMPLATE 1: MODERN CORPORATE ------------------ */
@@ -2358,7 +2366,7 @@
             sheet.style.fontSize = baseSize;
             sheet.style.lineHeight = lineH;
             
-            sheet.querySelectorAll('.entry-desc').forEach(el => {
+            sheet.querySelectorAll('.entry-desc, .project-tech').forEach(el => {
                 el.style.fontSize = themeSettings.fontSize === 'small' ? '8pt' : (themeSettings.fontSize === 'large' ? '9pt' : '8.5pt');
             });
         }
@@ -2402,7 +2410,8 @@
                     link: "github.com/gregharrison/apex-task",
                     start_date: "2022-01-01",
                     end_date: "2022-08-30",
-                    description: "• Designed a custom asynchronous queue handling utility in Python, executing 20k operations per second.\n• Integrated robust Redis locks to enforce critical section logic and prevent multiple thread overlaps."
+                    description: "• Designed a custom asynchronous queue handling utility in Python, executing 20k operations per second.\n• Integrated robust Redis locks to enforce critical section logic and prevent multiple thread overlaps.",
+                    technologies: "Python, Redis, Docker"
                 }
             ],
             education: [
@@ -2601,7 +2610,7 @@
             if (listKey === 'experience') {
                 newItem = { company: '', role: '', location: '', start_date: '', end_date: '', current: false, description: '' };
             } else if (listKey === 'projects') {
-                newItem = { name: '', role: '', link: '', start_date: '', end_date: '', description: '' };
+                newItem = { name: '', role: '', link: '', start_date: '', end_date: '', description: '', technologies: '' };
             } else if (listKey === 'education') {
                 newItem = { school: '', degree: '', field: '', start_date: '', end_date: '', gpa: '' };
             } else if (listKey === 'skills') {
@@ -2791,6 +2800,10 @@
                             <div class="form-group">
                                 <label><i class="fa-solid fa-calendar"></i> Completion Date</label>
                                 <input type="date" value="${item.start_date || ''}" oninput="updateListItem('projects', ${index}, 'start_date', this.value)">
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label><i class="fa-solid fa-screwdriver-wrench"></i> Technologies / Tools Used</label>
+                                <input type="text" value="${item.technologies || ''}" oninput="updateListItem('projects', ${index}, 'technologies', this.value)" placeholder="e.g. Python, Redis, React, Docker">
                             </div>
                             <div class="form-group form-group-full">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -3143,6 +3156,10 @@
                         } else if (linkHtml) {
                             projSubheader = `<div class="entry-subheader"><span>${linkHtml}</span></div>`;
                         }
+                        let techHtml = '';
+                        if (proj.technologies && proj.technologies.trim()) {
+                            techHtml = `<div class="project-tech"><strong>Technologies:</strong> ${proj.technologies.trim()}</div>`;
+                        }
                         bodyContent += `
                             <div class="project-entry">
                                 <div class="entry-header">
@@ -3150,6 +3167,7 @@
                                     <span>${dateRange}</span>
                                 </div>
                                 ${projSubheader}
+                                ${techHtml}
                                 <div class="entry-desc">${formatDescriptionToList(proj.description)}</div>
                             </div>
                         `;

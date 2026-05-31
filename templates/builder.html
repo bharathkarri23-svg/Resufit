@@ -3148,17 +3148,23 @@
                         if (proj.link) {
                             linkHtml = `<a href="${formatHref(proj.link)}" target="_blank" class="contact-link">Project Link</a>`;
                         }
-                        let projSubheader = '';
-                        if (roleHtml && linkHtml) {
-                            projSubheader = `<div class="entry-subheader"><span>${roleHtml} | ${linkHtml}</span></div>`;
+                        let techRaw = proj.technologies ? proj.technologies.trim() : '';
+                        let leftHtml = '';
+                        if (roleHtml && techRaw) {
+                            leftHtml = `<span>${roleHtml} | <strong>Technologies:</strong> ${techRaw}</span>`;
                         } else if (roleHtml) {
-                            projSubheader = `<div class="entry-subheader"><span>${roleHtml}</span></div>`;
-                        } else if (linkHtml) {
-                            projSubheader = `<div class="entry-subheader"><span>${linkHtml}</span></div>`;
+                            leftHtml = `<span>${roleHtml}</span>`;
+                        } else if (techRaw) {
+                            leftHtml = `<span><strong>Technologies:</strong> ${techRaw}</span>`;
                         }
-                        let techHtml = '';
-                        if (proj.technologies && proj.technologies.trim()) {
-                            techHtml = `<div class="project-tech"><strong>Technologies:</strong> ${proj.technologies.trim()}</div>`;
+
+                        let projSubheader = '';
+                        if (leftHtml && linkHtml) {
+                            projSubheader = `<div class="entry-subheader">${leftHtml}<span>${linkHtml}</span></div>`;
+                        } else if (leftHtml) {
+                            projSubheader = `<div class="entry-subheader">${leftHtml}</div>`;
+                        } else if (linkHtml) {
+                            projSubheader = `<div class="entry-subheader"><span></span><span>${linkHtml}</span></div>`;
                         }
                         bodyContent += `
                             <div class="project-entry">
@@ -3167,7 +3173,6 @@
                                     <span>${dateRange}</span>
                                 </div>
                                 ${projSubheader}
-                                ${techHtml}
                                 <div class="entry-desc">${formatDescriptionToList(proj.description)}</div>
                             </div>
                         `;

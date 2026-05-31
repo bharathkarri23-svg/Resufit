@@ -16,7 +16,6 @@ import smtplib
 from email.mime.text import MIMEText
 from ocr import extract_text, ocr_image
 from groq_ai import analyze_resume,analyze_job_fit
-import pdfkit
 
 app = Flask(__name__)
 

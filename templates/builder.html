@@ -668,6 +668,18 @@
             padding-left: 0.5mm;
         }
 
+        .contact-link {
+            color: #1d4ed8 !important;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .contact-link:hover {
+            text-decoration: underline !important;
+            color: #1e40af !important;
+        }
+
         /* DYNAMIC TEMPLATE STYLES */
         
         /* ------------------ TEMPLATE 1: MODERN CORPORATE ------------------ */
@@ -3010,6 +3022,16 @@
             }
         }
 
+        // Helper to format URLs cleanly for anchor href links
+        function formatHref(url) {
+            if (!url) return '';
+            let clean = url.trim();
+            if (!/^https?:\/\//i.test(clean)) {
+                clean = 'https://' + clean;
+            }
+            return clean;
+        }
+
         // Helper to format descriptions into proper HTML bulleted lists
         function formatDescriptionToList(desc) {
             if (!desc) return '';
@@ -3040,9 +3062,9 @@
             let locationHtml = data.location ? `<div class="contact-item"><i class="fa-solid fa-location-dot"></i> ${data.location}</div>` : '';
             let emailHtml = data.email ? `<div class="contact-item"><i class="fa-solid fa-envelope"></i> ${data.email}</div>` : '';
             let phoneHtml = data.phone ? `<div class="contact-item"><i class="fa-solid fa-phone"></i> ${data.phone}</div>` : '';
-            let linkedinHtml = data.linkedin ? `<div class="contact-item"><i class="fa-brands fa-linkedin"></i> ${data.linkedin}</div>` : '';
-            let githubHtml = data.github ? `<div class="contact-item"><i class="fa-brands fa-github"></i> ${data.github}</div>` : '';
-            let portfolioHtml = data.portfolio ? `<div class="contact-item"><i class="fa-solid fa-globe"></i> ${data.portfolio}</div>` : '';
+            let linkedinHtml = data.linkedin ? `<div class="contact-item"><i class="fa-brands fa-linkedin"></i> <a href="${formatHref(data.linkedin)}" target="_blank" class="contact-link">LinkedIn</a></div>` : '';
+            let githubHtml = data.github ? `<div class="contact-item"><i class="fa-brands fa-github"></i> <a href="${formatHref(data.github)}" target="_blank" class="contact-link">GitHub</a></div>` : '';
+            let portfolioHtml = data.portfolio ? `<div class="contact-item"><i class="fa-solid fa-globe"></i> <a href="${formatHref(data.portfolio)}" target="_blank" class="contact-link">Portfolio</a></div>` : '';
             
             // Section names from settings or defaults
             const nameSummary = themeSettings.sectionNames.summary || 'Professional Summary';
@@ -3100,6 +3122,10 @@
                     bodyContent += `<div class="section-title">${nameProjects}</div>`;
                     data.projects.forEach(proj => {
                         const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
+                        let linkHtml = '';
+                        if (proj.link) {
+                            linkHtml = ` | <a href="${formatHref(proj.link)}" target="_blank" class="contact-link">Project Link</a>`;
+                        }
                         bodyContent += `
                             <div class="project-entry">
                                 <div class="entry-header">
@@ -3107,7 +3133,7 @@
                                     <span>${dateRange}</span>
                                 </div>
                                 <div class="entry-subheader">
-                                    <span>${proj.role || 'Role'} | ${proj.link || ''}</span>
+                                    <span>${proj.role || 'Role'}${linkHtml}</span>
                                 </div>
                                 <div class="entry-desc">${formatDescriptionToList(proj.description)}</div>
                             </div>

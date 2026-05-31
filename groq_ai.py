@@ -263,3 +263,55 @@ Output ONLY the enhanced text. Do not add intro, explanations, or quotes.
     except Exception as e:
         print("OPTIMIZE ERROR:", str(e))
         return text
+
+
+def tailor_resume(resume_data, job_description):
+    prompt = f"""
+You are an expert ATS Resume Tailoring AI.
+Your job is to rewrite parts of the candidate's resume data to optimize and tailor it for a specific job description.
+
+Target Job Description:
+{job_description}
+
+Original Resume Data (JSON format):
+{json.dumps(resume_data, indent=2)}
+
+Rules for Tailoring:
+1. **Executive Summary**: Rewrite the summary to align directly with the key qualifications and requirements of the target job description. Focus on matching the tone and objectives.
+2. **Work Experience Bullet Points**: For each experience entry, rewrite its `description` (retaining the bullet points structure if present) to highlight achievements, metrics, technologies, and duties that are highly relevant to the target job description. Do NOT invent new achievements, companies, dates, or titles. Only rewrite the phrasing to emphasize matching skills.
+3. **Projects**: For each project, rewrite its `description` to emphasize technical achievements or results matching the job description's tech stack and objectives.
+4. **Skills**: Look at the skill lists. Re-order or append relevant keywords/skills from the target job description to match their respective categories. Do not add skills that the candidate has absolutely no background in, but do optimize and list the matching ones.
+5. **No Hallucinations**: Do not invent fake companies, school names, dates, GPA, titles, or links. Keep all dates, links, names, and titles exactly as they are.
+
+IMPORTANT:
+Return ONLY a valid JSON object matching the input structure exactly. Do not include markdown code block formats (e.g., no ```json), no intro text, and no explanation.
+
+JSON output structure:
+{json.dumps(resume_data, indent=2)}
+"""
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "You are a strict ATS resume tailoring assistant that only outputs valid JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.2,
+        )
+        
+        result = response.choices[0].message.content.strip()
+        print("RAW TAILOR RESPONSE:", result)
+
+        # Extract JSON safely
+        match = re.search(r"\{.*\}", result, re.DOTALL)
+        if match:
+            json_text = match.group()
+            return json.loads(json_text)
+        else:
+            # Try to parse raw response directly if regex fails
+            return json.loads(result)
+            
+    except Exception as e:
+        print("TAILOR ERROR:", str(e))
+        return resume_data

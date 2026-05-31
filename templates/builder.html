@@ -8,7 +8,7 @@
     <!-- Modern Typography & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fira+Code:wght@400;500&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Main Style Sheet (Embedded to keep things highly responsive) -->
@@ -1276,6 +1276,249 @@
             font-size: 8.5pt;
         }
 
+        /* ------------------ TEMPLATE 7: SLATE CLEAN & ELEGANT ------------------ */
+        .preview-sheet.template-7 {
+            font-family: 'Outfit', sans-serif;
+            padding: 15mm 15mm;
+            display: flex;
+            flex-direction: column;
+            gap: 5mm;
+            color: #1e293b;
+        }
+
+        .template-7 .header-section {
+            border-bottom: 3px double var(--primary);
+            padding-bottom: 4mm;
+            margin-bottom: 2mm;
+            text-align: center;
+        }
+
+        .template-7 .header-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24pt;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 0.5px;
+        }
+
+        .template-7 .header-title {
+            font-size: 12pt;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1mm;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .template-7 .contact-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 3mm;
+            font-size: 8.5pt;
+            color: #475569;
+        }
+
+        .template-7 .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0f172a;
+            background: #f1f5f9;
+            padding: 1.5mm 3mm;
+            border-radius: 4px;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 3mm;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .template-7 .experience-entry, 
+        .template-7 .project-entry, 
+        .template-7 .education-entry {
+            margin-bottom: 3.5mm;
+        }
+
+        .template-7 .entry-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 9.5pt;
+            color: #0f172a;
+        }
+
+        .template-7 .entry-subheader {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0.5mm;
+        }
+
+        .template-7 .entry-desc {
+            font-size: 8.5pt;
+            color: #334155;
+            margin-top: 1.5mm;
+            line-height: 1.4;
+        }
+
+        .template-7 .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2mm;
+            font-size: 8.5pt;
+        }
+
+        .template-7 .skills-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .template-7 .skills-cat {
+            font-weight: 700;
+            width: 150px;
+            color: #0f172a;
+        }
+
+        .template-7 .skills-list {
+            color: #475569;
+            flex: 1;
+        }
+
+        .template-7 .certs-langs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 8.5pt;
+        }
+
+        /* ------------------ TEMPLATE 8: SILICON VALLEY TECHNICAL ------------------ */
+        .preview-sheet.template-8 {
+            font-family: 'Inter', sans-serif;
+            padding: 15mm 15mm;
+            display: flex;
+            flex-direction: column;
+            gap: 4.5mm;
+            color: #0f172a;
+        }
+
+        .template-8 .header-section {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 4mm;
+            margin-bottom: 2mm;
+        }
+
+        .template-8 .header-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24pt;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .template-8 .header-title {
+            font-size: 12pt;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+            color: var(--primary);
+            margin-top: 1.5mm;
+        }
+
+        .template-8 .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 3mm;
+            font-size: 8pt;
+            color: #475569;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .template-8 .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1.5px solid #cbd5e1;
+            padding-bottom: 1mm;
+            margin-bottom: 3mm;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .template-8 .experience-entry, 
+        .template-8 .project-entry, 
+        .template-8 .education-entry {
+            margin-bottom: 3.5mm;
+        }
+
+        .template-8 .entry-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 9.5pt;
+        }
+
+        .template-8 .entry-subheader {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            color: var(--primary);
+            font-family: 'Fira Code', monospace;
+            margin-top: 0.5mm;
+        }
+
+        .template-8 .entry-desc {
+            font-size: 8.5pt;
+            color: #334155;
+            margin-top: 1.5mm;
+            line-height: 1.4;
+        }
+
+        .template-8 .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2mm;
+            font-size: 8.5pt;
+        }
+
+        .template-8 .skills-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .template-8 .skills-cat {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            font-size: 8pt;
+            color: var(--primary);
+            width: 150px;
+        }
+
+        .template-8 .skills-list {
+            color: #334155;
+            flex: 1;
+        }
+
+        .template-8 .tech-badge {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 8pt;
+        }
+
+        .template-8 .certs-langs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 8.5pt;
+        }
+
         /* ATS CHECKLIST AND WARNINGS */
         .ats-checklist-card {
             background: #fffbeb;
@@ -1406,41 +1649,85 @@
 
         /* PRINT STYLING */
         @media print {
-            body {
+            @page {
+                size: A4;
+                margin: 0mm;
+            }
+            html, body {
+                height: 297mm !important;
+                width: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
                 background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             .navbar, .editor-panel, .preview-toolbar, .zoom-controls, .mobile-view-bar {
                 display: none !important;
             }
             .builder-container {
-                margin-top: 0 !important;
-                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                height: 297mm !important;
+                width: 210mm !important;
                 display: block !important;
+                overflow: hidden !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
             }
             .preview-panel {
-                width: 100% !important;
-                height: auto !important;
-                overflow: visible !important;
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                overflow: hidden !important;
                 background: white !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
             }
             .preview-viewport {
+                margin: 0 !important;
                 padding: 0 !important;
+                border: none !important;
                 background: white !important;
-                overflow: visible !important;
+                overflow: hidden !important;
                 display: block !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
             }
             .preview-sheet-container {
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
                 transform: none !important;
                 width: 210mm !important;
                 height: 297mm !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
             }
             .preview-sheet {
-                box-shadow: none !important;
                 margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
                 transform: none !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
                 page-break-after: avoid;
                 page-break-inside: avoid;
-                overflow: hidden;
+                overflow: hidden !important;
             }
         }
     </style>
@@ -1463,6 +1750,8 @@
                 <option value="4">Creative Professional</option>
                 <option value="5">Academic / CV</option>
                 <option value="6">Bold Modernist</option>
+                <option value="7">Slate Clean & Elegant</option>
+                <option value="8">Silicon Valley Technical</option>
             </select>
 
             <button class="btn btn-success" onclick="printResume()"><i class="fa-solid fa-download"></i> Save / Print PDF</button>
@@ -1714,6 +2003,115 @@
                                 <div class="template-gallery-desc">Emerald title banner, striking highlights.</div>
                             </div>
                         </div>
+                        <div class="template-gallery-card" onclick="switchTemplate(7)" id="tgc-7">
+                            <div class="template-thumb-overlay" style="color: #1e293b;">T7</div>
+                            <div class="template-gallery-info">
+                                <div class="template-gallery-title">Slate Clean</div>
+                                <div class="template-gallery-desc">Double border header, slate theme. High elegance.</div>
+                            </div>
+                        </div>
+                        <div class="template-gallery-card" onclick="switchTemplate(8)" id="tgc-8">
+                            <div class="template-thumb-overlay" style="font-family: 'Fira Code', monospace; color: #6366f1;">T8</div>
+                            <div class="template-gallery-info">
+                                <div class="template-gallery-title">Silicon Valley Tech</div>
+                                <div class="template-gallery-desc">Technical tags & monospace highlights. Clean code aesthetic.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="font-weight: 600; font-size: 15px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Design & Page Customizer
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-droplet"></i> Primary Accent Color</label>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <input type="color" id="theme_primary_color" onchange="updateThemeColor(this.value)" style="width: 50px; height: 38px; padding: 2px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                                    <span style="font-size: 12px; font-family: monospace; color: var(--text-muted);" id="theme_color_hex">#2f54eb</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-font"></i> Font Family</label>
+                                <select id="theme_font_family" onchange="updateThemeFont(this.value)">
+                                    <option value="">Default (Template Font)</option>
+                                    <option value="'Inter', sans-serif">Inter (Modern Clean)</option>
+                                    <option value="'Outfit', sans-serif">Outfit (Tech Bold)</option>
+                                    <option value="'Roboto', sans-serif">Roboto (Professional)</option>
+                                    <option value="'Georgia', serif">Georgia (Classic Editorial)</option>
+                                    <option value="'Times New Roman', Times, serif">Times New Roman (Academic)</option>
+                                    <option value="'Merriweather', serif">Merriweather (Elegant Editorial)</option>
+                                    <option value="'Fira Code', monospace">Fira Code (Developer Code)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-arrows-left-right"></i> Page Margins</label>
+                                <select id="theme_margins" onchange="updateThemeMargins(this.value)">
+                                    <option value="normal">Normal (15mm)</option>
+                                    <option value="compact">Compact (10mm)</option>
+                                    <option value="spacious">Spacious (20mm)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-text-height"></i> Font Size Density</label>
+                                <select id="theme_font_size" onchange="updateThemeFontSize(this.value)">
+                                    <option value="medium">Medium (Standard 10pt)</option>
+                                    <option value="small">Compact (Small 9pt)</option>
+                                    <option value="large">Spacious (Large 11pt)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 5px;">
+                            <div style="font-weight: 600; font-size: 13px; margin-bottom: 10px; color: var(--text-main);"><i class="fa-solid fa-pen"></i> Rename Section Headings</div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Summary Section</label>
+                                    <input type="text" id="rename_sec_summary" oninput="renameSection('summary', this.value)" placeholder="Professional Summary">
+                                </div>
+                                <div class="form-group">
+                                    <label>Experience Section</label>
+                                    <input type="text" id="rename_sec_experience" oninput="renameSection('experience', this.value)" placeholder="Professional Experience">
+                                </div>
+                                <div class="form-group">
+                                    <label>Projects Section</label>
+                                    <input type="text" id="rename_sec_projects" oninput="renameSection('projects', this.value)" placeholder="Featured Projects">
+                                </div>
+                                <div class="form-group">
+                                    <label>Education Section</label>
+                                    <input type="text" id="rename_sec_education" oninput="renameSection('education', this.value)" placeholder="Education">
+                                </div>
+                                <div class="form-group">
+                                    <label>Skills Section</label>
+                                    <input type="text" id="rename_sec_skills" oninput="renameSection('skills', this.value)" placeholder="Technical Skills">
+                                </div>
+                                <div class="form-group">
+                                    <label>Extra Section</label>
+                                    <input type="text" id="rename_sec_extra" oninput="renameSection('extra', this.value)" placeholder="Certifications & Languages">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="font-weight: 600; font-size: 15px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary);"></i> Smart AI Job Tailoring
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+                            Paste the target Job Description below. Our Llama 3 AI will analyze it and rewrite your Summary, Experience Bullets, and Skills to highlight keywords matching this job description automatically.
+                        </p>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-file-invoice"></i> Target Job Description</label>
+                            <textarea id="tailor_jd_input" style="min-height: 120px;" placeholder="Paste the job description here... (e.g. 'Seeking a Software Engineer experienced in Flask, Docker, and SQL...')"></textarea>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" id="btn-tailor-jd" onclick="tailorResumeToJD()" style="flex: 1; border-radius: 10px;">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Tailor Resume to JD
+                            </button>
+                            <button class="btn btn-outline" id="btn-revert-tailor" onclick="revertTailoredResume()" style="display: none; border-radius: 10px; border-color: var(--danger); color: var(--danger);">
+                                <i class="fa-solid fa-undo"></i> Revert Tailoring
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1761,6 +2159,195 @@
         const totalSteps = 8;
         let autoFit = false;
         let activeMobileTab = 'edit';
+
+        // Advanced custom theme styling settings
+        let themeSettings = {
+            primaryColor: '',
+            fontFamily: '',
+            margins: 'normal',
+            fontSize: 'medium',
+            sectionNames: {
+                summary: 'Professional Summary',
+                experience: 'Professional Experience',
+                projects: 'Featured Projects',
+                education: 'Education',
+                skills: 'Technical Skills',
+                extra: 'Certifications & Languages'
+            }
+        };
+
+        function saveThemeSettings() {
+            localStorage.setItem('resufit_theme_settings', JSON.stringify(themeSettings));
+        }
+
+        function loadThemeSettings() {
+            const saved = localStorage.getItem('resufit_theme_settings');
+            if (saved) {
+                try {
+                    themeSettings = JSON.parse(saved);
+                } catch(e) {
+                    console.error("Error loading theme settings", e);
+                }
+            }
+            syncThemeSettingsToForm();
+        }
+
+        function syncThemeSettingsToForm() {
+            document.getElementById('theme_primary_color').value = themeSettings.primaryColor || getDefaultTemplateColor(currentTemplate);
+            document.getElementById('theme_color_hex').innerText = themeSettings.primaryColor || getDefaultTemplateColor(currentTemplate);
+            document.getElementById('theme_font_family').value = themeSettings.fontFamily || '';
+            document.getElementById('theme_margins').value = themeSettings.margins || 'normal';
+            document.getElementById('theme_font_size').value = themeSettings.fontSize || 'medium';
+            
+            document.getElementById('rename_sec_summary').value = themeSettings.sectionNames.summary || '';
+            document.getElementById('rename_sec_experience').value = themeSettings.sectionNames.experience || '';
+            document.getElementById('rename_sec_projects').value = themeSettings.sectionNames.projects || '';
+            document.getElementById('rename_sec_education').value = themeSettings.sectionNames.education || '';
+            document.getElementById('rename_sec_skills').value = themeSettings.sectionNames.skills || '';
+            document.getElementById('rename_sec_extra').value = themeSettings.sectionNames.extra || '';
+        }
+
+        function updateThemeColor(val) {
+            themeSettings.primaryColor = val;
+            document.getElementById('theme_color_hex').innerText = val;
+            saveThemeSettings();
+            applyThemeSettings();
+        }
+
+        function updateThemeFont(val) {
+            themeSettings.fontFamily = val;
+            saveThemeSettings();
+            applyThemeSettings();
+        }
+
+        function updateThemeMargins(val) {
+            themeSettings.margins = val;
+            saveThemeSettings();
+            applyThemeSettings();
+        }
+
+        function updateThemeFontSize(val) {
+            themeSettings.fontSize = val;
+            saveThemeSettings();
+            applyThemeSettings();
+        }
+
+        function renameSection(sectionKey, val) {
+            themeSettings.sectionNames[sectionKey] = val;
+            saveThemeSettings();
+            renderPreview();
+        }
+
+        function getDefaultTemplateColor(templateIndex) {
+            switch(templateIndex) {
+                case 1: return '#2f54eb';
+                case 2: return '#111827';
+                case 3: return '#06b6d4';
+                case 4: return '#7c2d12';
+                case 5: return '#000000';
+                case 6: return '#065f46';
+                case 7: return '#1e293b';
+                case 8: return '#6366f1';
+                default: return '#2f54eb';
+            }
+        }
+
+        function applyThemeSettings() {
+            const sheet = document.getElementById('preview-sheet');
+            if (!sheet) return;
+
+            // Apply custom accent color
+            const color = themeSettings.primaryColor || getDefaultTemplateColor(currentTemplate);
+            sheet.style.setProperty('--primary', color);
+            
+            // Set dynamic background/borders for template specifics
+            if (currentTemplate === 4) {
+                const sidebar = sheet.querySelector('.sidebar-left');
+                if (sidebar) sidebar.style.backgroundColor = color;
+                const secTitles = sheet.querySelectorAll('.section-title');
+                secTitles.forEach(t => t.style.color = color);
+            }
+            if (currentTemplate === 6) {
+                const headerSec = sheet.querySelector('.header-section');
+                if (headerSec) headerSec.style.backgroundColor = color;
+                const secTitles = sheet.querySelectorAll('.section-title');
+                secTitles.forEach(t => {
+                    t.style.color = color;
+                    t.style.borderColor = color;
+                });
+            }
+            if (currentTemplate === 3) {
+                const headerName = sheet.querySelector('.header-name');
+                if (headerName) headerName.style.color = color;
+                const badges = sheet.querySelectorAll('.tech-badge');
+                badges.forEach(b => {
+                    b.style.borderColor = color;
+                    b.style.color = color;
+                });
+                const secTitles = sheet.querySelectorAll('.section-title');
+                secTitles.forEach(t => {
+                    t.style.borderLeftColor = color;
+                });
+            }
+
+            // Apply custom font family
+            if (themeSettings.fontFamily) {
+                sheet.style.fontFamily = themeSettings.fontFamily;
+                sheet.querySelectorAll('*').forEach(el => {
+                    if (!el.classList.contains('tech-badge') && el.tagName !== 'CODE' && !el.style.fontFamily) {
+                        el.style.fontFamily = themeSettings.fontFamily;
+                    }
+                });
+            } else {
+                sheet.style.fontFamily = '';
+                sheet.querySelectorAll('*').forEach(el => {
+                    if (!el.classList.contains('tech-badge') && el.tagName !== 'CODE') {
+                        el.style.fontFamily = '';
+                    }
+                });
+            }
+
+            // Apply margins
+            let paddingVal = '15mm';
+            if (themeSettings.margins === 'compact') paddingVal = '10mm';
+            if (themeSettings.margins === 'spacious') paddingVal = '20mm';
+            
+            if (currentTemplate !== 4) {
+                sheet.style.padding = paddingVal;
+            } else {
+                const sidebar = sheet.querySelector('.sidebar-left');
+                const mainRight = sheet.querySelector('.main-right');
+                if (sidebar && mainRight) {
+                    if (themeSettings.margins === 'compact') {
+                        sidebar.style.padding = '8mm 4mm';
+                        mainRight.style.padding = '8mm 6mm';
+                    } else if (themeSettings.margins === 'spacious') {
+                        sidebar.style.padding = '15mm 8mm';
+                        mainRight.style.padding = '15mm 10mm';
+                    } else {
+                        sidebar.style.padding = '12mm 6mm';
+                        mainRight.style.padding = '12mm 8mm';
+                    }
+                }
+            }
+
+            // Apply font size density
+            let baseSize = '10pt';
+            let lineH = '1.4';
+            if (themeSettings.fontSize === 'small') {
+                baseSize = '9pt';
+                lineH = '1.3';
+            } else if (themeSettings.fontSize === 'large') {
+                baseSize = '11pt';
+                lineH = '1.5';
+            }
+            sheet.style.fontSize = baseSize;
+            sheet.style.lineHeight = lineH;
+            
+            sheet.querySelectorAll('.entry-desc').forEach(el => {
+                el.style.fontSize = themeSettings.fontSize === 'small' ? '8pt' : (themeSettings.fontSize === 'large' ? '9pt' : '8.5pt');
+            });
+        }
 
         // Structured initial sample data to wow users immediately
         let resumeData = {
@@ -1838,6 +2425,15 @@
                 } catch(e) {
                     console.error("Error loading cached resume data.", e);
                 }
+            }
+
+            // Load persistent theme settings
+            loadThemeSettings();
+
+            // Check if backup exists to show Revert button
+            if (localStorage.getItem('resufit_data_backup')) {
+                const revertBtn = document.getElementById('btn-revert-tailor');
+                if (revertBtn) revertBtn.style.display = 'inline-flex';
             }
 
             // Sync values from state to form inputs
@@ -2373,10 +2969,10 @@
 
         // REAL-TIME RENDERING ENGINE
         function switchTemplate(index) {
-            if (index < 1 || index > 6) return;
+            if (index < 1 || index > 8) return;
             
             // Remove active classes in gallery
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i <= 8; i++) {
                 const gCard = document.getElementById('tgc-' + i);
                 if (gCard) gCard.classList.remove('active');
             }
@@ -2384,14 +2980,20 @@
             // Set active in gallery
             const currentGCard = document.getElementById('tgc-' + index);
             if (currentGCard) currentGCard.classList.add('active');
-
+ 
             // Update selector
             document.getElementById('direct-template-switch').value = index;
-
+ 
             currentTemplate = index;
             const sheet = document.getElementById('preview-sheet');
             sheet.className = 'preview-sheet template-' + currentTemplate;
             
+            // Update color picker default visual state if user hasn't customized color
+            if (!themeSettings.primaryColor) {
+                document.getElementById('theme_primary_color').value = getDefaultTemplateColor(index);
+                document.getElementById('theme_color_hex').innerText = getDefaultTemplateColor(index);
+            }
+
             renderPreview();
         }
 
@@ -2419,6 +3021,14 @@
             let githubHtml = data.github ? `<div class="contact-item"><i class="fa-brands fa-github"></i> ${data.github}</div>` : '';
             let portfolioHtml = data.portfolio ? `<div class="contact-item"><i class="fa-solid fa-globe"></i> ${data.portfolio}</div>` : '';
             
+            // Section names from settings or defaults
+            const nameSummary = themeSettings.sectionNames.summary || 'Professional Summary';
+            const nameExperience = themeSettings.sectionNames.experience || 'Professional Experience';
+            const nameProjects = themeSettings.sectionNames.projects || 'Featured Projects';
+            const nameEducation = themeSettings.sectionNames.education || 'Education';
+            const nameSkills = themeSettings.sectionNames.skills || 'Technical Skills';
+            const nameExtra = themeSettings.sectionNames.extra || 'Certifications & Languages';
+
             // Render template-specific structures
             if (currentTemplate === 4) {
                 // Creative Accent uses a sidebar layout
@@ -2436,7 +3046,7 @@
                 `;
 
                 if (data.skills && data.skills.length > 0) {
-                    leftContent += `<div class="sidebar-title" style="margin-top: 6mm;">Skills</div>`;
+                    leftContent += `<div class="sidebar-title" style="margin-top: 6mm;">${nameSkills}</div>`;
                     leftContent += `<div class="skills-list-vert">`;
                     data.skills.forEach(s => {
                         leftContent += `<div style="font-weight: 600; margin-top: 1mm; font-size: 8pt; color: #fdba74;">${s.category}</div>`;
@@ -2458,13 +3068,13 @@
                 
                 if (data.summary) {
                     rightContent += `
-                        <div class="section-title">Profile Summary</div>
+                        <div class="section-title">${nameSummary}</div>
                         <div class="entry-desc" style="margin-top: 0; margin-bottom: 4mm;">${data.summary}</div>
                     `;
                 }
 
                 if (data.experience && data.experience.length > 0) {
-                    rightContent += `<div class="section-title">Work Experience</div>`;
+                    rightContent += `<div class="section-title">${nameExperience}</div>`;
                     data.experience.forEach(exp => {
                         const dateRange = formatDateString(exp.start_date) + ' - ' + (exp.current ? 'Present' : formatDateString(exp.end_date));
                         rightContent += `
@@ -2483,7 +3093,7 @@
                 }
 
                 if (data.projects && data.projects.length > 0) {
-                    rightContent += `<div class="section-title">Key Projects</div>`;
+                    rightContent += `<div class="section-title">${nameProjects}</div>`;
                     data.projects.forEach(proj => {
                         const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
                         rightContent += `
@@ -2502,7 +3112,7 @@
                 }
 
                 if (data.education && data.education.length > 0) {
-                    rightContent += `<div class="section-title">Education</div>`;
+                    rightContent += `<div class="section-title">${nameEducation}</div>`;
                     data.education.forEach(edu => {
                         rightContent += `
                             <div class="education-entry" style="margin-bottom: 3mm;">
@@ -2535,7 +3145,7 @@
                     <div class="main-right">${rightContent}</div>
                 `;
             } else {
-                // Single column or standard banner templates (1, 2, 3, 5, 6)
+                // Single column or standard banner templates (1, 2, 3, 5, 6, 7, 8)
                 let headerContent = `
                     <div class="header-name">${(data.first_name || '')} ${(data.last_name || '')}</div>
                     <div class="header-title">${data.job_title || ''}</div>
@@ -2553,13 +3163,13 @@
                 
                 if (data.summary) {
                     bodyContent += `
-                        <div class="section-title">Professional Summary</div>
+                        <div class="section-title">${nameSummary}</div>
                         <p class="entry-desc" style="margin-top: 0; margin-bottom: 4mm;">${data.summary}</p>
                     `;
                 }
                 
                 if (data.experience && data.experience.length > 0) {
-                    bodyContent += `<div class="section-title">Professional Experience</div>`;
+                    bodyContent += `<div class="section-title">${nameExperience}</div>`;
                     data.experience.forEach(exp => {
                         const dateRange = formatDateString(exp.start_date) + ' - ' + (exp.current ? 'Present' : formatDateString(exp.end_date));
                         bodyContent += `
@@ -2578,7 +3188,7 @@
                 }
 
                 if (data.projects && data.projects.length > 0) {
-                    bodyContent += `<div class="section-title">Featured Projects</div>`;
+                    bodyContent += `<div class="section-title">${nameProjects}</div>`;
                     data.projects.forEach(proj => {
                         const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
                         bodyContent += `
@@ -2597,7 +3207,7 @@
                 }
 
                 if (data.education && data.education.length > 0) {
-                    bodyContent += `<div class="section-title">Education</div>`;
+                    bodyContent += `<div class="section-title">${nameEducation}</div>`;
                     data.education.forEach(edu => {
                         bodyContent += `
                             <div class="education-entry">
@@ -2615,8 +3225,8 @@
 
                 // Skills formatting based on templates
                 if (data.skills && data.skills.length > 0) {
-                    bodyContent += `<div class="section-title">Technical Skills</div>`;
-                    if (currentTemplate === 3) {
+                    bodyContent += `<div class="section-title">${nameSkills}</div>`;
+                    if (currentTemplate === 3 || currentTemplate === 8) {
                         bodyContent += `<div class="skills-grid">`;
                         data.skills.forEach(s => {
                             const tags = s.list.split(',').map(t => `<span class="tech-badge">${t.trim()}</span>`).join(' ');
@@ -2640,7 +3250,7 @@
                 // Certifications & Languages
                 let hasExtra = (data.certifications && data.certifications.length > 0) || (data.languages && data.languages.length > 0);
                 if (hasExtra) {
-                    bodyContent += `<div class="section-title">Certifications & Languages</div>`;
+                    bodyContent += `<div class="section-title">${nameExtra}</div>`;
                     bodyContent += `<div class="certs-langs-grid">`;
                     
                     if (data.certifications && data.certifications.length > 0) {
@@ -2667,6 +3277,9 @@
                     <div class="body-section">${bodyContent}</div>
                 `;
             }
+            
+            // Apply customized styling variables, fonts, sizes, and spacing
+            applyThemeSettings();
         }
 
         // AI OPTIMIZER CLIENT SIDE TRIGGERS
@@ -2878,6 +3491,103 @@
             setTimeout(() => {
                 handleZoomSlider(currentZoom);
             }, 100);
+        }
+
+        // SMART AI JD TAILORING
+        let originalResumeBackup = null;
+
+        async function tailorResumeToJD() {
+            const jdText = document.getElementById('tailor_jd_input').value;
+            if (!jdText.trim()) {
+                alert("Please paste a target job description first!");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-tailor-jd');
+            const revertBtn = document.getElementById('btn-revert-tailor');
+            const originalHtml = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Tailoring Resume...';
+            
+            try {
+                const response = await fetch('/tailor-resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ resumeData: resumeData, jobdesc: jdText })
+                });
+                
+                const data = await response.json();
+                if (response.ok && data.tailored) {
+                    // Backup current data before overwriting
+                    originalResumeBackup = JSON.parse(JSON.stringify(resumeData));
+                    localStorage.setItem('resufit_data_backup', JSON.stringify(originalResumeBackup));
+                    
+                    // Overwrite state and cache
+                    resumeData = data.tailored;
+                    saveToCache();
+                    syncStateToForm();
+                    
+                    // Re-render accordions
+                    renderExperienceList();
+                    renderProjectList();
+                    renderEducationList();
+                    renderSkillsList();
+                    renderCertificationList();
+                    renderLanguageList();
+                    
+                    // Redraw preview and ATS scoring
+                    renderPreview();
+                    updateATSChecklist();
+                    
+                    alert("Success! Your resume has been tailored to the job description.");
+                    revertBtn.style.display = 'inline-flex';
+                } else {
+                    alert("Tailoring failed: " + (data.error || "Unknown error"));
+                }
+            } catch(e) {
+                console.error(e);
+                alert("Network error: Could not reach the tailoring server.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+
+        function revertTailoredResume() {
+            const savedBackup = localStorage.getItem('resufit_data_backup');
+            let restored = false;
+            
+            if (savedBackup) {
+                resumeData = JSON.parse(savedBackup);
+                restored = true;
+            } else if (originalResumeBackup) {
+                resumeData = JSON.parse(JSON.stringify(originalResumeBackup));
+                restored = true;
+            }
+            
+            if (restored) {
+                saveToCache();
+                syncStateToForm();
+                
+                renderExperienceList();
+                renderProjectList();
+                renderEducationList();
+                renderSkillsList();
+                renderCertificationList();
+                renderLanguageList();
+                
+                renderPreview();
+                updateATSChecklist();
+                
+                localStorage.removeItem('resufit_data_backup');
+                document.getElementById('btn-revert-tailor').style.display = 'none';
+                alert("Restored your original resume data!");
+            } else {
+                alert("No backup found to restore.");
+            }
         }
     </script>
 </body>

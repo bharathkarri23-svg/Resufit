@@ -430,21 +430,23 @@
         }
 
         .buttons{
-            display:flex;
-            gap:15px;
-            flex-wrap:wrap;
-            margin-top:25px;
-            margin-left:0; /* remove fixed margin */
+            margin-top:5px;
         }
 
         .btn-primary{
-            padding:12px 28px;
-            background:#2f54eb;
-            color:#fff;
+            padding:10px 20px;
             border:none;
             border-radius:50px;
-            font-size:16px;
+            background:#2f54eb;
+            color:white;
+            font-size:15px;
+            font-weight:500;
             cursor:pointer;
+            transition:0.3s;
+        }
+
+        .btn-primary:hover{
+            transform:translateY(-2px);
         }
 
         .right-section{
@@ -1165,6 +1167,30 @@
     // Restore Active Tab After Refresh
     // ===============================
     window.addEventListener("DOMContentLoaded", () => {
+
+        // Determine if the navigation is a reload
+        const navigationEntry = performance.getEntriesByType("navigation")[0];
+        const isReload = navigationEntry ? navigationEntry.type === "reload" : (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
+        const referrer = document.referrer;
+        
+        // If the user lands on home from a different page (not a reload),
+        // always default to the main dashboard tab.
+        if (!isReload) {
+            let shouldReset = true;
+            if (referrer) {
+                try {
+                    const refUrl = new URL(referrer);
+                    if (refUrl.pathname === "/home") {
+                        shouldReset = false;
+                    }
+                } catch (e) {
+                    // Ignore URL parse errors
+                }
+            }
+            if (shouldReset) {
+                localStorage.setItem("activeTab", "dashboard");
+            }
+        }
 
         const activeTab = localStorage.getItem("activeTab");
 

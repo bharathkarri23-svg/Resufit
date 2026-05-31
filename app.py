@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, session, render_template, request, redirect, url_for,jsonify,send_file
 import sqlite3
 import secrets
@@ -13,10 +16,7 @@ import smtplib
 from email.mime.text import MIMEText
 from ocr import extract_text, ocr_image
 from groq_ai import analyze_resume,analyze_job_fit
-from dotenv import load_dotenv
 import pdfkit
-
-load_dotenv()
 
 app = Flask(__name__)
 
@@ -667,6 +667,36 @@ def optimize_text_route():
     except Exception as e:
         print("ROUTE AI ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
+
+
+# -------------------------------
+# AI Resume Tailoring Route
+# -------------------------------
+
+@app.route("/tailor-resume", methods=["POST"])
+def tailor_resume_route():
+    if "user" not in session:
+        return jsonify({"error": "Please sign in to use AI tailoring."}), 401
+        
+    try:
+        data = request.get_json()
+        if not data or "resumeData" not in data or "jobdesc" not in data:
+            return jsonify({"error": "Missing input data."}), 400
+            
+        resume_data = data.get("resumeData")
+        jobdesc = data.get("jobdesc").strip()
+        
+        if not jobdesc:
+            return jsonify({"tailored": resume_data})
+            
+        from groq_ai import tailor_resume
+        tailored_data = tailor_resume(resume_data, jobdesc)
+        return jsonify({"tailored": tailored_data})
+        
+    except Exception as e:
+        print("ROUTE AI TAILOR ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 # -------------------------------
 # Logout

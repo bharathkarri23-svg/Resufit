@@ -3103,15 +3103,23 @@
                     bodyContent += `<div class="section-title">${nameExperience}</div>`;
                     data.experience.forEach(exp => {
                         const dateRange = formatDateString(exp.start_date) + ' - ' + (exp.current ? 'Present' : formatDateString(exp.end_date));
+                        let company = exp.company ? exp.company.trim() : '';
+                        let location = exp.location ? exp.location.trim() : '';
+                        let expSubheader = '';
+                        if (company && location) {
+                            expSubheader = `<div class="entry-subheader"><span>${company} | ${location}</span></div>`;
+                        } else if (company) {
+                            expSubheader = `<div class="entry-subheader"><span>${company}</span></div>`;
+                        } else if (location) {
+                            expSubheader = `<div class="entry-subheader"><span>${location}</span></div>`;
+                        }
                         bodyContent += `
                             <div class="experience-entry">
                                 <div class="entry-header">
                                     <span>${exp.role || 'New Job'}</span>
                                     <span>${dateRange}</span>
                                 </div>
-                                <div class="entry-subheader">
-                                    <span>${exp.company || 'Company'} | ${exp.location || 'Location'}</span>
-                                </div>
+                                ${expSubheader}
                                 <div class="entry-desc">${formatDescriptionToList(exp.description)}</div>
                             </div>
                         `;
@@ -3122,9 +3130,18 @@
                     bodyContent += `<div class="section-title">${nameProjects}</div>`;
                     data.projects.forEach(proj => {
                         const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
+                        let roleHtml = proj.role ? proj.role.trim() : '';
                         let linkHtml = '';
                         if (proj.link) {
-                            linkHtml = ` | <a href="${formatHref(proj.link)}" target="_blank" class="contact-link">Project Link</a>`;
+                            linkHtml = `<a href="${formatHref(proj.link)}" target="_blank" class="contact-link">Project Link</a>`;
+                        }
+                        let projSubheader = '';
+                        if (roleHtml && linkHtml) {
+                            projSubheader = `<div class="entry-subheader"><span>${roleHtml} | ${linkHtml}</span></div>`;
+                        } else if (roleHtml) {
+                            projSubheader = `<div class="entry-subheader"><span>${roleHtml}</span></div>`;
+                        } else if (linkHtml) {
+                            projSubheader = `<div class="entry-subheader"><span>${linkHtml}</span></div>`;
                         }
                         bodyContent += `
                             <div class="project-entry">
@@ -3132,9 +3149,7 @@
                                     <span>${proj.name || 'Project'}</span>
                                     <span>${dateRange}</span>
                                 </div>
-                                <div class="entry-subheader">
-                                    <span>${proj.role || 'Role'}${linkHtml}</span>
-                                </div>
+                                ${projSubheader}
                                 <div class="entry-desc">${formatDescriptionToList(proj.description)}</div>
                             </div>
                         `;
@@ -3144,15 +3159,34 @@
                 if (data.education && data.education.length > 0) {
                     bodyContent += `<div class="section-title">${nameEducation}</div>`;
                     data.education.forEach(edu => {
+                        let degree = edu.degree ? edu.degree.trim() : '';
+                        let field = edu.field ? edu.field.trim() : '';
+                        let gpa = edu.gpa ? edu.gpa.trim() : '';
+                        let eduDetails = '';
+                        
+                        if (degree && field) {
+                            eduDetails = `${degree} in ${field}`;
+                        } else if (degree) {
+                            eduDetails = degree;
+                        } else if (field) {
+                            eduDetails = field;
+                        }
+                        
+                        if (gpa) {
+                            eduDetails += eduDetails ? ` (GPA: ${gpa})` : `GPA: ${gpa}`;
+                        }
+                        
+                        let eduSubheader = '';
+                        if (eduDetails) {
+                            eduSubheader = `<div class="entry-subheader"><span>${eduDetails}</span></div>`;
+                        }
                         bodyContent += `
                             <div class="education-entry">
                                 <div class="entry-header">
                                     <span>${edu.school || 'School'}</span>
                                     <span>${formatDateString(edu.end_date)}</span>
                                 </div>
-                                <div class="entry-subheader">
-                                    <span>${edu.degree || 'Degree'} in ${edu.field || 'Field'} ${edu.gpa ? '(GPA: ' + edu.gpa + ')' : ''}</span>
-                                </div>
+                                ${eduSubheader}
                             </div>
                         `;
                     });
@@ -3191,7 +3225,14 @@
                     if (data.certifications && data.certifications.length > 0) {
                         bodyContent += `<div>`;
                         data.certifications.forEach(c => {
-                            bodyContent += `<div style="margin-bottom: 1.5mm;"><strong>${c.name}</strong> - ${c.issuer} (${formatDateString(c.date)})</div>`;
+                            let certDetails = `<strong>${c.name}</strong>`;
+                            if (c.issuer) {
+                                certDetails += ` - ${c.issuer}`;
+                            }
+                            if (c.date) {
+                                certDetails += ` (${formatDateString(c.date)})`;
+                            }
+                            bodyContent += `<div style="margin-bottom: 1.5mm;">${certDetails}</div>`;
                         });
                         bodyContent += `</div>`;
                     }
@@ -3199,7 +3240,11 @@
                     if (data.languages && data.languages.length > 0) {
                         bodyContent += `<div>`;
                         data.languages.forEach(l => {
-                            bodyContent += `<div style="margin-bottom: 1.5mm;"><strong>${l.language}</strong>: ${l.level}</div>`;
+                            let langDetails = `<strong>${l.language}</strong>`;
+                            if (l.level) {
+                                langDetails += `: ${l.level}`;
+                            }
+                            bodyContent += `<div style="margin-bottom: 1.5mm;">${langDetails}</div>`;
                         });
                         bodyContent += `</div>`;
                     }

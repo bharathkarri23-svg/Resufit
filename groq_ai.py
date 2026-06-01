@@ -21,7 +21,7 @@ Rules:
 5. Detect the summary of the candidate based on the resume content.
 6. Add Suggestions on to improve the scores to above 90%.
 7. If there are no missings fields increase the score.
-8. for links LinkedIn, GitHub, Portfolio, check strictly for www.linkedin.com, github.com, and portfolio keywords in the resume otherwise give missing information for those fields. Do NOT guess or infer links.
+8. For links LinkedIn, GitHub, Portfolio, extract them if present in the resume text or links list.
 9. Give suggesstions on skills that can be added.
 10. Analyze the technologies used in the projects and suggest any missing technologies that are relevant to the job title.
 

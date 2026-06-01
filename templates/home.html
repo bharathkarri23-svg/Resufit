@@ -672,6 +672,43 @@
                 max-width: 280px;
             }
         }
+
+        /* Button Loading Spinner */
+        .btn-loading {
+            position: relative !important;
+            color: transparent !important;
+            pointer-events: none !important;
+        }
+
+        .btn-loading::after {
+            content: "" !important;
+            position: absolute !important;
+            width: 20px !important;
+            height: 20px !important;
+            top: 50% !important;
+            left: 50% !important;
+            margin-top: -10px !important;
+            margin-left: -10px !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 50% !important;
+            border-top-color: white !important;
+            animation: btn-spin 0.8s linear infinite !important;
+            z-index: 10 !important;
+        }
+
+        /* Hide text/icon contents inside a loading button */
+        .btn-loading * {
+            opacity: 0 !important;
+        }
+
+        @keyframes btn-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -725,7 +762,7 @@
                 </div>
 
                 {% if analysis or error %}
-                <form method="POST" enctype="multipart/form-data" class="header-upload-form">
+                <form id="header-upload-form" method="POST" enctype="multipart/form-data" class="header-upload-form">
                     <input type="hidden" name="form_type" value="resume_analysis">
                     <label for="header-file" class="header-upload-btn">
                         Upload New Resume
@@ -740,7 +777,7 @@
             <!-- Upload Card -->
             <div class="glass-card upload-section transparent-start">
                 <h2>Upload Your Resume</h2>
-                <form method="POST" enctype="multipart/form-data">
+                <form id="dashboard-upload-form" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="form_type" value="resume_analysis">
                     <label for="file" class="labelFile">
                         <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="50" height="50"
@@ -1109,7 +1146,7 @@
                         role's criteria.</p>
                 </div>
 
-                <form method="POST" enctype="multipart/form-data">
+                <form id="jobfit-form" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="form_type" value="job_fit">
 
                     <div class="jobfit-grid-setup">
@@ -1120,7 +1157,7 @@
                                 <i class="fa-solid fa-paste"></i> Paste Job Description</h3>
                             <textarea id="jobdesc" name="jobdesc" placeholder="Paste the full job description.."
                                 required
-                                style="width: 100%; height: 210px; padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); outline: none; font-size: 14px; resize: vertical; box-sizing: border-box; background: #f8fafc; color: var(--text-main);"></textarea>
+                                style="width: 100%; height: 210px; padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); outline: none; font-size: 14px; resize: vertical; box-sizing: border-box; background: #f8fafc; color: var(--text-main);">{{ jobdesc or '' }}</textarea>
                         </div>
 
                         <!-- Column 2: Upload Resume -->
@@ -1459,6 +1496,38 @@
 
             });
         }
+
+        // Handle loading screen on form submissions
+        document.addEventListener("DOMContentLoaded", () => {
+            const dashForm = document.getElementById('dashboard-upload-form');
+            if (dashForm) {
+                dashForm.addEventListener('submit', () => {
+                    const btn = dashForm.querySelector('button[type="submit"]');
+                    if (btn) btn.classList.add('btn-loading');
+                });
+            }
+            
+            const headerForm = document.getElementById('header-upload-form');
+            if (headerForm) {
+                const fileInput = document.getElementById('header-file');
+                if (fileInput) {
+                    fileInput.addEventListener('change', () => {
+                        if (fileInput.files.length > 0) {
+                            const btnLabel = document.querySelector('label[for="header-file"]');
+                            if (btnLabel) btnLabel.classList.add('btn-loading');
+                        }
+                    });
+                }
+            }
+            
+            const jobForm = document.getElementById('jobfit-form');
+            if (jobForm) {
+                jobForm.addEventListener('submit', () => {
+                    const btn = jobForm.querySelector('.btn-jobfit-submit');
+                    if (btn) btn.classList.add('btn-loading');
+                });
+            }
+        });
 
     </script>
 

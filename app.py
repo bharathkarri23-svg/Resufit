@@ -461,6 +461,7 @@ def home():
     analysis = None
     jobanalysis = None
     error = None
+    jobdesc = None
 
     active_tab = "dashboard"
 
@@ -621,10 +622,14 @@ def home():
         analysis=analysis,
         jobanalysis=jobanalysis,
         error=error,
-        active_tab=active_tab
+        active_tab=active_tab,
+        jobdesc=jobdesc
     )
 
 def is_resume_text(text):
+    if not text:
+        print("DEBUG: Resume text is empty or None")
+        return False
 
     resume_keywords = [
         "experience",
@@ -639,17 +644,31 @@ def is_resume_text(text):
         "intern",
         "university",
         "bachelor",
-        "master"
+        "master",
+        "work",
+        "profile",
+        "contact",
+        "email",
+        "phone",
+        "academic",
+        "achievement",
+        "languages",
+        "technologies",
+        "tools",
+        "developer",
+        "engineer"
     ]
 
     text_lower = text.lower()
-
     score = 0
+    matched_words = []
 
     for word in resume_keywords:
         if word in text_lower:
             score += 1
+            matched_words.append(word)
 
+    print(f"DEBUG: Resume text length = {len(text)}, score = {score}, matched keywords = {matched_words}")
     return score >= 3
 
 @app.route("/builder")

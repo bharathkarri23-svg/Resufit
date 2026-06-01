@@ -3201,10 +3201,10 @@
         function formatHref(url) {
             if (!url) return '';
             let clean = url.trim();
-            if (!/^https?:\/\//i.test(clean)) {
-                clean = 'https://' + clean;
-            }
-            return clean;
+            // Remove duplicates like httpshttps//, http://http://, https://https://
+            clean = clean.replace(/^(https?|http|httpshttps|https|httphttp|:|\/)+/gi, '');
+            clean = clean.replace(/^\/+/, '');
+            return 'https://' + clean;
         }
 
         // Helper to format descriptions into proper HTML bulleted lists

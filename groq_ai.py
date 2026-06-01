@@ -1,9 +1,57 @@
 import os
 import json
 import re
+import groq
 from groq import Groq
 
 client = Groq(api_key=os.getenv("groq_api_key"))
+
+
+def get_completion_with_fallback(messages, primary_model="llama-3.3-70b-versatile", **kwargs):
+    """
+    Attempts to get a chat completion using the primary model.
+    If a rate limit (429) or other transient server issues occur,
+    it falls back to a list of other capable models (e.g. llama-3.1-8b-instant, gemma2-9b-it, llama-3.2-3b-preview).
+    """
+    models = [primary_model]
+    
+    # List of fallback models to try if the primary model fails
+    fallbacks = ["llama-3.1-8b-instant", "gemma2-9b-it", "llama-3.2-3b-preview"]
+    
+    if primary_model == "openai/gpt-oss-120b":
+        models.extend(fallbacks)
+        models.append("llama-3.3-70b-versatile")
+    elif primary_model == "llama-3.3-70b-versatile":
+        models.extend(fallbacks)
+    else:
+        models.append("llama-3.3-70b-versatile")
+        models.extend(fallbacks)
+        
+    seen = set()
+    models = [x for x in models if not (x in seen or seen.add(x))]
+    
+    last_err = None
+    for model in models:
+        try:
+            print(f"Calling Groq with model: {model}")
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                **kwargs
+            )
+            return response
+        except groq.RateLimitError as e:
+            print(f"RateLimitError for model {model}: {e}. Trying fallback...")
+            last_err = e
+        except groq.APIStatusError as e:
+            if e.status_code == 429:
+                print(f"APIStatusError 429 (Rate Limit) for model {model}: {e}. Trying fallback...")
+                last_err = e
+            else:
+                raise e
+    if last_err:
+        raise last_err
+
 
 
 def analyze_resume(text):
@@ -92,8 +140,8 @@ Resume:
 """
     try:
 
-        response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+        response = get_completion_with_fallback(
+            primary_model="openai/gpt-oss-120b",
             messages=[
                 {"role": "system", "content": "You are an ATS resume analyzer."},
                 {"role": "user", "content": prompt}
@@ -113,6 +161,21 @@ Resume:
 
             json_text = match.group()
             data = json.loads(json_text)
+            
+            # Sanitize Candidate Information URLs (LinkedIn, GitHub, Portfolio)
+            if "Candidate_Information" in data and isinstance(data["Candidate_Information"], dict):
+                info = data["Candidate_Information"]
+                for key in ["LinkedIn", "GitHub", "Portfolio"]:
+                    if key in info and info[key]:
+                        val = info[key].strip()
+                        if val.lower() not in ["", "missing", "none", "n/a", "null"]:
+                            # Remove duplicates like httpshttps//, http://http://, https://https://
+                            val = re.sub(r'^(https?|http|httpshttps|https|httphttp|:|\/)+', '', val, flags=re.IGNORECASE)
+                            val = val.lstrip('/')
+                            info[key] = "https://" + val
+                        else:
+                            info[key] = "Missing"
+                            
             return data
 
         return {"error": "AI did not return valid JSON"}
@@ -183,8 +246,8 @@ Return JSON in this exact format:
 
     try:
 
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        response = get_completion_with_fallback(
+            primary_model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "You are a strict ATS resume analyzer that only returns valid JSON."},
                 {"role": "user", "content": prompt}
@@ -251,8 +314,8 @@ Original Text:
 Output ONLY the enhanced text. Do not add intro, explanations, or quotes.
 """
     try:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        response = get_completion_with_fallback(
+            primary_model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "You are a professional resume optimizer."},
                 {"role": "user", "content": prompt}
@@ -291,8 +354,8 @@ JSON output structure:
 """
 
     try:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        response = get_completion_with_fallback(
+            primary_model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "You are a strict ATS resume tailoring assistant that only outputs valid JSON."},
                 {"role": "user", "content": prompt}
@@ -345,8 +408,8 @@ JSON format:
 }}
 """
     try:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        response = get_completion_with_fallback(
+            primary_model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "You are a strict ATS keyword analyzer that only outputs valid JSON."},
                 {"role": "user", "content": prompt}

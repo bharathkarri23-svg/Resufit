@@ -827,18 +827,15 @@
                     <p><strong>Email:</strong> {{ analysis.Candidate_Information.Email }}</p>
                     <p><strong>Phone:</strong> {{ analysis.Candidate_Information.Phone }}</p>
                     <p><strong>Location:</strong> {{ analysis.Candidate_Information.Location }}</p>
-                    {% if analysis.Candidate_Information.LinkedIn and analysis.Candidate_Information.LinkedIn !=
-                    'Missing' %}
-                    <p><strong>LinkedIn:</strong> <a href="https://{{ analysis.Candidate_Information.LinkedIn }}"
+                    {% if analysis.Candidate_Information.LinkedIn and analysis.Candidate_Information.LinkedIn != 'Missing' %}
+                    <p><strong>LinkedIn:</strong> <a href="{{ analysis.Candidate_Information.LinkedIn }}"
                             target="_blank">View Profile</a></p>
                     {% endif %}
-                    {% if analysis.Candidate_Information.GitHub and analysis.Candidate_Information.GitHub != 'Missing'
-                    %}
+                    {% if analysis.Candidate_Information.GitHub and analysis.Candidate_Information.GitHub != 'Missing' %}
                     <p><strong>GitHub:</strong> <a href="{{ analysis.Candidate_Information.GitHub }}"
                             target="_blank">View Profile</a></p>
                     {% endif %}
-                    {% if analysis.Candidate_Information.Portfolio and analysis.Candidate_Information.Portfolio !=
-                    'Missing' %}
+                    {% if analysis.Candidate_Information.Portfolio and analysis.Candidate_Information.Portfolio != 'Missing' %}
                     <p><strong>Portfolio:</strong> <a href="{{ analysis.Candidate_Information.Portfolio }}"
                             target="_blank">View Portfolio</a></p>
                     {% endif %}

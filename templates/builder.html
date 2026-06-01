@@ -2600,6 +2600,7 @@
                     console.error("Error loading cached resume data.", e);
                 }
             }
+            migrateProjectDates(resumeData);
 
             // Load persistent theme settings
             loadThemeSettings();
@@ -2950,7 +2951,7 @@
                             </div>
                             <div class="form-group">
                                 <label><i class="fa-solid fa-calendar"></i> Completion Date</label>
-                                <input type="date" value="${item.start_date || ''}" oninput="updateListItem('projects', ${index}, 'start_date', this.value)">
+                                <input type="date" value="${item.end_date || ''}" oninput="updateListItem('projects', ${index}, 'end_date', this.value)">
                             </div>
                             <div class="form-group form-group-full">
                                 <label><i class="fa-solid fa-screwdriver-wrench"></i> Technologies / Tools Used</label>
@@ -3178,6 +3179,24 @@
             }
         }
 
+        function migrateProjectDates(data) {
+            if (data && data.projects) {
+                data.projects.forEach(proj => {
+                    if (proj.start_date && proj.end_date) {
+                        const start = new Date(proj.start_date);
+                        const end = new Date(proj.end_date);
+                        if (!isNaN(start) && !isNaN(end) && start > end) {
+                            proj.end_date = proj.start_date;
+                            proj.start_date = '';
+                        }
+                    } else if (proj.start_date && !proj.end_date) {
+                        proj.end_date = proj.start_date;
+                        proj.start_date = '';
+                    }
+                });
+            }
+        }
+
         // Helper to format URLs cleanly for anchor href links
         function formatHref(url) {
             if (!url) return '';
@@ -3285,7 +3304,7 @@
                 if (data.projects && data.projects.length > 0) {
                     bodyContent += `<div class="section-title">${nameProjects}</div>`;
                     data.projects.forEach(proj => {
-                        const dateRange = formatDateString(proj.start_date) + ' - ' + formatDateString(proj.end_date);
+                        const dateRange = formatDateString(proj.end_date || proj.start_date);
                         let roleHtml = proj.role ? proj.role.trim() : '';
                         let linkHtml = '';
                         if (proj.link) {
@@ -3521,6 +3540,7 @@
                     const parsed = JSON.parse(e.target.result);
                     if (parsed && typeof parsed === 'object') {
                         resumeData = parsed;
+                        migrateProjectDates(resumeData);
                         saveToCache();
                         syncStateToForm();
                         
@@ -3720,6 +3740,7 @@
                     
                     // Overwrite state and cache
                     resumeData = data.tailored;
+                    migrateProjectDates(resumeData);
                     saveToCache();
                     syncStateToForm();
                     

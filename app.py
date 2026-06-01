@@ -221,19 +221,36 @@ def send_otp(to_email, otp):
     sender_email = os.getenv("EMAIL_USER")
     sender_password = os.getenv("EMAIL_PASS")
 
-    print("DEBUG EMAIL:", sender_email)
-    print("DEBUG PASS:", sender_password)
+    try:
+        print("Connecting to SMTP...")
 
-    msg = MIMEText(f"Your OTP for password reset is: {otp}")
-    msg["Subject"] = "Password Reset OTP"
-    msg["From"] = sender_email
-    msg["To"] = to_email
+        server = smtplib.SMTP(
+            "smtp.gmail.com",
+            587,
+            timeout=20
+        )
 
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
-    server.login(sender_email, sender_password)
-    server.send_message(msg)
-    server.quit()
+        print("SMTP Connected")
+
+        server.starttls()
+        print("TLS Started")
+
+        server.login(sender_email, sender_password)
+        print("Logged In")
+
+        msg = MIMEText(f"Your OTP for password reset is: {otp}")
+        msg["Subject"] = "Password Reset OTP"
+        msg["From"] = sender_email
+        msg["To"] = to_email
+
+        server.send_message(msg)
+        print("Email Sent")
+
+        server.quit()
+
+    except Exception as e:
+        print("SMTP ERROR:", str(e))
+        raise
 
 @app.route("/verify", methods=["GET", "POST"])
 def verify():

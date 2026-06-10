@@ -4,676 +4,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Analyzer Dashboard</title>
+    <title>Resume Analyzer Dashboard | ResuFit</title>
+    
+    <!-- Modern Typography & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Theme Initialization Script to Prevent FOUC -->
+    <script>
+        (function() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        })();
+    </script>
+
     <style>
         *,
         *::before,
         *::after {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Modern Glassmorphism Theme */
         :root {
-            --primary: #0d6efd;
-            --primary-hover: #084298;
-            --bg-color: #f4f7fe;
-            --card-bg: rgba(255, 255, 255, 0.75);
-            --card-border: rgba(255, 255, 255, 0.5);
-            --text-main: #2b3674;
-            --text-muted: #a3aed1;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            /* Accent Colors */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #f5f3ff;
+            --secondary: #db2777;
+            --secondary-hover: #be185d;
+            --btn-gradient: linear-gradient(135deg, #4f46e5, #db2777);
+            --btn-gradient-hover: linear-gradient(135deg, #4338ca, #be185d);
+            
+            /* Semantic Colors */
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.08);
+            --success-border: rgba(16, 185, 129, 0.2);
+            
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.08);
+            --danger-border: rgba(239, 68, 68, 0.2);
+            
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.08);
+            --warning-border: rgba(245, 158, 11, 0.2);
+
+            /* Light Theme Custom Variables */
+            --bg-app: #f4f6fa;
+            --bg-sidebar: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: #ffffff;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --border-color-hover: rgba(203, 213, 225, 1);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            
+            --sidebar-text: #64748b;
+            --sidebar-hover-bg: #f1f5f9;
+            --sidebar-active-bg: #e0e7ff;
+            --sidebar-active-text: #4f46e5;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            
+            --glow-opacity: 0.05;
+            --blur-overlay: rgba(244, 246, 250, 0.6);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Custom Variables */
+            --bg-app: #080b11;
+            --bg-sidebar: #0f131c;
+            --bg-card: rgba(20, 27, 41, 0.75);
+            --bg-card-hover: rgba(28, 37, 56, 0.9);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --border-color-hover: rgba(255, 255, 255, 0.15);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --text-light: #64748b;
+            
+            --sidebar-text: #94a3b8;
+            --sidebar-hover-bg: #1e293b;
+            --sidebar-active-bg: #1f2a45;
+            --sidebar-active-text: #818cf8;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5);
+            
+            --glow-opacity: 0.15;
+            --blur-overlay: rgba(8, 11, 17, 0.7);
+        }
+
+        [data-theme="dark"] .mobile-logo-group img,
+        [data-theme="dark"] .sidebar .head img {
+            filter: brightness(0) invert(1);
         }
 
         body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e") no-repeat center center/cover;
-            height: 100vh;
-            height: 100dvh;
+            font-family: var(--font-body);
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
             overflow: hidden;
             width: 100%;
-            position: relative;
-            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
         }
 
-        body::before {
-            content: "";
-            position: absolute;
+        /* Ambient Background Glows */
+        .glow-blobs {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 15, 40, 0.6);
-            backdrop-filter: blur(8px);
-            z-index: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        /* Sidebar */
-        .slider-container {
-            width: 250px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 30px 20px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            z-index: 10;
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: var(--glow-opacity);
+            transition: opacity 0.3s ease;
         }
 
-        .head {
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -150px;
+            left: -150px;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--secondary);
+            bottom: -200px;
+            right: -200px;
+        }
+
+        /* Layout Container */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            z-index: 100;
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .head img {
-            width: 40px;
-            border-radius: 10px;
-            padding: 5px;
-        }
-
-        .head h4 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 700;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-        }
-
-        .head h4 a {
-            color: white;
+            gap: 12px;
+            margin-bottom: 4px;
             text-decoration: none;
         }
 
-        h1.username {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            color: #00e0ff;
+        .sidebar-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--btn-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
         }
 
-        .slider {
+        .sidebar-logo-text {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.35rem;
+            background: var(--btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-workspace {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-left: 2px;
+        }
+
+        /* Sidebar Search */
+        .sidebar-search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .sidebar-search-input {
+            width: 100%;
+            padding: 10px 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-search-input::placeholder {
+            color: var(--text-light);
+        }
+
+        .sidebar-search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+
+        .sidebar-search-shortcut {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Sidebar Menu Navigation */
+        .sidebar-nav-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-nav-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            padding-left: 12px;
+        }
+
+        .sidebar-nav-list {
             list-style: none;
-            padding: 0;
-            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .slide {
-            padding: 15px 20px;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
             cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .slide:hover,
-        .slide.active {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            transform: translateX(5px);
-        }
-
-        /* Main Content */
-        .main-content {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--sidebar-text);
+            transition: all 0.2s ease;
             position: relative;
-            z-index: 2;
-            margin-left: 290px;
-            padding: 40px;
-            height: 100vh;
-            height: 100dvh;
-            overflow-y: auto;
-            box-sizing: border-box;
+            user-select: none;
+        }
+
+        .slide i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .slide:hover {
+            background-color: var(--sidebar-hover-bg);
+            color: var(--text-primary);
+        }
+
+        .slide.active {
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+        }
+
+        .slide.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 25%;
+            height: 50%;
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+            background-color: var(--primary);
+        }
+
+        .slide.hidden-by-search {
+            display: none !important;
+        }
+
+        .badge-soon {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            border-radius: 12px;
+            margin-left: auto;
+        }
+
+        .badge-new {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            background-color: rgba(79, 70, 229, 0.08);
+            color: var(--primary);
+            border-radius: 12px;
+            margin-left: auto;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+        }
+
+        /* Sidebar Footer Controls */
+        .sidebar-footer {
+            margin-top: auto;
             display: flex;
             flex-direction: column;
+            gap: 16px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
         }
 
-        .dashboard-header {
+        .sidebar-controls {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
+            justify-content: space-around;
         }
 
-        .dashboard-header h1 {
-            color: white;
-            margin: 0;
-            font-size: 28px;
-            flex-grow: 1;
-        }
-
-        /* Mobile Menu Toggle */
-        .mobile-top-bar {
-            display: none;
-            margin-bottom: 20px;
-        }
-
-        .menu-toggle {
-            display: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
+        .control-btn {
             background: none;
             border: none;
-            padding: 0;
-            display: inline-flex;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .control-btn:hover {
+            color: var(--text-primary);
+            background-color: var(--sidebar-hover-bg);
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            background-color: var(--bg-app);
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .user-profile-card:hover {
+            background-color: var(--sidebar-hover-bg);
+            border-color: var(--border-color-hover);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--btn-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-logout-trigger {
+            color: var(--text-light);
+            transition: color 0.2s;
+            font-size: 0.95rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .bottom button {
-            background: linear-gradient(135deg, var(--primary), #00e0ff);
-            color: white;
+        .user-logout-trigger:hover {
+            color: var(--danger);
+            background-color: var(--danger-bg);
+        }
+
+        /* Main Content Viewport */
+        .main-content {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+        }
+
+        .main-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-greeting-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-greeting {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtext {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Mobile Topbar */
+        .mobile-topbar {
+            display: none;
+            background-color: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 20px;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            height: 58px;
+        }
+
+        .mobile-logo-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .mobile-logo-text {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.15rem;
+            background: var(--btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mobile-menu-toggle {
+            background: none;
             border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 1.35rem;
+            color: var(--text-primary);
             cursor: pointer;
-            width: calc(100% - 40px);
-            transition: all 0.3s;
-            position: absolute;
-            left: 20px;
-            bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 99;
         }
 
         /* Glass Cards */
         .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
         }
 
-        /* Upload Section */
-        .upload-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .upload-section h2 {
-            margin-top: 0;
-        }
-
-        .labelFile {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            height: 180px;
-            border: 2px dashed var(--primary);
-            border-radius: 15px;
-            background: rgba(13, 110, 253, 0.05);
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--primary);
-        }
-
-        .labelFile:hover {
-            background: rgba(13, 110, 253, 0.1);
+        .glass-card:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-color-hover);
         }
 
-        .input {
-            display: none;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 12px 30px;
-            border: none;
-            background: linear-gradient(135deg, var(--primary), #00e0ff);
-            color: white;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
-        }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .score-charts {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .chart-container-wrapper {
-            position: relative;
-            width: 200px;
-            height: 200px;
+        /* Profile Completeness Card */
+        .completeness-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
+            gap: 16px;
+            position: relative;
+            box-shadow: var(--shadow-md);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .completeness-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .chart-container {
-            width: 160px;
-            height: 160px;
-            position: relative;
+        .completeness-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .chart-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .chart-title {
-            margin-top: 15px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .section-title {
-            font-size: 18px;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid rgba(13, 110, 253, 0.2);
-            padding-bottom: 10px;
+        .completeness-title {
+            font-family: var(--font-heading);
             font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
         }
 
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 14px;
-            background: rgba(13, 110, 253, 0.1);
+        .completeness-percentage {
+            font-weight: 800;
+            font-size: 0.9rem;
             color: var(--primary);
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 5px 5px 5px 0;
-            border: 1px solid rgba(13, 110, 253, 0.2);
         }
 
-        .badge.missing {
-            background: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-            border-color: rgba(220, 53, 69, 0.2);
-        }
-
-        .badge.strength {
-            background: rgba(25, 135, 84, 0.1);
-            color: #198754;
-            border-color: rgba(25, 135, 84, 0.2);
-        }
-
-        /* New styles for dynamic tabs & header upload */
-        .header-upload-form {
-            position: relative;
-            margin-left: auto;
-        }
-
-        /* Upload Button */
-        .header-upload-btn {
-            background: linear-gradient(135deg, var(--primary), #00e0ff);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
+        .completeness-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
             cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .completeness-close-btn:hover {
+            color: var(--danger);
+        }
+
+        .completeness-progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .completeness-progress-bar {
+            height: 100%;
+            background: var(--btn-gradient);
+            border-radius: 6px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+
+        .completeness-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .completeness-action-btn {
+            align-self: flex-start;
+            padding: 8px 18px;
+            border-radius: 8px;
+            background-color: rgba(79, 70, 229, 0.08);
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .completeness-action-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Metric Grid Counter */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-color-hover);
+        }
+
+        .metric-icon-container {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .metric-icon-container.blue {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .metric-icon-container.purple {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .metric-icon-container.green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .metric-icon-container.orange {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .metric-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .metric-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
             font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Buttons Styling */
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            text-align: center;
-            white-space: nowrap;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
             border: none;
-            user-select: none;
-        }
-
-        /* Hover Effect */
-        .header-upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
-        }
-
-        /* Click Effect */
-        .header-upload-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* Mobile Friendly */
-        @media (max-width: 768px) {
-            .header-upload-btn {
-                width: 100%;
-                padding: 10px;
-                font-size: 15px;
-                border-radius: 12px;
-                margin-right: 5px;
-            }
-        }
-
-        /* Small Mobile Devices */
-        @media (max-width: 480px) {
-            .header-upload-btn {
-                font-size: 14px;
-                padding: 10px;
-            }
-        }
-
-        .transparent-start {
-            background: rgba(255, 255, 255, 0.05) !important;
-            backdrop-filter: blur(5px) !important;
-            border: 1px dashed rgba(255, 255, 255, 0.3) !important;
-            box-shadow: none !important;
-            color: white;
-        }
-
-        .transparent-start h2,
-        .transparent-start h1,
-        .transparent-start p,
-        .transparent-start label {
-            color: white !important;
-        }
-
-        .tab-content {
-            display: none;
-            width: 100%;
-            animation: fadeIn 0.4s ease;
-            flex-grow: 1;
-            box-sizing: border-box;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-                padding-top: 20px;
-            }
-
-            .slider-container {
-                transform: translateX(-100%);
-                transition: 0.3s;
-            }
-
-            .slider-container.open {
-                transform: translateX(0);
-            }
-
-            .mobile-top-bar {
-                display: flex;
-                margin: -20px -20px 20px -20px;
-                padding: 12px 20px;
-                align-items: center;
-                gap: 15px;
-                pointer-events: none;
-            }
-
-            .menu-toggle {
-                display: inline-flex;
-                pointer-events: auto;
-            }
-
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .header-upload-form {
-                margin-left: 0;
-                width: 100%;
-            }
-
-            .header-upload-btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            /* Add overlay when sidebar is open */
-            .sidebar-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(3px);
-                z-index: 5;
-            }
-
-            .sidebar-overlay.active {
-                display: block;
-            }
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1300px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-        }
-
-        .left-section {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .left-section h1 {
-            font-size: 40px;
-            line-height: 1.2;
-        }
-
-        .left-section p {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #333;
-            max-width: 650px;
-        }
-
-        .buttons {
-            margin-top: 5px;
+            text-decoration: none;
+            white-space: nowrap;
         }
 
         .btn-primary {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            background: #2f54eb;
+            background: var(--btn-gradient);
             color: white;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.3);
         }
 
-        .right-section {
-            flex: 1;
-            display: flex;
-            justify-content: center;
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
-        .resume-card {
-            width: 100%;
-            max-width: 380px;
-            padding: 15px;
-            border-radius: 20px;
+        .btn-outline:hover {
+            background-color: var(--sidebar-hover-bg);
+            border-color: var(--border-color-hover);
         }
 
-        .resume-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 12px;
-        }
-
-        /* Tablet */
-        @media (max-width:1100px) {
-
-            .container {
-                flex-direction: column;
-                text-align: center;
-                gap: 30px;
-            }
-
-            .left-section p {
-                margin: auto;
-            }
-
-            .buttons {
-                justify-content: center;
-            }
-        }
-
-        /* Mobile */
-        @media (max-width:768px) {
-
-            .dashboard-header h1 {
-                font-size: 22px;
-            }
-
-            .glass-card {
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-            }
-
-            .jobfit-card {
-                padding: 15px;
-                border-radius: 12px;
-            }
-
-            #resume-builder {
-                padding: 15px !important;
-            }
-
-            .container {
-                gap: 20px;
-            }
-
-            .left-section {
-                padding: 0;
-            }
-
-            .left-section h1 {
-                font-size: 2rem;
-                line-height: 1.3;
-                margin-bottom: 12px;
-            }
-
-            .left-section p {
-                font-size: 15px;
-                /* NOT 5px */
-                line-height: 1.7;
-                margin-bottom: 20px;
-            }
-
-            .buttons {
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-            }
-
-            .btn-primary {
-                width: 100%;
-                max-width: 280px;
-                font-size: 15px;
-                padding: 14px;
-            }
-
-            .resume-card {
-                max-width: 320px;
-                margin: auto;
-            }
-
-            .tag {
-                font-size: 13px;
-                padding: 8px 14px;
-                top: -10px;
-                right: -5px;
-            }
-        }
-
-        /* Small Phones */
-        @media (max-width:480px) {
-
-            .left-section h1 {
-                font-size: 1.7rem;
-            }
-
-            .left-section p {
-                font-size: 14px;
-            }
-
-            .resume-card {
-                max-width: 280px;
-            }
-        }
-
-        /* Button Loading Spinner */
         .btn-loading {
             position: relative !important;
             color: transparent !important;
@@ -683,12 +824,12 @@
         .btn-loading::after {
             content: "" !important;
             position: absolute !important;
-            width: 20px !important;
-            height: 20px !important;
+            width: 18px !important;
+            height: 18px !important;
             top: 50% !important;
             left: 50% !important;
-            margin-top: -10px !important;
-            margin-left: -10px !important;
+            margin-top: -9px !important;
+            margin-left: -9px !important;
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
             border-radius: 50% !important;
             border-top-color: white !important;
@@ -696,17 +837,601 @@
             z-index: 10 !important;
         }
 
-        /* Hide text/icon contents inside a loading button */
-        .btn-loading * {
-            opacity: 0 !important;
+        @keyframes btn-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        @keyframes btn-spin {
-            0% {
-                transform: rotate(0deg);
+        /* Upload Container area */
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 2px dashed var(--border-color);
+            background-color: var(--bg-card);
+            transition: all 0.3s;
+            padding: 40px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .upload-section:hover, .upload-section.dragover {
+            border-color: var(--primary);
+            background-color: rgba(79, 70, 229, 0.02);
+        }
+
+        .upload-icon-container {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: rgba(79, 70, 229, 0.05);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-section:hover .upload-icon-container {
+            transform: scale(1.08);
+        }
+
+        .upload-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 6px;
+        }
+
+        .upload-subtext {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .input-file-hidden {
+            display: none;
+        }
+
+        .header-upload-form {
+            position: relative;
+        }
+
+        .header-upload-btn {
+            background: var(--btn-gradient);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+        }
+
+        .header-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Tab Layouts */
+        .tab-content {
+            display: none;
+            width: 100%;
+            animation: tabFadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Results Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card {
+            border-left: 4px solid var(--primary);
+            background-color: rgba(79, 70, 229, 0.02);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .details-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .details-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .details-label {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .details-value {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .details-value a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .details-value a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        /* Chip badges */
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-app);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .badge.strength {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border-color: var(--success-border);
+        }
+
+        .badge.missing {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+            border-color: var(--danger-border);
+        }
+
+        /* Vertical Timeline and Card Items */
+        .timeline {
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 12px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -20px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            border: 2px solid var(--bg-card);
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .project-card {
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-app);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateX(4px);
+            border-color: var(--border-color-hover);
+        }
+
+        .project-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .project-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .project-techs {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .suggestions-alert {
+            background-color: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            border-radius: 12px;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        .suggestions-list {
+            padding-left: 20px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .suggestions-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Job Fit Styling */
+        .jobfit-grid-setup {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .jobfit-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .jobfit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-color-hover);
+        }
+
+        .jobfit-textarea {
+            width: 100%;
+            height: 200px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .jobfit-textarea::placeholder {
+            color: var(--text-light);
+        }
+
+        .jobfit-textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .ats-match-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 15px 0;
+        }
+
+        .ats-gauge-circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(closest-side, var(--bg-card) 79%, transparent 80% 100%), conic-gradient(var(--primary) calc(var(--score-percent, 0) * 1%), var(--border-color) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ats-gauge-text {
+            font-family: var(--font-heading);
+            font-size: 2.15rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .ats-gauge-description {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .suggestion-card-item {
+            background-color: var(--bg-app);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-card-item:hover {
+            transform: translateX(4px);
+            background-color: var(--bg-card-hover);
+            border-color: var(--primary);
+        }
+
+        .suggestion-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(79, 70, 229, 0.08);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .suggestion-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .suggestion-card-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .suggestion-card-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Resume Builder Landing Page Section */
+        .builder-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .builder-text-col {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .builder-text-col h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+        }
+
+        .builder-text-col p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .builder-img-col {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+        }
+
+        .builder-mockup-wrapper {
+            position: relative;
+            max-width: 310px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 4px solid var(--bg-card);
+            transition: transform 0.3s;
+        }
+
+        .builder-mockup-wrapper:hover {
+            transform: translateY(-8px) rotate(1deg);
+        }
+
+        .builder-mockup-wrapper img {
+            width: 100%;
+            display: block;
+        }
+
+        .builder-mockup-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Responsiveness Styling */
+        @media (max-width: 992px) {
+            body {
+                flex-direction: column;
             }
-            100% {
-                transform: rotate(360deg);
+            
+            .app-container {
+                height: calc(100vh - 58px);
+                height: calc(100dvh - 58px);
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                box-shadow: none;
+                z-index: 1010;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow: var(--shadow-lg);
+            }
+            
+            .sidebar-overlay {
+                z-index: 1009;
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            .mobile-topbar {
+                display: flex;
+            }
+            
+            .main-content {
+                padding: 24px;
+                gap: 24px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid, .jobfit-grid-setup {
+                grid-template-columns: 1fr;
+            }
+            
+            .builder-container {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .builder-text-col {
+                align-items: center;
+                text-align: center;
+            }
+            
+            .builder-text-col h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -714,657 +1439,577 @@
 
 <body>
 
-    <!-- Mobile Sidebar Overlay -->
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-    <!-- Sidebar -->
-    <div class="slider-container" id="sidebar">
-        <div class="head">
-            <img src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo">
-            <h4><a href="/">Resufit</a></h4>
-        </div>
-        <h1 class="username">Welcome, {{ username }}</h1>
-        <ul class="slider">
-            <li class="slide active" onclick="switchTab('dashboard', this)">Dashboard</li>
-            <li class="slide" onclick="switchTab('job-fit', this)">Job Fit Analysis</li>
-            <li class="slide" onclick="switchTab('resume-builder', this)">Resume Builder</li>
-        </ul>
-        <div class="bottom">
-            <ul>
-                <button onclick="window.location.href='/logout'">Logout</button>
-            </ul>
-        </div>
+    <!-- Ambient Glows -->
+    <div class="glow-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-topbar">
+        <a href="/" class="mobile-logo-group" style="display: flex; align-items: center; gap: 8px;">
+            <img src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo" style="width: 30px; border-radius: 6px;">
+            <span class="mobile-logo-text" style="color: var(--text-primary); font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; background: none; -webkit-text-fill-color: initial;">Resufit</span>
+        </a>
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
 
-        <!-- Mobile Top Bar for all tabs -->
-        <div class="mobile-top-bar">
-            <button class="menu-toggle" onclick="toggleSidebar()">
-                <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Application Flex Wrapper -->
+    <div class="app-container">
+
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div class="head" style="display: flex; align-items: center; margin-bottom: 8px; gap: 10px;">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo" style="width: 38px; border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.1);">
+                <h4 style="margin: 0; font-size: 20px; font-weight: 700; font-family: Verdana, Geneva, Tahoma, sans-serif;"><a href="/" style="color: var(--text-primary); text-decoration: none;">Resufit</a></h4>
+            </div>
+            <div class="sidebar-workspace">Personal Workspace</div>
+            
+            <!-- Search bar mockup (filters page cards dynamically) -->
+            <div class="sidebar-search-container">
+                <span class="sidebar-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="sidebar-search-input" placeholder="Search dashboard..." onkeyup="handleSearch(this.value)" id="sidebar-search">
+                <span class="sidebar-search-shortcut">⌘K</span>
+            </div>
+
+            <!-- Menu items -->
+            <div class="sidebar-nav-section">
+                <ul class="sidebar-nav-list">
+                    <li class="slide active" onclick="switchTab('dashboard', this)">
+                        <i class="fa-solid fa-house"></i> Dashboard
+                    </li>
+                    <li class="slide" onclick="switchTab('job-fit', this)">
+                        <i class="fa-solid fa-briefcase"></i> Job Fit Analysis
+                    </li>
+                    <li class="slide" onclick="switchTab('resume-builder', this)">
+                        <i class="fa-solid fa-file-invoice"></i> Resume Builder
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Footer & Settings controls -->
+            <div class="sidebar-footer">
+                <div class="sidebar-controls">
+                    <button class="control-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                        <i class="fa-solid fa-moon" id="theme-toggle-btn"></i>
+                    </button>
+                </div>
+                
+                <!-- User card profile element -->
+                <div class="user-profile-card">
+                    <div class="user-avatar" id="avatar-letters">
+                        U
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">{{ username }}</span>
+                        <span class="user-email">{{ email }}</span>
+                    </div>
+                    <button class="user-logout-trigger" onclick="window.location.href='/logout'" title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- .......................................................Resume Analysis ................................................................ -->
+        <!-- Main Content View Area -->
+        <div class="main-content">
 
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
+            <!-- ============================== TABS SECTION ============================== -->
 
-            <div class="dashboard-header">
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <h1>Resume Analysis Dashboard</h1>
+            <!-- Tab 1: Dashboard -->
+            <div id="dashboard" class="tab-content active">
+
+                <!-- Shared Greeting Header -->
+                <div class="main-content-header">
+                    <div class="header-greeting-container">
+                        <h1 class="header-greeting" id="greeting-text">Welcome, {{ username }}</h1>
+                        <span class="header-subtext" id="greeting-subtext">Let's power up your career search today.</span>
+                    </div>
+                    <div class="header-actions">
+                        <!-- Upload Resume triggers if analyzed or errors exist -->
+                        {% if analysis or error %}
+                        <form id="header-upload-form" method="POST" enctype="multipart/form-data" class="header-upload-form">
+                            <input type="hidden" name="form_type" value="resume_analysis">
+                            <label for="header-file" class="header-upload-btn">
+                                <i class="fa-solid fa-file-arrow-up"></i> Upload New
+                            </label>
+                            <input class="input-file-hidden" name="resume" id="header-file" type="file" onchange="this.form.submit()" required>
+                        </form>
+                        {% endif %}
+                    </div>
                 </div>
 
-                {% if analysis or error %}
-                <form id="header-upload-form" method="POST" enctype="multipart/form-data" class="header-upload-form">
-                    <input type="hidden" name="form_type" value="resume_analysis">
-                    <label for="header-file" class="header-upload-btn">
-                        Upload New Resume
-                    </label>
-                    <input class="input" name="resume" id="header-file" type="file" onchange="this.form.submit()"
-                        required>
-                </form>
+                <!-- Upload Section (if no file is uploaded yet) -->
+                {% if not analysis and not error %}
+                <div class="glass-card upload-section" id="drop-zone" onclick="document.getElementById('file').click()">
+                    <div class="upload-icon-container">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3 class="upload-title">Upload your resume document</h3>
+                    <p class="upload-subtext">Drag & drop your PDF resume here, or click to browse files</p>
+                    
+                    <form id="dashboard-upload-form" method="POST" enctype="multipart/form-data" onclick="event.stopPropagation()">
+                        <input type="hidden" name="form_type" value="resume_analysis">
+                        <input class="input-file-hidden" name="resume" id="file" type="file" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-sparkles"></i> Analyze Resume
+                        </button>
+                    </form>
+                </div>
                 {% endif %}
-            </div>
 
-            {% if not analysis and not error %}
-            <!-- Upload Card -->
-            <div class="glass-card upload-section transparent-start">
-                <h2>Upload Your Resume</h2>
-                <form id="dashboard-upload-form" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="form_type" value="resume_analysis">
-                    <label for="file" class="labelFile">
-                        <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="50" height="50"
-                            fill="currentColor">
-                            <g>
-                                <path
-                                    d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z" />
-                            </g>
-                        </svg>
-                        <p style="margin-top: 15px; font-weight: 500;">Drag & Drop or Click to Browse File</p>
-                        <p style="font-size: 12px; color: #a3aed1;">(PDF)</p>
-                    </label>
-                    <input class="input" name="resume" id="file" type="file" required>
-                    <button type="submit">Analyze Profile</button>
-                </form>
-            </div>
-            {% endif %}
-
-            {% if error %}
-            <div class="glass-card upload-section transparent-start">
-                <h2 style="color: #ff4d4d; margin-bottom: 10px;">Error Processing File</h2>
-                <p style="color: #ffb3b3; font-size: 16px;">{{ error }}</p>
-                <p style="color: white; margin-top: 15px;">Please use the <strong>Upload New Resume</strong> button
-                    above to try again.</p>
-            </div>
-            {% endif %}
-
-            {% if analysis is mapping and active_tab == "dashboard" %}
-            <!-- Analysis Results -->
-            <div class="dashboard-grid">
-
-                <!-- Scores Chart -->
-                <div class="glass-card full-width">
-                    <h3 class="section-title">Candidate Summary</h3>
-                    <div
-                        style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.4); border-radius: 12px; border-left: 4px solid var(--primary);">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.6;">
-                        <p>{{ analysis.summary }}</p>
-                        </p>
+                <!-- Error Display -->
+                {% if error %}
+                <div class="glass-card" style="border-color: var(--danger-border); background-color: var(--danger-bg); display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px; color: var(--danger);">
+                        <i class="fa-solid fa-circle-exclamation" style="font-size: 1.5rem;"></i>
+                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin: 0;">Error Processing File</h3>
                     </div>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">{{ error }}</p>
+                    <button class="btn btn-outline" style="align-self: flex-start;" onclick="window.location.reload()">
+                        <i class="fa-solid fa-rotate-left"></i> Try Again
+                    </button>
                 </div>
+                {% endif %}
 
-                <!-- Candidate Info -->
-                <div class="glass-card">
-                    <h3 class="section-title">Candidate Details</h3>
-                    <p><strong>Name:</strong> {{ analysis.Candidate_Information.Name }}</p>
-                    <p><strong>Email:</strong> {{ analysis.Candidate_Information.Email }}</p>
-                    <p><strong>Phone:</strong> {{ analysis.Candidate_Information.Phone }}</p>
-                    <p><strong>Location:</strong> {{ analysis.Candidate_Information.Location }}</p>
-                    {% if analysis.Candidate_Information.LinkedIn and analysis.Candidate_Information.LinkedIn != 'Missing' %}
-                    <p><strong>LinkedIn:</strong> <a href="{{ analysis.Candidate_Information.LinkedIn }}"
-                            target="_blank">View Profile</a></p>
-                    {% endif %}
-                    {% if analysis.Candidate_Information.GitHub and analysis.Candidate_Information.GitHub != 'Missing' %}
-                    <p><strong>GitHub:</strong> <a href="{{ analysis.Candidate_Information.GitHub }}"
-                            target="_blank">View Profile</a></p>
-                    {% endif %}
-                    {% if analysis.Candidate_Information.Portfolio and analysis.Candidate_Information.Portfolio != 'Missing' %}
-                    <p><strong>Portfolio:</strong> <a href="{{ analysis.Candidate_Information.Portfolio }}"
-                            target="_blank">View Portfolio</a></p>
-                    {% endif %}
-                </div>
+                <!-- Analysis Results Dashboard -->
+                {% if analysis is mapping and active_tab == "dashboard" %}
+                <div class="dashboard-grid">
 
-                <!-- Strengths & Weaknesses -->
-                <div class="glass-card">
-                    <h3 class="section-title">Evaluation</h3>
-                    <div style="margin-bottom: 20px;">
-                        <strong>Key Strengths:</strong><br>
-                        <div style="margin-top: 10px;">
-                            {% for item in analysis.Resume_Strengths %}
-                            <span class="badge strength">{{ item }}</span>
-                            {% endfor %}
+                    <!-- Candidate Summary -->
+                    <div class="glass-card full-width">
+                        <h3 class="section-title"><i class="fa-solid fa-user-tie"></i> Candidate Summary</h3>
+                        <div class="summary-card">
+                            <p>{{ analysis.summary }}</p>
                         </div>
                     </div>
-                    <div>
-                        <strong>Areas to Improve:</strong><br>
-                        <div style="margin-top: 10px;">
-                            {% for item in analysis.Resume_Weaknesses %}
-                            <span class="badge missing">{{ item }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Skills -->
-                <div class="glass-card full-width">
-                    <h3 class="section-title">Technical & Professional Skills</h3>
-                    <div>
-                        {% for skill in analysis.Skills %}
-                        <span class="badge">{{ skill }}</span>
-                        {% else %}
-                        <span class="badge missing">No skills detected</span>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- Experience & Projects -->
-                <div class="glass-card">
-                    <h3 class="section-title">Experience</h3>
-                    <ul>
-                        {% for exp in analysis.Experience %}
-                        <li>
-                            <strong>{{ exp.Job_Title }}</strong> at {{ exp.Company }}
-                            {% if exp.Duration and exp.Duration != 'Missing' %}
-                            <br><small style="color: #666;">{{ exp.Duration }}</small>
+                    <!-- Candidate Details -->
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fa-solid fa-address-card"></i> Candidate Details</h3>
+                        <div class="details-list">
+                            <div class="details-item">
+                                <span class="details-label">Full Name</span>
+                                <span class="details-value">{{ analysis.Candidate_Information.Name }}</span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Email Address</span>
+                                <span class="details-value">{{ analysis.Candidate_Information.Email }}</span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Phone Number</span>
+                                <span class="details-value">{{ analysis.Candidate_Information.Phone }}</span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Location</span>
+                                <span class="details-value">{{ analysis.Candidate_Information.Location }}</span>
+                            </div>
+                            {% if analysis.Candidate_Information.LinkedIn and analysis.Candidate_Information.LinkedIn != 'Missing' %}
+                            <div class="details-item">
+                                <span class="details-label">LinkedIn</span>
+                                <span class="details-value"><a href="{{ analysis.Candidate_Information.LinkedIn }}" target="_blank"><i class="fa-brands fa-linkedin"></i> View Profile</a></span>
+                            </div>
                             {% endif %}
-                        </li>
-                        {% else %}
-                        <li style="color: #666;">No experience listed.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="glass-card">
-                    <h3 class="section-title">Projects</h3>
-                    <ul>
-                        {% if analysis and analysis.Projects %}
-                        {% for proj in analysis.Projects %}
-                        <strong>{{ proj.name }}</strong>
-                        <ul>
-                            <li>{{proj.description}}</li>
-                            <li>{{proj.technologies|join(', ')}}</li>
-                        </ul>
-                        {% endfor %}
-                        {% else %}
-                        <li style="color: #666;">No projects listed.</li>
-                        {% endif %}
-                    </ul>
-                </div>
-
-                <!-- Certifications -->
-                {% if analysis.Certifications and analysis.Certifications|length > 0 %}
-                <div class="glass-card full-width">
-                    <h3 class="section-title">Certifications</h3>
-                    <ul>
-                        {% for cert in analysis.Certifications %}
-                        <li>{{ cert.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-
-                <!-- Missing Info & Suggestions -->
-                <div class="glass-card full-width"
-                    style="background: rgba(255, 235, 235, 0.7); border-color: rgba(220, 53, 69, 0.3);">
-                    <h3 class="section-title" style="color: #dc3545; border-bottom-color: rgba(220, 53, 69, 0.2);">
-                        Missing Elements & Suggestions</h3>
-                    <p><strong>Required Elements Missing:</strong></p>
-                    <div>
-                        {% for item in analysis.Missing_Information %}
-                        {% if item %}
-                        <span class="badge missing">{{ item }}</span>
-                        {% endif %}
-                        {% else %}
-                        <span class="badge strength">Everything looks complete!</span>
-                        {% endfor %}
+                            {% if analysis.Candidate_Information.GitHub and analysis.Candidate_Information.GitHub != 'Missing' %}
+                            <div class="details-item">
+                                <span class="details-label">GitHub</span>
+                                <span class="details-value"><a href="{{ analysis.Candidate_Information.GitHub }}" target="_blank"><i class="fa-brands fa-github"></i> View Profile</a></span>
+                            </div>
+                            {% endif %}
+                            {% if analysis.Candidate_Information.Portfolio and analysis.Candidate_Information.Portfolio != 'Missing' %}
+                            <div class="details-item">
+                                <span class="details-label">Portfolio</span>
+                                <span class="details-value"><a href="{{ analysis.Candidate_Information.Portfolio }}" target="_blank"><i class="fa-solid fa-globe"></i> View Portfolio</a></span>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    {% if analysis.Suggestions and analysis.Suggestions|length > 0 %}
-                    <p style="margin-top: 20px;"><strong>Actionable Suggestions:</strong></p>
-                    <ul style="color: #444;">
-                        {% for sug in analysis.Suggestions %}
-                        <li>{{ sug }}</li>
-                        {% endfor %}
-                    </ul>
+                    <!-- Strengths and Weaknesses -->
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fa-solid fa-shield-halved"></i> Evaluation</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--success); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-circle-check"></i> Key Strengths
+                            </h4>
+                            <div class="badge-container">
+                                {% for item in analysis.Resume_Strengths %}
+                                <span class="badge strength"><i class="fa-solid fa-check"></i> {{ item }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--danger); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Areas to Improve
+                            </h4>
+                            <div class="badge-container">
+                                {% for item in analysis.Resume_Weaknesses %}
+                                <span class="badge missing"><i class="fa-solid fa-arrow-trend-up"></i> {{ item }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Chips -->
+                    <div class="glass-card full-width">
+                        <h3 class="section-title"><i class="fa-solid fa-code"></i> Technical & Professional Skills</h3>
+                        <div class="badge-container">
+                            {% for skill in analysis.Skills %}
+                            <span class="badge"><i class="fa-solid fa-bolt" style="color: var(--primary); font-size: 0.75rem;"></i> {{ skill }}</span>
+                            {% else %}
+                            <span class="badge missing">No skills detected</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Work Experience Timeline -->
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fa-solid fa-briefcase"></i> Experience</h3>
+                        <ul class="timeline">
+                            {% for exp in analysis.Experience %}
+                            <li class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-title">{{ exp.Job_Title }}</div>
+                                <div class="timeline-subtitle">{{ exp.Company }}</div>
+                                {% if exp.Duration and exp.Duration != 'Missing' %}
+                                <div class="timeline-date"><i class="fa-regular fa-clock"></i> {{ exp.Duration }}</div>
+                                {% endif %}
+                            </li>
+                            {% else %}
+                            <li style="color: var(--text-muted); list-style: none;">No experience listed.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Projects Timeline -->
+                    <div class="glass-card">
+                        <h3 class="section-title"><i class="fa-solid fa-diagram-project"></i> Projects</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            {% if analysis and analysis.Projects %}
+                            {% for proj in analysis.Projects %}
+                            <div class="project-card">
+                                <h4 class="project-name">{{ proj.name }}</h4>
+                                <p class="project-desc">{{ proj.description }}</p>
+                                <div class="project-techs">
+                                    <i class="fa-solid fa-microchip"></i> {{ proj.technologies|join(', ') }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <span style="color: var(--text-muted);">No projects listed.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Certifications -->
+                    {% if analysis.Certifications and analysis.Certifications|length > 0 %}
+                    <div class="glass-card full-width">
+                        <h3 class="section-title"><i class="fa-solid fa-certificate"></i> Certifications</h3>
+                        <div class="badge-container">
+                            {% for cert in analysis.Certifications %}
+                            <span class="badge"><i class="fa-solid fa-award" style="color: var(--warning);"></i> {{ cert.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                     {% endif %}
+
+                    <!-- Missing Info & Suggestions -->
+                    <div class="glass-card full-width suggestions-alert">
+                        <h3 class="section-title" style="color: var(--warning); border-bottom-color: var(--warning-border);"><i class="fa-solid fa-lightbulb"></i> Missing Elements & Suggestions</h3>
+                        <p style="font-weight: 700; margin-bottom: 12px;">Required Elements Missing:</p>
+                        <div class="badge-container" style="margin-bottom: 20px;">
+                            {% for item in analysis.Missing_Information %}
+                            {% if item %}
+                            <span class="badge missing"><i class="fa-solid fa-xmark"></i> {{ item }}</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="badge strength"><i class="fa-solid fa-check"></i> Everything looks complete!</span>
+                            {% endfor %}
+                        </div>
+
+                        {% if analysis.Suggestions and analysis.Suggestions|length > 0 %}
+                        <p style="font-weight: 700;">Actionable Recommendations:</p>
+                        <ul class="suggestions-list">
+                            {% for sug in analysis.Suggestions %}
+                            <li>{{ sug }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+
                 </div>
+                {% elif analysis %}
+                <!-- Fallback Plain Text Display -->
+                <div class="glass-card">
+                    <h3 class="section-title">Analysis Results</h3>
+                    <p style="color: var(--danger); margin-bottom: 12px;">Structured parsing parsed raw. Output is displayable below:</p>
+                    <pre style="white-space: pre-wrap; background: var(--bg-app); padding: 20px; border-radius: 12px; font-family: Courier, monospace; border: 1px solid var(--border-color); color: var(--text-primary);">{{ analysis }}</pre>
+                </div>
+                {% else %}
+                    <!-- No file uploaded greeting banner (if not showing results/errors) -->
+                    {% if not error %}
+                    <div class="glass-card" style="text-align: center; padding: 48px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+                        <div style="font-size: 3rem; color: var(--primary); opacity: 0.7;">
+                            <i class="fa-solid fa-file-circle-question"></i>
+                        </div>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800;">No Active Profile Loaded</h3>
+                        <p style="color: var(--text-muted); max-width: 450px; line-height: 1.6; text-align: center; align-self: center; margin: 0 auto;">Upload a resume to initialize the candidate score details, skills extraction, and ATS compliance check.</p>
+                    </div>
+                    {% endif %}
+                {% endif %}
 
             </div>
-            {% elif analysis %}
-            <!-- Fallback if it's not a mapping/dict (error in JSON parsing) -->
-            <div class="glass-card">
-                <h3>Analysis Results</h3>
-                <p style="color: #dc3545;">The AI returned plain text instead of structured data.</p>
-                <pre
-                    style="white-space: pre-wrap; word-wrap: break-word; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 10px;">{{ analysis }}</pre>
-            </div>
-            {% else %}
-            <div class="glass-card" style="text-align: center; color: #666; padding: 40px;">
-                <svg style="margin-bottom: 20px; color: var(--primary); opacity: 0.5;" xml:space="preserve"
-                    viewBox="0 0 184.69 184.69" width="80" height="80" fill="currentColor">
-                    <g>
-                        <path
-                            d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z" />
-                    </g>
-                </svg>
-                <p style="font-size: 18px; font-weight: 500;">No analysis to show yet.</p>
-                <p>Please upload a resume document above to get started.</p>
-            </div>
-            {% endif %}
 
-        </div> <!-- End Dashboard Tab -->
-
-        <!-- ...........................................................Job Fit................................................................. -->
-
-        <!-- Empty Transparent Tabs -->
-        <!-- ...........................................................Job Fit................................................................. -->
-
-        <!-- Empty Transparent Tabs -->
-        <div id="job-fit" class="tab-content " style="padding: 20px; border-radius: 20px; margin-top: 15px;">
-            <style>
-                .jobfit-container {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 25px;
-                    width: 100%;
-                    box-sizing: border-box;
-                }
-
-                .jobfit-grid-setup {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 25px;
-                    text-align: left;
-                }
-
-                .jobfit-card {
-                    background: rgba(255, 255, 255, 0.85);
-                    backdrop-filter: blur(12px);
-                    border: 1px solid rgba(255, 255, 255, 0.4);
-                    border-radius: 20px;
-                    padding: 30px;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                    display: flex;
-                    flex-direction: column;
-                    gap: 15px;
-                    color: #1e293b;
-                }
-
-                .jobfit-full-width {
-                    grid-column: 1 / -1;
-                }
-
-                .ats-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    padding: 8px 16px;
-                    border-radius: 20px;
-                    font-size: 13px;
-                    font-weight: 600;
-                    margin: 4px;
-                    transition: all 0.3s ease;
-                    border: 1px solid transparent;
-                }
-
-                .ats-badge.match {
-                    background: rgba(25, 135, 84, 0.12);
-                    color: #198754;
-                    border-color: rgba(25, 135, 84, 0.25);
-                }
-
-                .ats-badge.missing {
-                    background: rgba(220, 53, 69, 0.12);
-                    color: #dc3545;
-                    border-color: rgba(220, 53, 69, 0.25);
-                }
-
-                .suggestion-card-item {
-                    background: rgba(255, 255, 255, 0.6);
-                    border: 1px solid rgba(226, 232, 240, 0.8);
-                    padding: 15px 20px;
-                    border-radius: 12px;
-                    margin-bottom: 12px;
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 15px;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                }
-
-                .suggestion-card-item:hover {
-                    transform: translateX(5px);
-                    background: rgba(255, 255, 255, 0.95);
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-                    border-color: var(--primary);
-                }
-
-                .suggestion-card-icon {
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
-                    background: rgba(13, 110, 253, 0.08);
-                    color: var(--primary);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 16px;
-                    flex-shrink: 0;
-                }
-
-                .suggestion-card-content {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 4px;
-                    text-align: left;
-                }
-
-                .suggestion-card-title {
-                    font-weight: 700;
-                    font-size: 14px;
-                    color: #0f172a;
-                }
-
-                .suggestion-card-text {
-                    font-size: 13px;
-                    color: #475569;
-                    line-height: 1.5;
-                }
-
-                .labelFile-premium {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    height: 180px;
-                    border: 2px dashed rgba(13, 110, 253, 0.3);
-                    border-radius: 15px;
-                    background: rgba(13, 110, 253, 0.02);
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    color: var(--primary);
-                }
-
-                .labelFile-premium:hover {
-                    background: rgba(13, 110, 253, 0.06);
-                    border-color: var(--primary);
-                    transform: translateY(-2px);
-                }
-
-                .btn-jobfit-submit {
-                    padding: 12px 30px;
-                    border: none;
-                    background: linear-gradient(135deg, var(--primary), #00e0ff);
-                    color: white;
-                    border-radius: 10px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
-                    width: 100%;
-                }
-
-                .btn-jobfit-submit:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
-                }
-
-                @media (max-width: 992px) {
-                    .jobfit-grid-setup {
-                        grid-template-columns: 1fr;
-                    }
-                }
-            </style>
-
-            <div class="jobfit-container">
-                <div class="blog-header">
-                    <h1
-                        style="color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.2); font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800;">
-                        Job Fit Analysis</h1>
-                    <p style="color: #cbd5e1; margin-top: 5px; font-size: 16px;">Compare your resume against any target
-                        role's criteria.</p>
+            <!-- Tab 2: Job Fit Analysis -->
+            <div id="job-fit" class="tab-content">
+                <div class="main-content-header" style="margin-bottom: 0;">
+                    <div class="header-greeting-container">
+                        <h1 class="header-greeting">Job Fit Analysis</h1>
+                        <span class="header-subtext">Check details compliance and keyword match rate for target roles.</span>
+                    </div>
                 </div>
 
                 <form id="jobfit-form" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="form_type" value="job_fit">
 
                     <div class="jobfit-grid-setup">
-                        <!-- Column 1: Paste Job description -->
+                        <!-- Left Panel: Job Description -->
                         <div class="jobfit-card">
-                            <h3 class="section-title"
-                                style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                                <i class="fa-solid fa-paste"></i> Paste Job Description</h3>
-                            <textarea id="jobdesc" name="jobdesc" placeholder="Paste the full job description.."
-                                required
-                                style="width: 100%; height: 210px; padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); outline: none; font-size: 14px; resize: vertical; box-sizing: border-box; background: #f8fafc; color: var(--text-main);">{{ jobdesc or '' }}</textarea>
+                            <h3 class="section-title"><i class="fa-solid fa-paste"></i> Paste Job Description</h3>
+                            <textarea id="jobdesc" name="jobdesc" class="jobfit-textarea" placeholder="Paste the target job description details here..." required>{{ jobdesc or '' }}</textarea>
                         </div>
 
-                        <!-- Column 2: Upload Resume -->
+                        <!-- Right Panel: Resume Drag-Drop upload -->
                         <div class="jobfit-card" style="justify-content: space-between;">
-                            <h3 class="section-title"
-                                style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                                <i class="fa-solid fa-file-arrow-up"></i> Upload Target Resume</h3>
-
-                            <label for="jobfit-file" class="labelFile-premium">
-                                <svg xml:space="preserve" viewBox="0 0 184.69 184.69" width="44" height="44"
-                                    fill="currentColor">
-                                    <g>
-                                        <path
-                                            d="M149.968,50.186c-8.017-14.308-23.796-22.515-40.717-19.813 C102.609,16.43,88.713,7.576,73.087,7.576c-22.117,0-40.112,17.994-40.112,40.115 c0,0.913,0.036,1.854,0.118,2.834C14.004,54.875,0,72.11,0,91.959 c0,23.456,19.082,42.535,42.538,42.535h33.623v-7.025H42.538 c-19.583,0-35.509-15.929-35.509-35.509 c0-17.526,13.084-32.621,30.442-35.105 c0.931-0.132,1.768-0.633,2.326-1.392 c0.555-0.755,0.795-1.704,0.644-2.63 c-0.297-1.904-0.447-3.582-0.447-5.139 c0-18.249,14.852-33.094,33.094-33.094 c13.703,0,25.789,8.26,30.803,21.04 c0.63,1.621,2.351,2.534,4.058,2.14 c15.425-3.568,29.919,3.883,36.604,17.168 c0.508,1.027,1.503,1.736,2.641,1.897 c17.368,2.473,30.481,17.569,30.481,35.112 c0,19.58-15.937,35.509-35.52,35.509H97.391v7.025h44.761 c23.459,0,42.538-19.079,42.538-42.535 C184.69,71.545,169.884,53.901,149.968,50.186z" />
-                                    </g>
-                                </svg>
-                                <p style="margin-top: 12px; font-weight: 600; font-size: 14px;">Browse or Drag Resume
-                                    File</p>
-                                <p style="font-size: 11px; opacity: 0.7; margin-top: 2px; color: var(--text-muted);">
-                                    (PDF format only)</p>
-                            </label>
-                            <input class="input" name="resume" id="jobfit-file" type="file" required>
-
-                            <button type="submit" class="btn-jobfit-submit"><i
-                                    class="fa-solid fa-magnifying-glass-chart"></i> Start Job Match Analysis</button>
+                            <h3 class="section-title"><i class="fa-solid fa-file-arrow-up"></i> Upload Resume</h3>
+                            
+                            <div class="upload-section" id="jobfit-drop-zone" onclick="document.getElementById('jobfit-file').click()" style="padding: 24px;">
+                                <div class="upload-icon-container" style="width: 52px; height: 52px; font-size: 1.35rem; margin-bottom: 12px;">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                </div>
+                                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 4px;">Choose Resume Document</h4>
+                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0;" id="jobfit-filename-text">(PDF format only)</p>
+                            </div>
+                            
+                            <input class="input-file-hidden" name="resume" id="jobfit-file" type="file" required>
+                            
+                            <button type="submit" class="btn btn-primary btn-jobfit-submit" style="width: 100%;">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i> Start Job Match Analysis
+                            </button>
                         </div>
                     </div>
                 </form>
 
-                {% if error %}
-                <div class="jobfit-card"
-                    style="background: rgba(220,53,69,0.15); border-color: rgba(220,53,69,0.3); color: white;">
-                    <h3 style="color: #fca5a5; font-weight: 700; margin: 0;"><i
-                            class="fa-solid fa-circle-exclamation"></i> Error Parsing Documents</h3>
-                    <p style="font-size: 14px; opacity: 0.95; margin: 0;">{{ error }}</p>
-                    <p style="font-size: 12px; opacity: 0.7; margin: 0;">Please ensure you are uploading a standard,
-                        searchable text-based PDF resume.</p>
-                </div>
-                {% endif %}
-
-                <!-- .................................. Job Analysis Results ......................................-->
-
+                <!-- Job Match Output -->
                 {% if jobanalysis is mapping and active_tab == "job-fit" %}
                 <div class="jobfit-grid-setup" style="margin-top: 10px;">
-
-                    <!-- Scores Card -->
-                    <div class="jobfit-card jobfit-full-width">
-                        <h3 class="section-title"
-                            style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                            <i class="fa-solid fa-circle-info"></i> Candidate Match Profile</h3>
-
-                        <div
-                            style="margin-top: 10px; padding: 20px; background: rgba(13, 110, 253, 0.03); border-radius: 15px; border-left: 5px solid var(--primary); display: flex; flex-direction: column; gap: 12px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-weight: 700; font-size: 15px; color: #0f172a;">Overall Job Fit
-                                    Score</span>
-                                <span style="font-weight: 800; font-size: 26px; color: var(--primary);">{{
-                                    jobanalysis.score }}</span>
+                    
+                    <!-- Overal Score indicator -->
+                    <div class="jobfit-card" style="grid-column: 1 / -1; align-items: center; text-align: center;">
+                        <h3 class="section-title" style="width: 100%;"><i class="fa-solid fa-circle-nodes"></i> Match Score</h3>
+                        <div class="ats-match-gauge">
+                            <div class="ats-gauge-circle" id="score-gauge" style="--score-percent: 0;">
+                                <span class="ats-gauge-text">{{ jobanalysis.score }}</span>
                             </div>
-                            <div
-                                style="width: 100%; height: 16px; background: rgba(0,0,0,0.06); border-radius: 30px; overflow: hidden; border: 1px solid rgba(255,255,255,0.4);">
-                                <div
-                                    style="width: {{ jobanalysis.score }}; height: 100%; border-radius: 30px; background: linear-gradient(90deg, var(--primary), #00e0ff); box-shadow: 0 0 15px rgba(13, 110, 253, 0.3);">
-                                </div>
-                            </div>
+                            <span class="ats-gauge-description">Overall ATS Compatibility Score</span>
                         </div>
                     </div>
 
-                    <!-- Matching Skills Card -->
+                    <!-- Matching Skills -->
                     <div class="jobfit-card">
-                        <h3 class="section-title"
-                            style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                            <i class="fa-solid fa-circle-check" style="color: #198754;"></i> Matching Skills</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                        <h3 class="section-title"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> Matching Skills</h3>
+                        <div class="badge-container">
                             {% for skill in jobanalysis.skill %}
-                            <span class="ats-badge match"><i class="fa-solid fa-check"></i> {{ skill }}</span>
+                            <span class="badge strength"><i class="fa-solid fa-check"></i> {{ skill }}</span>
                             {% else %}
-                            <div style="color: #64748b; font-size: 13px; padding: 10px 0;"><i
-                                    class="fa-solid fa-face-frown"></i> No matching skill tags detected.</div>
+                            <div style="color: var(--text-muted); font-size: 0.85rem;"><i class="fa-solid fa-triangle-exclamation"></i> No overlapping keywords found.</div>
                             {% endfor %}
                         </div>
                     </div>
 
-                    <!-- Missing Skills Card -->
+                    <!-- Missing Skills -->
                     <div class="jobfit-card">
-                        <h3 class="section-title"
-                            style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                            <i class="fa-solid fa-triangle-exclamation" style="color: #dc3545;"></i> Missing ATS
-                            Keywords</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                        <h3 class="section-title"><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> Missing Keywords</h3>
+                        <div class="badge-container">
                             {% for missing in jobanalysis.missing_skills %}
                             {% if missing %}
-                            <span class="ats-badge missing"><i class="fa-solid fa-exclamation"></i> {{ missing }}</span>
+                            <span class="badge missing"><i class="fa-solid fa-xmark"></i> {{ missing }}</span>
                             {% endif %}
                             {% else %}
-                            <span class="ats-badge match" style="margin: 0;"><i class="fa-solid fa-circle-check"></i> No
-                                missing skills! Profile matches excellently.</span>
+                            <span class="badge strength"><i class="fa-solid fa-star"></i> Perfect keyword overlap! No missing tags.</span>
                             {% endfor %}
                         </div>
                     </div>
 
-                    <!-- Extra Certifications Suggestions -->
-                    <div class="jobfit-card jobfit-full-width">
-                        <h3 class="section-title"
-                            style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                            <i class="fa-solid fa-certificate"></i> Certification Recommendations</h3>
-                        <div style="margin-top: 8px;">
+                    <!-- Certifications recommendations -->
+                    <div class="jobfit-card" style="grid-column: 1 / -1;">
+                        <h3 class="section-title"><i class="fa-solid fa-award"></i> Certification Recommendations</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
                             {% for cert in jobanalysis.Certifications_Suggestions %}
                             <div class="suggestion-card-item">
-                                <div class="suggestion-card-icon"><i class="fa-solid fa-certificate"></i></div>
+                                <div class="suggestion-card-icon">
+                                    <i class="fa-solid fa-certificate"></i>
+                                </div>
                                 <div class="suggestion-card-content">
                                     <span class="suggestion-card-title">{{ cert.name }}</span>
                                     <span class="suggestion-card-text">{{ cert.reason }}</span>
                                 </div>
                             </div>
                             {% else %}
-                            <div style="color: #64748b; font-size: 13px; padding: 10px 0;"><i
-                                    class="fa-solid fa-check"></i> No additional certifications needed for this level.
-                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.85rem;"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> No certifications missing for this track.</div>
                             {% endfor %}
                         </div>
                     </div>
 
-                    <!-- Actionable Suggestions -->
-                    <div class="jobfit-card jobfit-full-width">
-                        <h3 class="section-title"
-                            style="margin-top: 0; font-size: 16px; font-weight: 700; border-bottom: 2px solid rgba(13,110,253,0.1); padding-bottom: 8px; color: var(--text-main);">
-                            <i class="fa-solid fa-lightbulb"></i> Actionable Profile Adjustments</h3>
-                        <div style="margin-top: 8px;">
-                            {% if jobanalysis.Suggestions and jobanalysis.Suggestions|length > 0 %}
+                    <!-- Actionable Adjustments -->
+                    <div class="jobfit-card" style="grid-column: 1 / -1;">
+                        <h3 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Recommendations</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            {% if jobanalysis.Suggestions %}
                             {% for sug in jobanalysis.Suggestions %}
                             <div class="suggestion-card-item">
-                                <div class="suggestion-card-icon"
-                                    style="background: rgba(16, 185, 129, 0.08); color: #10b981;"><i
-                                        class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                <div class="suggestion-card-icon" style="background-color: var(--success-bg); color: var(--success);">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
                                 <div class="suggestion-card-content">
-                                    <span class="suggestion-card-text" style="color: #0f172a; font-weight: 500;">{{ sug
-                                        }}</span>
+                                    <span class="suggestion-card-text" style="color: var(--text-primary); font-weight: 500;">{{ sug }}</span>
                                 </div>
                             </div>
                             {% endfor %}
                             {% else %}
-                            <div class="suggestion-card-item"
-                                style="background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.2);">
-                                <div class="suggestion-card-icon"
-                                    style="background: rgba(16,185,129,0.1); color: #10b981;"><i
-                                        class="fa-solid fa-circle-check"></i></div>
+                            <div class="suggestion-card-item" style="border-color: var(--success-border); background-color: var(--success-bg);">
+                                <div class="suggestion-card-icon" style="background-color: var(--success-bg); color: var(--success);">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
                                 <div class="suggestion-card-content">
-                                    <span class="suggestion-card-text" style="color: #065f46; font-weight: 600;">Your
-                                        profile is perfectly optimized for this role! No corrections needed.</span>
+                                    <span class="suggestion-card-text" style="color: var(--success); font-weight: 700;">ATS Profile alignment is complete. Resume is fully optimized!</span>
                                 </div>
                             </div>
                             {% endif %}
                         </div>
                     </div>
+
                 </div>
                 {% endif %}
             </div>
-        </div>
 
-        <!-- ...........................................................Resume Builder................................................................. -->
-
-        <div id="resume-builder" class="tab-content transparent-start"
-            style="padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px;">
-
-            <div class="container">
-                <!-- LEFT CONTENT -->
-                <div class="left-section">
-                    <h1>Top <br>Resume Templates</h1>
-                    <p>Welcome to our Resume Builder website, designed to help students and professionals create modern,
-                        professional, and ATS-friendly resumes easily. Choose from top resume templates, customize your
-                        details, and generate impressive resumes within minutes.</p>
-                    <div class="buttons">
-                        <button class="btn-primary" onclick="window.location.href='{{ url_for('builder') }}'">Create new
-                            resume</button>
-                    </div>
-                </div>
-
-                <!-- RIGHT IMAGE -->
-                <div class="right-section">
-                    <div class="resume-card">
-                        <div class="tag">
-                            ✨ Enhance with AI
+            <!-- Tab 3: Resume Builder Landing -->
+            <div id="resume-builder" class="tab-content">
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
+                    <div class="builder-container">
+                        <div class="builder-text-col">
+                            <h1 style="font-family: var(--font-heading); color: var(--text-primary);">Build Professional <br><span style="background: var(--btn-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">ATS-Friendly Resumes</span></h1>
+                            <p>Select clean templates validated by recruiters, customize details, and enhance text items using AI generation suggestions. Power up credentials in minutes.</p>
+                            <button class="btn btn-primary" onclick="window.location.href='{{ url_for('builder') }}'" style="margin-top: 10px; padding: 12px 28px;">
+                                <i class="fa-solid fa-circle-plus"></i> Create New Resume
+                            </button>
                         </div>
-                        <img src="https://template.canva.com/EAGDIYMJ4NU/2/0/1131w-wixRuvEARu8.jpg"
-                            alt="Resume Template">
+                        <div class="builder-img-col">
+                            <div class="builder-mockup-wrapper">
+                                <div class="builder-mockup-tag">✨ AI Enhanced</div>
+                                <img src="https://template.canva.com/EAGDIYMJ4NU/2/0/1131w-wixRuvEARu8.jpg" alt="Resume Template Design">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </div>
 
-    </div>
+        </div> <!-- End Main Content -->
+    </div> <!-- End App Container -->
 
-    <!-- Scripts -->
+    <!-- Scripting Interactions -->
     <script>
-
-        // ===============================
-        // Sidebar Toggle Logic
-        // ===============================
+        // ==========================================
+        // Sidebar Toggle
+        // ==========================================
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.querySelector('.sidebar-overlay').classList.toggle('active');
         }
 
-        // ===============================
-        // Tab Switching Logic
-        // ===============================
-        function switchTab(tabId, element) {
+        // ==========================================
+        // Theme Toggling persistence logic
+        // ==========================================
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            let newTheme = 'light';
+            if (htmlEl.getAttribute('data-theme') === 'light') {
+                newTheme = 'dark';
+            }
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon();
+        }
 
+        function updateThemeIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeBtnIcon = document.getElementById('theme-toggle-btn');
+            if (themeBtnIcon) {
+                if (currentTheme === 'dark') {
+                    themeBtnIcon.className = 'fa-solid fa-sun';
+                } else {
+                    themeBtnIcon.className = 'fa-solid fa-moon';
+                }
+            }
+        }
+
+        // Run theme icon update initially
+        updateThemeIcon();
+
+        // ==========================================
+        // Time-based Greetings
+        // ==========================================
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greetingEl = document.getElementById('greeting-text');
+            const greetingSubEl = document.getElementById('greeting-subtext');
+            const username = "{{ username }}";
+            let greet = "Welcome";
+            let sub = "Let's work on your career targets today.";
+
+            if (hour >= 5 && hour < 12) {
+                greet = "Good morning";
+                sub = "Ready to start your job search? Optimize your profile.";
+            } else if (hour >= 12 && hour < 17) {
+                greet = "Good afternoon";
+                sub = "Track applications and measure your ATS scoring rate.";
+            } else if (hour >= 17 && hour < 22) {
+                greet = "Good evening";
+                sub = "Fine-tune your resume or compare against new descriptions.";
+            } else {
+                greet = "Good night";
+                sub = "Prepping resumes late? Make sure it hits all keywords.";
+            }
+            
+            if (greetingEl) greetingEl.textContent = `${greet}, ${username}`;
+            if (greetingSubEl) greetingSubEl.textContent = sub;
+        }
+
+        setGreeting();
+
+        // Initialize User Avatar Letters
+        function setAvatarLetters() {
+            const username = "{{ username }}";
+            const avatarEl = document.getElementById('avatar-letters');
+            if (avatarEl && username) {
+                const letters = username.slice(0, 2).toUpperCase();
+                avatarEl.textContent = letters;
+            }
+        }
+
+        setAvatarLetters();
+
+        // ==========================================
+        // Tab Navigation state logic
+        // ==========================================
+        function switchTab(tabId, element) {
             // Remove active classes
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -1374,32 +2019,36 @@
                 slide.classList.remove('active');
             });
 
-            // Add active class
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
+            // Set active states
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            if (element) {
+                element.classList.add('active');
+            }
 
-            // Save active tab
             localStorage.setItem("activeTab", tabId);
 
-            // Auto close sidebar on mobile
-            if (window.innerWidth <= 992) {
-                document.getElementById('sidebar').classList.remove('open');
-                document.querySelector('.sidebar-overlay').classList.remove('active');
+            // Close mobile menu
+            document.getElementById('sidebar').classList.remove('open');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+
+            // Scroll search reset
+            const searchInput = document.getElementById('sidebar-search');
+            if (searchInput) {
+                searchInput.value = '';
+                handleSearch('');
             }
         }
 
-        // ===============================
-        // Restore Active Tab After Refresh
-        // ===============================
+        // Restore active state on reload
         window.addEventListener("DOMContentLoaded", () => {
-
-            // Determine if the navigation is a reload
             const navigationEntry = performance.getEntriesByType("navigation")[0];
             const isReload = navigationEntry ? navigationEntry.type === "reload" : (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
             const referrer = document.referrer;
 
-            // If the user lands on home from a different page (not a reload),
-            // always default to the main dashboard tab.
+            // If landing page from direct click, override storage
             if (!isReload) {
                 let shouldReset = true;
                 if (referrer) {
@@ -1408,93 +2057,190 @@
                         if (refUrl.pathname === "/home") {
                             shouldReset = false;
                         }
-                    } catch (e) {
-                        // Ignore URL parse errors
-                    }
+                    } catch (e) {}
                 }
                 if (shouldReset) {
                     localStorage.setItem("activeTab", "dashboard");
                 }
             }
 
-            const activeTab = localStorage.getItem("activeTab");
+            const storedTab = localStorage.getItem("activeTab") || "dashboard";
+            const tabBtn = Array.from(document.querySelectorAll('.slide')).find(slide => {
+                const clickAttr = slide.getAttribute("onclick");
+                return clickAttr && clickAttr.includes(storedTab);
+            });
 
-            if (activeTab) {
-
-                // Remove all active classes
-                document.querySelectorAll('.tab-content').forEach(tab => {
-                    tab.classList.remove('active');
-                });
-
-                document.querySelectorAll('.slide').forEach(slide => {
-                    slide.classList.remove('active');
-                });
-
-                // Activate saved tab
-                const selectedTab = document.getElementById(activeTab);
-
-                if (selectedTab) {
-                    selectedTab.classList.add('active');
-                }
-
-                // Activate matching sidebar button
-                document.querySelectorAll('.slide').forEach(slide => {
-
-                    const onclickValue = slide.getAttribute("onclick");
-
-                    if (onclickValue && onclickValue.includes(activeTab)) {
-                        slide.classList.add("active");
-                    }
-
-                });
+            if (tabBtn) {
+                switchTab(storedTab, tabBtn);
+            }
+            
+            // Apply Gauge scores if present
+            const gauge = document.getElementById('score-gauge');
+            if (gauge) {
+                const text = gauge.querySelector('.ats-gauge-text').textContent;
+                const scoreValue = parseInt(text.replace('%', '')) || 0;
+                gauge.style.setProperty('--score-percent', scoreValue);
             }
         });
 
-        // ===============================
-        // Dashboard File Upload Name
-        // ===============================
-        const fileInput = document.getElementById("file");
+        // ==========================================
+        // Close Completeness tracker
+        // ==========================================
+        function dismissCompleteness() {
+            const banner = document.getElementById('completeness-banner');
+            if (banner) {
+                banner.style.display = 'none';
+                sessionStorage.setItem('completenessDismissed', 'true');
+            }
+        }
 
-        if (fileInput) {
+        if (sessionStorage.getItem('completenessDismissed') === 'true') {
+            const banner = document.getElementById('completeness-banner');
+            if (banner) banner.style.display = 'none';
+        }
 
-            fileInput.addEventListener("change", function () {
-
-                const fileName = this.files[0]
-                    ? this.files[0].name
-                    : "Browse File";
-
-                const labelText = document.querySelector(".labelFile p");
-
-                if (labelText) {
-                    labelText.textContent = fileName;
+        // ==========================================
+        // Search filter matching
+        // ==========================================
+        function handleSearch(query) {
+            query = query.toLowerCase().trim();
+            
+            // Filter sidebar links (except headers)
+            document.querySelectorAll('.slide').forEach(slide => {
+                const text = slide.textContent.toLowerCase();
+                const clickAttr = slide.getAttribute("onclick");
+                // Don't filter out active tabs
+                if (!clickAttr) return; 
+                
+                if (text.includes(query) || query === '') {
+                    slide.classList.remove('hidden-by-search');
+                } else {
+                    slide.classList.add('hidden-by-search');
                 }
+            });
 
+            // Filter active content cards
+            const activeTab = document.querySelector('.tab-content.active');
+            if (activeTab) {
+                const cards = activeTab.querySelectorAll('.glass-card, .jobfit-card, .project-card, .timeline-item');
+                cards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(query) || query === '') {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Global search short key (⌘K / Ctrl+K)
+        window.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.getElementById('sidebar-search');
+                if (searchInput) searchInput.focus();
+            }
+        });
+
+        // ==========================================
+        // File Drag & Drop Handlers
+        // ==========================================
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file');
+        
+        if (dropZone && fileInput) {
+            // Drag and drop events
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.add('dragover');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.remove('dragover');
+                }, false);
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    const labelText = dropZone.querySelector('.upload-subtext');
+                    if (labelText) {
+                        labelText.textContent = files[0].name;
+                        labelText.style.color = 'var(--primary)';
+                    }
+                    // Auto submit form
+                    document.getElementById('dashboard-upload-form').submit();
+                }
+            }, false);
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    const labelText = dropZone.querySelector('.upload-subtext');
+                    if (labelText) {
+                        labelText.textContent = fileInput.files[0].name;
+                    }
+                    document.getElementById('dashboard-upload-form').submit();
+                }
             });
         }
 
-        // ===============================
-        // Job Fit File Upload Name
-        // ===============================
-        const jobFitFile = document.getElementById("jobfit-file");
+        // Job Fit drop handlers
+        const jobfitDropZone = document.getElementById('jobfit-drop-zone');
+        const jobfitFileInput = document.getElementById('jobfit-file');
+        
+        if (jobfitDropZone && jobfitFileInput) {
+            ['dragenter', 'dragover'].forEach(eventName => {
+                jobfitDropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    jobfitDropZone.classList.add('dragover');
+                }, false);
+            });
 
-        if (jobFitFile) {
+            ['dragleave', 'drop'].forEach(eventName => {
+                jobfitDropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    jobfitDropZone.classList.remove('dragover');
+                }, false);
+            });
 
-            jobFitFile.addEventListener("change", function () {
-
-                const fileName = this.files[0]
-                    ? this.files[0].name
-                    : "Browse Resume";
-
-                const labelText = this.previousElementSibling.querySelector("p");
-
-                if (labelText) {
-                    labelText.textContent = fileName;
+            jobfitDropZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    jobfitFileInput.files = files;
+                    const labelText = document.getElementById('jobfit-filename-text');
+                    if (labelText) {
+                        labelText.textContent = files[0].name;
+                        labelText.style.color = 'var(--primary)';
+                        labelText.style.fontWeight = 'bold';
+                    }
                 }
+            }, false);
 
+            jobfitFileInput.addEventListener('change', () => {
+                if (jobfitFileInput.files.length > 0) {
+                    const labelText = document.getElementById('jobfit-filename-text');
+                    if (labelText) {
+                        labelText.textContent = jobfitFileInput.files[0].name;
+                        labelText.style.color = 'var(--primary)';
+                        labelText.style.fontWeight = 'bold';
+                    }
+                }
             });
         }
 
-        // Handle loading screen on form submissions
+        // Loading states spinner setup on submit
         document.addEventListener("DOMContentLoaded", () => {
             const dashForm = document.getElementById('dashboard-upload-form');
             if (dashForm) {
@@ -1525,9 +2271,7 @@
                 });
             }
         });
-
     </script>
-
 </body>
 
 </html>

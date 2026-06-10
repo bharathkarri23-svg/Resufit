@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +11,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='auth_split.css') }}">
 </head>
+
 <body>
 
     <main class="split-layout">
-        
+
         <!-- LEFT SIDE: Branding & Animation -->
         <div class="split-left">
             <a href="/" class="split-logo">
                 <i class="fa-solid fa-file-signature"></i> Resufit
             </a>
-            
+
             <!-- background animation elements trapped in left panel -->
             <div class="bg-shape shape-1"></div>
             <div class="bg-shape shape-2" style="bottom: 10%; right: 10%;"></div>
-            
+
             <div class="split-left-content animate-on-scroll">
                 <h1>Welcome Back</h1>
                 <p>Unlock your career potential with our smart analyzer.</p>
@@ -36,7 +38,7 @@
 
         <!-- RIGHT SIDE: Frameless Form Area -->
         <div class="split-right">
-            
+
             <!-- Optional Top Right Nav Links removed per request -->
 
             <div class="split-form-container">
@@ -44,13 +46,13 @@
                     <h2>Sign In</h2>
                     <p>Enter your details to access your dashboard.</p>
                 </div>
-                
+
                 <form action="/signin" method="post" class="auth-form">
                     <div class="input-group">
                         <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
                         <input type="email" id="email" name="email" placeholder="name@example.com" required>
                     </div>
-                    
+
                     <div class="input-group password-group">
                         <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
                         <div class="password-wrapper">
@@ -58,7 +60,7 @@
                             <i class="fa-solid fa-eye" id="togglePassword"></i>
                         </div>
                     </div>
-                    
+
                     <div class="form-options">
                         <label class="checkbox-container">
                             <input type="checkbox" name="remember">
@@ -67,26 +69,27 @@
                         </label>
                         <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary w-100">Sign In</button>
                 </form>
-                
+
                 <div class="divider">
                     <span>or continue with</span>
                 </div>
-                
+
                 <div class="social-login">
                     <a href="/google-login" class="btn btn-google w-100">
                         <i class="fa-brands fa-google"></i> Sign in with Google
                     </a>
                 </div>
-                
-                <p class="auth-redirect" style="margin-top: 2rem;">Don't have an account? <a href="/signup">Create Account</a></p>
-                
+
+                <p class="auth-redirect" style="margin-top: 2rem;">Don't have an account? <a href="/signup">Create
+                        Account</a></p>
+
                 {% if error %}
-                    <div class="error-message">
-                        <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
-                    </div>
+                <div class="error-message">
+                    <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -124,4 +127,5 @@
         });
     </script>
 </body>
+
 </html>

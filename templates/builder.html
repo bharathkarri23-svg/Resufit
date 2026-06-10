@@ -10,21 +10,54 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fira+Code:wght@400;500&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Theme Initialization Script to Prevent FOUC -->
+    <script>
+        (function() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        })();
+    </script>
     
     <!-- Main Style Sheet (Embedded to keep things highly responsive) -->
     <style>
         :root {
-            --primary: #2f54eb;
-            --primary-hover: #1d39c4;
-            --primary-light: #f0f5ff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #f5f3ff;
+            --secondary: #db2777;
+            --secondary-hover: #be185d;
             --dark-bg: #0f172a;
             --card-bg: rgba(255, 255, 255, 0.85);
             --border-color: #e2e8f0;
+            --border-color-hover: #cbd5e1;
             --text-main: #1e293b;
+            --text-secondary: #475569;
             --text-muted: #64748b;
             --success: #10b981;
             --danger: #ef4444;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Theme specific */
+            --bg-app: #f8fafc;
+            --bg-panel: #ffffff;
+            --bg-panel-header: #f8fafc;
+            --bg-accordion-header-active: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --border-color: #334155;
+            --border-color-hover: #475569;
+            --text-main: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --primary-light: #1e293b;
+            
+            /* Theme specific */
+            --bg-app: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-panel-header: #0f172a;
+            --bg-accordion-header-active: #1e293b;
         }
 
         * {
@@ -35,10 +68,181 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
+            background: var(--bg-app);
             color: var(--text-main);
-            overflow-x: hidden;
+            overflow: hidden;
             height: 100vh;
+        }
+
+        /* Dark Theme Element Overrides */
+        [data-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .navbar .logo img {
+            filter: brightness(0) invert(1);
+        }
+
+        [data-theme="dark"] .editor-panel {
+            background: var(--bg-panel);
+            border-right-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .stepper-header {
+            background: var(--bg-panel-header);
+            border-bottom-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .step-pill {
+            background: var(--bg-panel);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .step-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .step-pill.completed {
+            background: var(--primary-light);
+            color: #818cf8;
+            border-color: #818cf8;
+        }
+
+        [data-theme="dark"] .step-title-section h2 {
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .form-group label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] input[type="text"],
+        [data-theme="dark"] input[type="email"],
+        [data-theme="dark"] input[type="tel"],
+        [data-theme="dark"] input[type="date"],
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background: var(--bg-app);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] input:focus, 
+        [data-theme="dark"] select:focus, 
+        [data-theme="dark"] textarea:focus {
+            background: var(--bg-panel);
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .accordion-card {
+            background: var(--bg-app);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .accordion-header {
+            background: var(--bg-panel);
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .accordion-card.active .accordion-header {
+            background: var(--bg-accordion-header-active);
+        }
+
+        [data-theme="dark"] .accordion-content {
+            background: var(--bg-panel);
+        }
+
+        [data-theme="dark"] .action-icon-btn {
+            background: var(--bg-panel);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .action-icon-btn:hover {
+            background: var(--bg-app);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .add-item-btn {
+            background: var(--primary-light);
+            color: #818cf8;
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .add-item-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .skills-tag-box {
+            background: var(--bg-app);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .suggestion-badge {
+            background: var(--bg-panel);
+            color: var(--text-muted);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .suggestion-badge:hover {
+            background: var(--primary-light);
+            color: #818cf8;
+        }
+
+        [data-theme="dark"] .template-gallery-card {
+            background: var(--bg-panel);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .template-gallery-card.active {
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .template-thumb-overlay {
+            background: var(--bg-panel-header);
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .template-gallery-info {
+            border-top-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .template-gallery-title {
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .editor-footer {
+            background: var(--bg-panel-header);
+            border-top-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .btn-outline {
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .btn-outline:hover {
+            background: var(--bg-app);
+            border-color: var(--border-color-hover);
+        }
+
+        [data-theme="dark"] .ats-checklist-card {
+            background: rgba(245, 158, 11, 0.05);
+            border-color: rgba(245, 158, 11, 0.15);
+        }
+
+        [data-theme="dark"] .ats-checklist-card h3 {
+            color: #f59e0b;
+        }
+
+        [data-theme="dark"] .ats-checklist-card li {
+            color: var(--text-secondary);
         }
 
         /* HEADER NAV */
@@ -107,15 +311,15 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 4px 12px rgba(47, 84, 235, 0.2);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .btn-primary:hover {
-            background: var(--primary-hover);
+            background: linear-gradient(135deg, var(--primary-hover), var(--secondary-hover));
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(47, 84, 235, 0.3);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
         }
 
         .btn-success {
@@ -1729,9 +1933,16 @@
         }
 
         @media (max-width: 1024px) {
+            .navbar {
+                padding: 10px 20px;
+                height: 65px;
+            }
+
             .builder-container {
                 flex-direction: column;
-                height: calc(100vh - 75px);
+                margin-top: 65px;
+                height: calc(100vh - 65px);
+                height: calc(100dvh - 65px);
                 position: relative;
             }
             
@@ -1771,6 +1982,51 @@
             
             .template-gallery-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Hide non-essential navbar buttons */
+            .nav-links button:not(#theme-toggle-btn):not([onclick="printResume()"]),
+            .nav-links select,
+            .nav-links input {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 10px 12px;
+                height: 60px;
+            }
+            
+            .builder-container {
+                margin-top: 60px;
+                height: calc(100vh - 60px);
+                height: calc(100dvh - 60px);
+            }
+            
+            .navbar .logo .logo-text {
+                font-size: 18px;
+            }
+            
+            .navbar .logo img {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .nav-links {
+                gap: 6px;
+            }
+            
+            .nav-links .btn {
+                padding: 8px 10px;
+            }
+            
+            .nav-links .btn-text {
+                display: none !important;
+            }
+            
+            .nav-links button[onclick="printResume()"] {
+                display: inline-flex !important;
             }
         }
 
@@ -1860,13 +2116,16 @@
     <nav class="navbar">
         <a href="/" class="logo">
             <img src="https://icons.veryicon.com/png/o/miscellaneous/general-icon-library/resume-7.png" alt="Logo">
-            Resufit
+            <span class="logo-text">Resufit</span>
         </a>
         <div class="nav-links">
-            <a href="/home" class="btn btn-outline"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+            <a href="/home" class="btn btn-outline"><i class="fa-solid fa-gauge"></i> <span class="btn-text">Dashboard</span></a>
+            <button class="btn btn-outline" onclick="toggleTheme()" title="Toggle Dark/Light Mode" style="width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--border-color); flex-shrink: 0;">
+                <i class="fa-solid fa-moon" id="theme-toggle-btn"></i>
+            </button>
             
-            <button class="btn btn-outline" onclick="triggerImportJSON()"><i class="fa-solid fa-file-import"></i> Import JSON</button>
-            <button class="btn btn-outline" onclick="exportJSON()"><i class="fa-solid fa-file-export"></i> Export JSON</button>
+            <button class="btn btn-outline" onclick="triggerImportJSON()"><i class="fa-solid fa-file-import"></i> <span class="btn-text">Import JSON</span></button>
+            <button class="btn btn-outline" onclick="exportJSON()"><i class="fa-solid fa-file-export"></i> <span class="btn-text">Export JSON</span></button>
             <input type="file" id="import-json-file" accept=".json" onchange="importJSON(event)" style="display: none;">
 
             <select id="direct-template-switch" onchange="switchTemplate(parseInt(this.value))" style="width: 160px; padding: 8px 12px; font-size: 13px; border-radius: 10px;">
@@ -1880,7 +2139,7 @@
                 <option value="8">Silicon Valley Technical</option>
             </select>
 
-            <button class="btn btn-success" onclick="printResume()"><i class="fa-solid fa-download"></i> Save / Print PDF</button>
+            <button class="btn btn-success" onclick="printResume()"><i class="fa-solid fa-download"></i> <span class="btn-text">Save / Print PDF</span></button>
         </div>
     </nav>
 
@@ -2148,7 +2407,7 @@
                     <div style="font-weight: 600; font-size: 15px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Design & Page Customizer
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                    <div style="background: var(--bg-panel-header); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-droplet"></i> Primary Accent Color</label>
@@ -2239,7 +2498,7 @@
                     <div style="font-weight: 600; font-size: 15px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary);"></i> Smart AI Job Tailoring
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                    <div style="background: var(--bg-panel-header); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
                         <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
                             Paste the target Job Description below. Our Llama 3 AI will analyze it and rewrite your Summary, Experience Bullets, and Skills to highlight keywords matching this job description automatically.
                         </p>
@@ -2267,13 +2526,13 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label style="color: var(--success); font-weight: 600; font-size: 12px;"><i class="fa-solid fa-circle-check"></i> Matched Keywords</label>
-                                    <div id="matched-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
+                                    <div id="matched-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
                                         <!-- Matched badges will be injected here -->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label style="color: #d97706; font-weight: 600; font-size: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Missing Keywords</label>
-                                    <div id="missing-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
+                                    <div id="missing-keywords-container" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;">
                                         <!-- Missing badges will be injected here -->
                                     </div>
                                 </div>
@@ -3880,6 +4139,33 @@
             if (matchedContainer) matchedContainer.innerHTML = '';
             if (missingContainer) missingContainer.innerHTML = '';
         }
+
+        // Theme Toggling persistence logic
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            let newTheme = 'light';
+            if (htmlEl.getAttribute('data-theme') === 'light') {
+                newTheme = 'dark';
+            }
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeBtnIcon = document.getElementById('theme-toggle-btn');
+            if (themeBtnIcon) {
+                if (currentTheme === 'dark') {
+                    themeBtnIcon.className = 'fa-solid fa-sun';
+                } else {
+                    themeBtnIcon.className = 'fa-solid fa-moon';
+                }
+            }
+        }
+
+        // Run theme icon update initially
+        updateThemeIcon();
     </script>
 </body>
 </html>

@@ -232,6 +232,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * **PyMuPDF**: For clean, fast document parsing and metadata extraction.
 * **Tesseract OCR**: For scanned document parsing fallback.
 * **Shields.io**: For beautiful project status badges.
-
-
-

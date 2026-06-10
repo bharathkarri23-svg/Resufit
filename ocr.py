@@ -4,12 +4,19 @@ import fitz
 from PIL import Image
 import pytesseract
 
-# Configure Tesseract path only on Windows if it exists at the default installation path.
-# On Linux (Render) or other platforms, we rely on tesseract being in the system PATH.
+# Configure Tesseract path depending on platform.
 if platform.system() == "Windows":
     win_tesseract_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     if os.path.exists(win_tesseract_path):
         pytesseract.pytesseract.tesseract_cmd = win_tesseract_path
+else:
+    # On Render/Linux, check if we have a portable static tesseract binary in the project.
+    project_bin_path = os.path.join(os.path.dirname(__file__), "bin", "tesseract")
+    if os.path.exists(project_bin_path):
+        pytesseract.pytesseract.tesseract_cmd = project_bin_path
+        # Point Tesseract to the local tessdata directory in the project
+        tessdata_dir = os.path.join(os.path.dirname(__file__), "bin", "tessdata")
+        os.environ["TESSDATA_PREFIX"] = tessdata_dir
 
 def is_likely_resume(text):
     if not text:

@@ -1,8 +1,15 @@
+import os
+import platform
 import fitz
 from PIL import Image
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Configure Tesseract path only on Windows if it exists at the default installation path.
+# On Linux (Render) or other platforms, we rely on tesseract being in the system PATH.
+if platform.system() == "Windows":
+    win_tesseract_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    if os.path.exists(win_tesseract_path):
+        pytesseract.pytesseract.tesseract_cmd = win_tesseract_path
 
 def is_likely_resume(text):
     if not text:

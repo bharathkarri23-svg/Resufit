@@ -120,8 +120,8 @@ A full-screen, laptop-resolution (`1366x768`) video demo of the entire applicati
 
 ### 🎬 Live Demo Walkthrough
 
-<video width="100%" src="./resufit_walkthrough.webm" controls>
-  <source src="./resufit_walkthrough.webm" type="video/webm">
+<video width="100%" src="https://github.com/user-attachments/assets/7f0c3d02-4697-45b2-8358-e1a6c3d1a96b" controls>
+  <source src="https://github.com/user-attachments/assets/7f0c3d02-4697-45b2-8358-e1a6c3d1a96b" type="video/webm">
   Your browser does not support the video tag.
 </video>
 
